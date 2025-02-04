@@ -1,0 +1,34 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1737961356150,
+      "tag": "0000_lying_legion",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1738055244724,
+      "tag": "0001_funny_ravenous",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1738382026580,
+      "tag": "0002_public_bloodstorm",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1738424516310,
+      "tag": "0003_worried_tana_nile",
+      "breakpoints": true
+    }
+  ]
+}
