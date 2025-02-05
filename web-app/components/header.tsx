@@ -1,15 +1,13 @@
-'use client';
-
-import { cn, getInitials } from '@/lib/utils';
+import { getInitials } from '@/lib/utils';
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import React from 'react';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Session } from 'next-auth';
+import HeaderBrowsing from './header-browsing';
+import SignOutButton from './sign-out-btn';
 
 export default function Header({ session }: Readonly<{ session: Session }>) {
-  const pathname = usePathname();
 
   return (
     <header className="my-10 flex justify-between gap-5">
@@ -27,29 +25,7 @@ export default function Header({ session }: Readonly<{ session: Session }>) {
       </Link>
 
       <nav className="flex flex-row items-center gap-8">
-        <Link
-          href="/"
-          className={cn(
-            'cursor-pointer text-base capitalize',
-            pathname === '/'
-              ? 'text-light-200'
-              : 'text-light-100 hover:text-light-400',
-          )}
-        >
-          Home
-        </Link>
-
-        <Link
-          href="/library"
-          className={cn(
-            'cursor-pointer text-base capitalize',
-            pathname === '/library'
-              ? 'text-light-200'
-              : 'text-light-100 hover:text-light-400',
-          )}
-        >
-          Library
-        </Link>
+        <HeaderBrowsing />
 
         <Link href={'/my-profile'} className="group flex items-center gap-2">
           <Avatar>
@@ -63,15 +39,7 @@ export default function Header({ session }: Readonly<{ session: Session }>) {
           </p>
         </Link>
 
-        {/* <li>
-          <form action={async () => {
-            'use server'
-
-            await signOut()
-          }}>
-            <Button>Logout</Button>
-          </form>
-        </li> */}
+        <SignOutButton />
       </nav>
     </header>
   );

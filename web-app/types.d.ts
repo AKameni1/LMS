@@ -1,3 +1,5 @@
+import { LucideIcon } from 'lucide-react';
+
 type Book = {
   id: string;
   title: string;
@@ -39,4 +41,10 @@ type BookParams = {
 type BorrowBookParams = {
   bookId: string;
   userId: string;
+};
+
+type NavigationLink = {
+  href: string;
+  label: string;
+  icon: LucideIcon;
 };

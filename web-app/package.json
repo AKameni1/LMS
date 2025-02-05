@@ -2,7 +2,6 @@
   "name": "lms",
   "version": "0.1.0",
   "private": true,
-
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
@@ -14,7 +13,6 @@
     "db:migrate": "npx drizzle-kit migrate",
     "db:studio": "npx drizzle-kit studio"
   },
-  
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
     "@mswjs/interceptors": "^0.37.5",
@@ -25,6 +23,7 @@
     "@radix-ui/react-separator": "^1.1.1",
     "@radix-ui/react-slot": "^1.1.1",
     "@radix-ui/react-toast": "^1.2.5",
+    "@radix-ui/react-tooltip": "^1.1.7",
     "@upstash/qstash": "^2.7.20",
     "@upstash/ratelimit": "^2.0.5",
     "@upstash/redis": "^1.34.3",
@@ -55,7 +54,6 @@
     "use-debounce": "^10.0.4",
     "zod": "^3.24.1"
   },
-
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@types/bcrypt": "^5.0.2",

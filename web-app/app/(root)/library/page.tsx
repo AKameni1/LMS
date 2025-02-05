@@ -23,7 +23,7 @@ export default async function Page(
   const searchParams = await props.searchParams;
   const query = searchParams?.query ?? '';
   const currentPage = Number(searchParams?.page) || 1;
-  const totalPages = await fetchBooksPages(query);
+  const totalPages = await fetchBooksPages(query.trim());
 
   return (
     <>
@@ -67,7 +67,7 @@ export default async function Page(
         </Select>
       </div>
 
-      <BookListFilter query={query} currentPage={currentPage} />
+      <BookListFilter query={query.trim()} currentPage={currentPage} />
 
       <Separator className="mt-10 h-1 rounded-full bg-dark-200/40" />
 

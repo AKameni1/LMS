@@ -1,16 +1,25 @@
-export const navigationLinks = [
+import { NavigationLink } from '@/types';
+import { BookHeartIcon, LibraryBigIcon, School2Icon } from 'lucide-react';
+
+export const navigationLinks: readonly NavigationLink[] = [
   {
-    href: '/library',
-    label: 'Library',
+    href: '/',
+    label: 'Home',
+    icon: School2Icon,
   },
 
   {
-    img: '/icons/user.svg',
-    selectedImg: '/icons/user-fill.svg',
-    href: '/my-profile',
-    label: 'My Profile',
+    href: '/library',
+    label: 'Library',
+    icon: LibraryBigIcon,
   },
-];
+
+  {
+    href: '/my-favorites',
+    label: 'My Favorites',
+    icon: BookHeartIcon,
+  },
+] as const;
 
 export const adminSideBarLinks = [
   {
@@ -38,7 +47,7 @@ export const adminSideBarLinks = [
     route: '/admin/account-requests',
     text: 'Account Requests',
   },
-];
+] as const;
 
 export const FIELD_NAMES = {
   fullName: 'Full name',
@@ -46,14 +55,14 @@ export const FIELD_NAMES = {
   universityId: 'University ID Number',
   password: 'Password',
   universityCard: 'Upload University ID Card',
-};
+} as const;
 
 export const FIELD_TYPES = {
   fullName: 'text',
   email: 'email',
   universityId: 'number',
   password: 'password',
-};
+} as const;
 
 export const sampleBooks = [
   {
@@ -190,4 +199,4 @@ export const sampleBooks = [
     summary:
       'Morgan Housel explores the unique behaviors and mindsets that shape financial success and decision-making.',
   },
-];
+] as const;
