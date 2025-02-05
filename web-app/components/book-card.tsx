@@ -19,7 +19,11 @@ export default function BookCard({
         href={`/books/${id}`}
         className={cn(isLoanedBook && 'flex w-full flex-col items-center')}
       >
-        <BookCover bookTitle={title} coverColor={coverColor} coverImage={coverUrl} />
+        <BookCover
+          bookTitle={title}
+          coverColor={coverColor}
+          coverImage={coverUrl}
+        />
 
         <div className={cn('mt-4', !isLoanedBook && 'max-w-28 xs:max-w-40')}>
           <p className="book-title">{title}</p>

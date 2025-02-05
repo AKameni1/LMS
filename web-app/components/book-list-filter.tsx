@@ -1,9 +1,10 @@
 import { fetchFilteredBooks } from '@/lib/data';
-import React from 'react'
+import React from 'react';
 import BookList from './book-list';
 
 export default async function BookListFilter({
-  query, currentPage
+  query,
+  currentPage,
 }: Readonly<{
   query: string;
   currentPage: number;
@@ -11,8 +12,8 @@ export default async function BookListFilter({
   const books = (await fetchFilteredBooks(query, currentPage)) as Book[];
 
   return (
-    <div className='flow-root'>
+    <div className="flow-root">
       <BookList containerClassName="mt-10" books={books} />
     </div>
-  )
+  );
 }

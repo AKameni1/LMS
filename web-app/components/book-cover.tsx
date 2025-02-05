@@ -1,4 +1,4 @@
-"use client"
+'use client';
 
 import { cn } from '@/lib/utils';
 import React from 'react';
@@ -49,10 +49,10 @@ export default function BookCover({
           path={coverImage}
           urlEndpoint={config.env.imageKit.urlEndpoint}
           fill
-          className="rounded-tr-sm rounded-br-sm object-fill border-black border-b-2"
+          className="rounded-br-sm rounded-tr-sm border-b-2 border-black object-fill"
           alt={bookTitle}
           loading={'lazy'}
-        // lqip={{ active: true }}
+          // lqip={{ active: true }}
         />
       </div>
     </div>

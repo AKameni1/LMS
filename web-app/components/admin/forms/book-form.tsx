@@ -57,7 +57,7 @@ export default function BookForm({
       toast({
         title: 'Success',
         description: 'Book has been created successfully.',
-      })
+      });
 
       router.push(`/admin/books/${result.data.id}`);
     } else {

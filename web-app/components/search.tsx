@@ -7,7 +7,9 @@ import { useDebouncedCallback } from 'use-debounce';
 
 export default function Search({
   placeholder,
-}: Readonly<{ placeholder: string }>) {
+}: Readonly<{
+  placeholder: string;
+}>) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();

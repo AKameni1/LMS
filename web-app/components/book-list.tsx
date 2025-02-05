@@ -13,7 +13,7 @@ export default function BookList({
   containerClassName,
 }: Readonly<BookListPropsType>) {
   if (books.length < 2) {
-    return
+    return;
   }
   return (
     <section className={containerClassName}>

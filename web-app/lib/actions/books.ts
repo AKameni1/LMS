@@ -35,12 +35,12 @@ export const borrowBook = async (params: BorrowBookParams) => {
       .update(books)
       .set({ availableCopies: book.availableCopies - 1 })
       .where(eq(books.id, bookId));
-    
+
     return {
       success: true,
       message: 'Book borrowed successfully',
       data: JSON.parse(JSON.stringify(record)),
-    }
+    };
   } catch (error) {
     console.log('Error borrowing book:', error);
     return {

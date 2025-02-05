@@ -13,7 +13,10 @@ export const getInitials = (name: string): string =>
     .toUpperCase()
     .slice(0, 2);
 
-export const generatePagination = (currentPage: number, totalPages: number): (string | number)[] => {
+export const generatePagination = (
+  currentPage: number,
+  totalPages: number,
+): (string | number)[] => {
   // If the total number of pages is 7 or less,
   // display all pages without any ellipsis.
   if (totalPages <= 7) {

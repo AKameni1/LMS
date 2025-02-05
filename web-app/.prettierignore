@@ -12,3 +12,5 @@ migrations/
 *.min.js
 *.min.css
 .env
+package.json
+pnpm-lock.yaml

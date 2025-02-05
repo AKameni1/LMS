@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { fetchBooksPages } from '@/lib/data';
-import React from 'react';
+import { cn } from '@/lib/utils';
 
 export default async function Page(
   props: Readonly<{
@@ -30,9 +30,18 @@ export default async function Page(
       <Search placeholder="Search for books" />
 
       <div className="mt-12 flex items-center justify-between">
-        <h2 className="font-bebas-neue text-4xl text-light-100">
-          All Library Books
-        </h2>
+        <div className={cn(query && 'mr-4')}>
+          {!query ? (
+            <h2 className="font-bebas-neue text-4xl text-light-100">
+              All Library Books
+            </h2>
+          ) : (
+            <h2 className="text-3xl font-semibold text-light-100">
+              Search Result for:{' '}
+              <span className="max-w-28 text-light-200">{query}</span>
+            </h2>
+          )}
+        </div>
 
         <Select>
           <SelectTrigger className="select-trigger">
@@ -60,9 +69,11 @@ export default async function Page(
 
       <BookListFilter query={query} currentPage={currentPage} />
 
-      <Separator className="mt-10 h-[3px] rounded-full bg-dark-200/40" />
+      <Separator className="mt-10 h-1 rounded-full bg-dark-200/40" />
 
       <Pagination totalPages={totalPages} />
+
+      {/* <NoResults onClear={onClear} searchQuery={query} /> */}
     </>
   );
 }

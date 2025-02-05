@@ -26,11 +26,10 @@ export default function Pagination({
     searchParams,
   });
 
-
   const allPages = generatePagination(currentPage, totalPages);
 
   return (
-    <div id="pagination" className='mt-10'>
+    <div id="pagination" className="mt-10">
       <Button
         className="pagination-btn_dark"
         disabled={currentPage <= 1}
@@ -38,11 +37,17 @@ export default function Pagination({
       >
         {currentPage <= 1 ? (
           <div>
-            <ChevronLeft className="h-6 w-6 text-light-100 font-semibold" />
+            <ChevronLeft
+              strokeWidth={2}
+              className="h-6 w-6 font-semibold text-light-100"
+            />
           </div>
         ) : (
           <Link href={createPageURL(currentPage - 1)}>
-            <ChevronLeft className="h-6 w-6 text-light-100 font-semibold" />
+            <ChevronLeft
+              strokeWidth={2}
+              className="h-6 w-6 font-semibold text-light-100"
+            />
           </Link>
         )}
       </Button>
@@ -82,11 +87,17 @@ export default function Pagination({
       >
         {currentPage >= totalPages ? (
           <div>
-            <ChevronRight className="h-6 w-6 text-light-100 font-semibold" />
+            <ChevronRight
+              strokeWidth={2}
+              className="h-6 w-6 font-semibold text-light-100"
+            />
           </div>
         ) : (
           <Link href={createPageURL(currentPage + 1)}>
-            <ChevronRight className="h-6 w-6 text-light-100 font-semibold" />
+            <ChevronRight
+              strokeWidth={2}
+              className="h-6 w-6 font-semibold text-light-100"
+            />
           </Link>
         )}
       </Button>

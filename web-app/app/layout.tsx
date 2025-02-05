@@ -1,4 +1,4 @@
-import { SpeedInsights } from '@vercel/speed-insights/next'
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 import type { Metadata } from 'next';
 import './globals.css';
@@ -37,7 +37,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: ReactNode;
 }>) {
-  const session = await auth()
+  const session = await auth();
 
   return (
     <html lang="en">

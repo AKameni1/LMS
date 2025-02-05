@@ -31,9 +31,9 @@ const authenticator = async () => {
       const errorText = await response.text();
       throw new Error(
         'Authentication request failed with status: ' +
-        response.status +
-        ' ' +
-        errorText,
+          response.status +
+          ' ' +
+          errorText,
       );
     }
 

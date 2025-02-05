@@ -2,6 +2,7 @@
   "name": "lms",
   "version": "0.1.0",
   "private": true,
+
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
@@ -13,6 +14,7 @@
     "db:migrate": "npx drizzle-kit migrate",
     "db:studio": "npx drizzle-kit studio"
   },
+  
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
     "@mswjs/interceptors": "^0.37.5",
@@ -53,6 +55,7 @@
     "use-debounce": "^10.0.4",
     "zod": "^3.24.1"
   },
+
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@types/bcrypt": "^5.0.2",
