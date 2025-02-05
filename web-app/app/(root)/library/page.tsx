@@ -1,6 +1,6 @@
-import BookList from '@/components/book-list';
+import BookListFilter from '@/components/book-list-filter';
+import Pagination from '@/components/pagination';
 import Search from '@/components/search';
-import { Button } from '@/components/ui/button';
 import {
   Select,
   SelectContent,
@@ -9,8 +9,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
-import { db } from '@/db/drizzle';
-import { books } from '@/db/schema';
+import { fetchBooksPages } from '@/lib/data';
 import React from 'react';
 
 export default async function Page(
@@ -23,9 +22,8 @@ export default async function Page(
 ) {
   const searchParams = await props.searchParams;
   const query = searchParams?.query ?? '';
-  const currentPage = searchParams?.page ?? 1;
-
-  const allBooks = (await db.select().from(books)) as Book[];
+  const currentPage = Number(searchParams?.page) || 1;
+  const totalPages = await fetchBooksPages(query);
 
   return (
     <>
@@ -60,16 +58,11 @@ export default async function Page(
         </Select>
       </div>
 
-      <BookList books={allBooks} containerClassName="mt-10" />
+      <BookListFilter query={query} currentPage={currentPage} />
 
       <Separator className="mt-10 h-[3px] rounded-full bg-dark-200/40" />
 
-      <div id="pagination" className="mt-10">
-        <Button className="pagination-btn_dark text-light-100">Previous</Button>
-        <p className="bg-light-200">1</p>
-        <Button className="pagination-btn_dark text-light-100">Next</Button>
-        {/* Use pagination-btn_light className for light background when the button is active */}
-      </div>
+      <Pagination totalPages={totalPages} />
     </>
   );
 }

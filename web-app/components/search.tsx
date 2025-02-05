@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { Input } from './ui/input';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useDebouncedCallback } from 'use-debounce';
 
 export default function Search({
   placeholder,
@@ -11,15 +12,18 @@ export default function Search({
   const pathname = usePathname();
   const router = useRouter();
 
-  function handleSearch(term: string) {
+  const handleSearch = useDebouncedCallback((term: string) => {
+    console.log(`Searching... ${term}`);
+
     const params = new URLSearchParams(searchParams);
+    params.set('page', '1');
     if (term) {
       params.set('query', term);
     } else {
       params.delete('query');
     }
     router.replace(`${pathname}?${params.toString()}`);
-  }
+  }, 400);
 
   return (
     <section className="library">

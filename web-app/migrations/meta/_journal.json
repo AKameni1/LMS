@@ -29,6 +29,13 @@
       "when": 1738424516310,
       "tag": "0003_worried_tana_nile",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1738726771614,
+      "tag": "0004_stale_stryfe",
+      "breakpoints": true
     }
   ]
 }
