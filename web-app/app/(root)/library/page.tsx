@@ -1,13 +1,8 @@
-import BookListFilter from '@/components/book-list-filter';
+import FilterBookList from '@/components/filter-book-list';
+import FilterSelect from '@/components/filter-select';
+import NoResults from '@/components/no-results';
 import Pagination from '@/components/pagination';
 import Search from '@/components/search';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { fetchBooksPages } from '@/lib/data';
 import { cn } from '@/lib/utils';
@@ -17,13 +12,18 @@ export default async function Page(
     searchParams?: Promise<{
       query?: string;
       page?: string;
+      filter?: string;
     }>;
   }>,
 ) {
   const searchParams = await props.searchParams;
   const query = searchParams?.query ?? '';
+  const filter = searchParams?.filter ?? 'all';
   const currentPage = Number(searchParams?.page) || 1;
-  const totalPages = await fetchBooksPages(query.trim());
+  const totalPages = await fetchBooksPages(
+    query.trim(),
+    filter.trim() as Filter,
+  );
 
   return (
     <>
@@ -43,37 +43,24 @@ export default async function Page(
           )}
         </div>
 
-        <Select>
-          <SelectTrigger className="select-trigger">
-            <SelectValue placeholder="Sort By" />
-          </SelectTrigger>
-          <SelectContent className="select-content">
-            <SelectItem className="select-item" value="all">
-              All
-            </SelectItem>
-            <SelectItem className="select-item" value="oldest">
-              Oldest
-            </SelectItem>
-            <SelectItem className="select-item" value="newest">
-              Newest
-            </SelectItem>
-            <SelectItem className="select-item" value="available">
-              Available
-            </SelectItem>
-            <SelectItem className="select-item" value="highest_rated">
-              Highest Rated
-            </SelectItem>
-          </SelectContent>
-        </Select>
+        <FilterSelect />
       </div>
 
-      <BookListFilter query={query.trim()} currentPage={currentPage} />
+      {totalPages === 0 ? (
+        <NoResults />
+      ) : (
+        <>
+            <FilterBookList
+            query={query.trim()}
+            currentPage={currentPage}
+            filter={filter as Filter}
+          />
 
-      <Separator className="mt-10 h-1 rounded-full bg-dark-200/40" />
+          <Separator className="mt-10 h-1 rounded-full bg-dark-200/40" />
 
-      <Pagination totalPages={totalPages} />
-
-      {/* <NoResults onClear={onClear} searchQuery={query} /> */}
+          <Pagination totalPages={totalPages} />
+        </>
+      )}
     </>
   );
 }

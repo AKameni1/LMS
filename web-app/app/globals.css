@@ -257,7 +257,7 @@
 
   /* Root */
   .root-container {
-    @apply flex min-h-dvh flex-1 flex-col bg-dark-100 bg-pattern bg-cover bg-top px-5 xs:px-10 md:px-16;
+    @apply flex min-h-dvh flex-1 flex-col overflow-hidden bg-dark-100 bg-pattern bg-cover bg-top px-5 xs:px-10 md:px-16;
   }
 
   /* Book Details */

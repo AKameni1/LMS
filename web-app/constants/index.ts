@@ -1,5 +1,15 @@
-import { NavigationLink } from '@/types';
-import { BookHeartIcon, LibraryBigIcon, School2Icon } from 'lucide-react';
+import {
+  BookHeartIcon,
+  LibraryBigIcon,
+  LucideIcon,
+  School2Icon,
+} from 'lucide-react';
+
+type NavigationLink = {
+  href: string;
+  label: string;
+  icon: LucideIcon;
+};
 
 export const navigationLinks: readonly NavigationLink[] = [
   {
@@ -47,6 +57,14 @@ export const adminSideBarLinks = [
     route: '/admin/account-requests',
     text: 'Account Requests',
   },
+] as const;
+
+export const filterOptions = [
+  { value: 'all', label: 'All' },
+  { value: 'oldest', label: 'Oldest' },
+  { value: 'newest', label: 'Newest' },
+  { value: 'available', label: 'Available' },
+  { value: 'highest_rated', label: 'Highest Rated' },
 ] as const;
 
 export const FIELD_NAMES = {

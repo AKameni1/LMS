@@ -1,21 +1,23 @@
+'use client'
+
 import Image from 'next/image';
 import { Button } from './ui/button';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
-type NoResultsProps = {
-  searchQuery: string;
-  onClear: () => void;
-};
+export default function NoResults() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
-export default function NoResults({
-  searchQuery,
-  onClear,
-}: Readonly<NoResultsProps>) {
+  const handleClearSearch = () => {
+    // Clear the search query
+    const params = new URLSearchParams(searchParams);
+    params.delete('query');
+    router.replace(`${pathname}?${params.toString()}`);
+    router.refresh();
+  }
   return (
-    <div className="mt-10 flow-root w-full">
-      <h2 className="text-2xl font-semibold text-light-100">
-        Search Result for: <span className="text-light-200">{searchQuery}</span>
-      </h2>
-
+    <div className="mt-10 flow-root">
       <div id="not-found" className="mt-10">
         <Image
           src={'/images/no-books.png'}
@@ -30,9 +32,7 @@ export default function NoResults({
           different keywords or check for typos.
         </p>
 
-        <Button onClick={onClear} className="not-found-btn">
-          Clear Search
-        </Button>
+        <Button className="not-found-btn" onClick={handleClearSearch}>Clear Search</Button>
       </div>
     </div>
   );

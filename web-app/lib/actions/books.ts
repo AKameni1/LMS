@@ -2,13 +2,30 @@
 
 import { db } from '@/db/drizzle';
 import { books, borrowRecords } from '@/db/schema';
-import { eq } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 import dayjs from 'dayjs';
 
 export const borrowBook = async (params: BorrowBookParams) => {
   const { bookId, userId } = params;
 
   try {
+    // Check if the book is already borrowed by the user
+    const existingBorrow = await db
+      .select()
+      .from(borrowRecords)
+      .where(
+        sql`${borrowRecords.userId} = ${userId} AND ${borrowRecords.bookId} = ${bookId} AND ${borrowRecords.status} = 'BORROWED'`,
+      )
+      .limit(1);
+
+    if (existingBorrow.length > 0) {
+      return {
+        success: false,
+        message: 'You have already borrowed this book.',
+      };
+    }
+
+    // Check if the book is available for borrowing
     const [book] = await db
       .select({ availableCopies: books.availableCopies })
       .from(books)
@@ -33,8 +50,9 @@ export const borrowBook = async (params: BorrowBookParams) => {
 
     await db
       .update(books)
-      .set({ availableCopies: book.availableCopies - 1 })
-      .where(eq(books.id, bookId));
+      .set({ availableCopies: sql`${book.availableCopies} - 1` })
+      .where(eq(books.id, bookId))
+      .returning({ id: books.id });
 
     return {
       success: true,

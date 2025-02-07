@@ -1,0 +1,1 @@
+ALTER TABLE "borrow_records" ADD CONSTRAINT "unq" UNIQUE("user_id","book_id");

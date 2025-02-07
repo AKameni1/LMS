@@ -6,6 +6,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/t
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 
+
 export default function HeaderBrowsing() {
   const pathname = usePathname();
   return (

@@ -36,6 +36,41 @@
       "when": 1738726771614,
       "tag": "0004_stale_stryfe",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1738857802103,
+      "tag": "0005_lame_agent_brand",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1738859960243,
+      "tag": "0006_add_update_search_text_trigger",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1738860257816,
+      "tag": "0007_good_mister_sinister",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1738890531675,
+      "tag": "0008_groovy_blindfold",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1738891190921,
+      "tag": "0009_add_insert_update_search_text_trigger",
+      "breakpoints": true
     }
   ]
 }

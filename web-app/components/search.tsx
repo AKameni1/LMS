@@ -48,7 +48,7 @@ export default function Search({
           className="search-input bg-transparent"
           placeholder={placeholder}
           onChange={(e) => handleSearch(e.target.value)}
-          defaultValue={searchParams.get('query')?.toString()}
+          defaultValue={searchParams.get('query')?.toString() ?? ''}
         />
       </div>
     </section>

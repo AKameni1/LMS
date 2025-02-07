@@ -1,4 +1,3 @@
-import { sql } from 'drizzle-orm';
 import {
   integer,
   text,
@@ -11,6 +10,7 @@ import {
   real,
   customType,
   index,
+  unique,
 } from 'drizzle-orm/pg-core';
 
 const tsVector = customType<{ data: string }>({
@@ -56,32 +56,32 @@ export const books = pgTable(
     updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow(),
 
     // Full text search
-    searchText: tsVector('search_text')
-      .generatedAlwaysAs(
-        sql`
-          to_tsvector(
-            'english',
-            coalesce(title, '') || ' ' || 
-            coalesce(author, '') || ' ' || 
-            coalesce(genre, '') || ' ' || 
-            coalesce(description, '') || ' ' || 
-            coalesce(summary, '')
-          )
-        `,
-      )
-      .$onUpdateFn(
-        () =>
-          sql`
-          to_tsvector(
-            'english',
-            coalesce(title, '') || ' ' || 
-            coalesce(author, '') || ' ' || 
-            coalesce(genre, '') || ' ' || 
-            coalesce(description, '') || ' ' || 
-            coalesce(summary, '')
-          )
-        `,
-      ),
+    searchText: tsVector('search_text'),
+    // .generatedAlwaysAs(
+    //   sql`
+    //     to_tsvector(
+    //       'english',
+    //       coalesce(title, '') || ' ' ||
+    //       coalesce(author, '') || ' ' ||
+    //       coalesce(genre, '') || ' ' ||
+    //       coalesce(description, '') || ' ' ||
+    //       coalesce(summary, '')
+    //     )
+    //   `,
+    // )
+    // .$onUpdateFn(
+    //   () =>
+    //     sql`
+    //     to_tsvector(
+    //       'english',
+    //       coalesce(title, '') || ' ' ||
+    //       coalesce(author, '') || ' ' ||
+    //       coalesce(genre, '') || ' ' ||
+    //       coalesce(description, '') || ' ' ||
+    //       coalesce(summary, '')
+    //     )
+    //   `,
+    // ),
   },
   (book) => [
     // Index GIN for full text search
@@ -91,19 +91,23 @@ export const books = pgTable(
   ],
 );
 
-export const borrowRecords = pgTable('borrow_records', {
-  id: uuid('id').notNull().primaryKey().defaultRandom().unique(),
-  userId: uuid('user_id')
-    .references(() => users.id)
-    .notNull(),
-  bookId: uuid('book_id')
-    .references(() => books.id)
-    .notNull(),
-  borrowDate: timestamp('borrow_date', { withTimezone: true })
-    .defaultNow()
-    .notNull(),
-  dueDate: date('due_date').notNull(),
-  returnDate: date('return_date'),
-  status: BORROW_STATUS('status').default('BORROWED').notNull(),
-  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
-});
+export const borrowRecords = pgTable(
+  'borrow_records',
+  {
+    id: uuid('id').notNull().primaryKey().defaultRandom().unique(),
+    userId: uuid('user_id')
+      .references(() => users.id)
+      .notNull(),
+    bookId: uuid('book_id')
+      .references(() => books.id)
+      .notNull(),
+    borrowDate: timestamp('borrow_date', { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+    dueDate: date('due_date').notNull(),
+    returnDate: date('return_date'),
+    status: BORROW_STATUS('status').default('BORROWED').notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  },
+  (table) => [unique('unq').on(table.userId, table.bookId)],
+);

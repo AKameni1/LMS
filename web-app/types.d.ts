@@ -1,5 +1,3 @@
-import { LucideIcon } from 'lucide-react';
-
 type Book = {
   id: string;
   title: string;
@@ -43,8 +41,4 @@ type BorrowBookParams = {
   userId: string;
 };
 
-type NavigationLink = {
-  href: string;
-  label: string;
-  icon: LucideIcon;
-};
+type Filter = 'oldest' | 'newest' | 'available' | 'highest_rated';

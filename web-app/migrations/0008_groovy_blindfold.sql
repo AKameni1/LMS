@@ -1,0 +1,1 @@
+ALTER TABLE "books" ALTER COLUMN "search_text" DROP NOT NULL;

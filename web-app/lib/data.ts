@@ -1,50 +1,110 @@
 import { db } from '@/db/drizzle';
 import { books } from '@/db/schema';
-import { desc, sql } from 'drizzle-orm';
+import { asc, desc, sql } from 'drizzle-orm';
 
 const ITEMS_PER_PAGE = 10;
-export async function fetchFilteredBooks(query: string, currentPage: number) {
+export async function fetchFilteredBooks(
+  query: string,
+  currentPage: number,
+  filter?: Filter,
+): Promise<Book[]> {
   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
 
   try {
-    const allbooks =
-      query.length > 0
-        ? await db
-            .select()
-            .from(books)
-            .where(
-              sql`${books.searchText} @@ to_tsquery('english', ${query.replace(/\s+/g, ' & ')})`,
-            )
-            .orderBy(desc(books.createdAt))
-            .limit(ITEMS_PER_PAGE)
-            .offset(offset)
-        : await db
-            .select()
-            .from(books)
-            .orderBy(desc(books.createdAt))
-            .limit(ITEMS_PER_PAGE)
-            .offset(offset);
+    // base query
+    let baseQuery = db.select().from(books).$dynamic(); // Dynamic mode enabled
 
-    return allbooks;
+    const conditions = [];
+
+    if (query.length > 0) {
+      conditions.push(
+        sql`${books.title} ILIKE ${'%' + query + '%'} OR
+             ${books.author} ILIKE ${'%' + query + '%'} OR
+             ${books.description} ILIKE ${'%' + query + '%'} OR
+             ${books.summary} ILIKE ${'%' + query + '%'}`,
+      );
+    }
+
+    // Apply search if necessary
+    if (query.length > 0) {
+      conditions.push(
+        sql`${books.searchText} @@ to_tsquery('english', ${query.replace(/\s+/g, ' & ')})`,
+      );
+    }
+
+    if (conditions.length > 0) {
+      baseQuery = baseQuery.where(sql.join(conditions, sql` OR `));
+    }
+
+    // Apply the filter here
+    switch (filter) {
+      case 'oldest':
+        baseQuery = baseQuery.orderBy(asc(books.createdAt));
+        break;
+      case 'newest':
+        baseQuery = baseQuery.orderBy(desc(books.createdAt));
+        break;
+      case 'highest_rated':
+        baseQuery = baseQuery.orderBy(desc(books.rating));
+        break;
+      // case 'available':
+      //   baseQuery = baseQuery.where(sql`${books.availableCopies} > 0`);
+      //   break;
+      default:
+        baseQuery = baseQuery.orderBy(desc(books.createdAt)); // Default to newest
+        break;
+    }
+
+    // Apply pagination
+    const allBooks = await baseQuery.limit(ITEMS_PER_PAGE).offset(offset);
+
+    return allBooks;
   } catch (error) {
     console.log(error);
     throw new Error('Failed to fetch books');
   }
 }
 
-export async function fetchBooksPages(query: string): Promise<number> {
+export async function fetchBooksPages(
+  query: string,
+  filter?: Filter,
+): Promise<number> {
   try {
-    const res =
-      query.length > 0
-        ? await db
-            .select({ count: sql<number>`cast(count(*) as integer)` })
-            .from(books)
-            .where(
-              sql`${books.searchText} @@ to_tsquery('english', ${query.replace(/\s+/g, ' & ')})`,
-            )
-        : await db
-            .select({ count: sql<number>`cast(count(*) as integer)` })
-            .from(books);
+    let baseQuery = db
+      .select({ count: sql<number>`cast(count(*) as integer)`.as('count') })
+      .from(books)
+      .$dynamic(); // Dynamic mode enabled
+
+    const conditions = [];
+
+    // Apply search if necessary
+    if (query.length > 0) {
+      conditions.push(
+        sql`${books.title} ILIKE ${'%' + query + '%'} OR
+             ${books.author} ILIKE ${'%' + query + '%'} OR
+             ${books.description} ILIKE ${'%' + query + '%'} OR
+             ${books.genre} ILIKE ${'%' + query + '%'} OR
+             ${books.summary} ILIKE ${'%' + query + '%'}`,
+      );
+    }
+
+    // Apply search if necessary
+    if (query.length > 0) {
+      conditions.push(
+        sql`${books.searchText} @@ to_tsquery('english', ${query.replace(/\s+/g, ' & ')})`,
+      );
+    }
+
+    // Apply the filter here
+    if (filter === 'available') {
+      conditions.push(sql`${books.availableCopies} > 0`);
+    }
+
+    if (conditions.length > 0) {
+      baseQuery = baseQuery.where(sql.join(conditions, sql` OR `));
+    }
+
+    const res = await baseQuery;
 
     const totalPages = Math.ceil(Number(res[0].count) / ITEMS_PER_PAGE);
     return totalPages;

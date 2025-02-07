@@ -19,8 +19,8 @@ export default function SignOutButton() {
     >
       <TooltipProvider>
         <Tooltip>
-          <TooltipTrigger>
-            <button className="rounded-full bg-white p-2 transition-all duration-300 hover:bg-red-600/50 hover:backdrop-blur-md">
+          <TooltipTrigger asChild>
+            <button className="rounded-full p-2 transition-all duration-300 hover:bg-red-600/50 hover:backdrop-blur-md">
               <LogOutIcon size={24} color="red" />
             </button>
           </TooltipTrigger>
