@@ -14,7 +14,7 @@ export default function BookCard({
   isLoanedBook = false,
 }: Readonly<Book>) {
   return (
-    <li className={cn(isLoanedBook && 'w-full xs:w-52')}>
+    <li className={cn('w-max list-none', isLoanedBook && 'w-full xs:w-52')}>
       <Link
         href={`/books/${id}`}
         className={cn(isLoanedBook && 'flex w-full flex-col items-center')}

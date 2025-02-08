@@ -48,3 +48,18 @@ export const generatePagination = (
     totalPages,
   ];
 };
+
+export function truncateText(text: string, maxLength: number): string {
+  if (text.length <= maxLength) return text;
+  return text.slice(0, maxLength) + '...';
+}
+
+export const getDateWithSuffix = (date: number) => {
+  const suffixes = ['th', 'st', 'nd', 'rd'];
+  const lastDigit = date % 10;
+  const suffix =
+    lastDigit >= 1 && lastDigit <= 3 && !(date >= 11 && date <= 13)
+      ? suffixes[lastDigit]
+      : suffixes[0];
+  return `${date}${suffix}`;
+};

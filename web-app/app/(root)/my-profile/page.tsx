@@ -1,53 +1,71 @@
-import { auth, signOut } from '@/auth';
-import BookList from '@/components/book-list';
-import { Button } from '@/components/ui/button';
+import { auth } from '@/auth';
+import BorrowedBookCard from '@/components/borrowed-book-card';
+import ProfileCard from '@/components/profile-card';
 import { db } from '@/db/drizzle';
-import { books, borrowRecords } from '@/db/schema';
-import { desc, eq, inArray } from 'drizzle-orm';
+import { books, borrowRecords, users } from '@/db/schema';
+import { eq, inArray } from 'drizzle-orm';
 import React from 'react';
 
 export default async function Page() {
   const session = await auth();
 
-  const latestBooks = (await db
+  // Fetch the user of the current session.
+  const user = (await db
     .select()
-    .from(books)
-    .limit(10)
-    .orderBy(desc(books.createdAt))) as Book[];
+    .from(users)
+    .where(eq(users.id, session?.user?.id!))
+    .limit(1)
+    .then((res) => res[0])) as User;
 
   // Breakdown of the code:
 
   // 1. Fetch all the borrowed books from the borrowRecords table where the userId is equal to the current user id.
-  const borrowedBooks = await db
-    .select()
+  const borrowedBooksInfo = await db
+    .select({
+      bookId: borrowRecords.bookId,
+      borrowDate: borrowRecords.borrowDate,
+      returnDate: borrowRecords.returnDate,
+      dueDate: borrowRecords.dueDate,
+      status: borrowRecords.status,
+    })
     .from(borrowRecords)
-    .where(eq(borrowRecords.userId, session?.user?.id!));
+    .where(eq(borrowRecords.userId, session?.user?.id!)) as BorrowedBookInfo[];
 
   // 2. Fetch all the books from the books table where the id is in the list of bookIds.
-  const bookIds = borrowedBooks.map((borrowedBook) => borrowedBook.bookId);
-  const userBooks = await db
+  const bookIds = borrowedBooksInfo.map((borrowedBook) => borrowedBook.bookId);
+  const userBooks = (await db
     .select()
     .from(books)
-    .where(inArray(books.id, bookIds));
+    .where(inArray(books.id, bookIds))) as Book[];
+
+  userBooks.forEach((book) => {
+    book.isLoanedBook = true;
+  });
 
   console.log(userBooks);
 
   return (
     <>
-      <form
-        action={async () => {
-          'use server';
+      <div className="grid w-full max-w-7xl gap-14 lg:grid-cols-[35%_auto]">
+        <div className="max-h-screen lg:sticky lg:top-6 lg:self-start">
+          <ProfileCard {...user} />
+        </div>
 
-          await signOut();
-        }}
-        className="mb-10"
-      >
-        <Button>Logout</Button>
-      </form>
+        <div>
+          <h2 className="text-3xl font-semibold text-light-100 mb-6">
+            Borrowed Books
+          </h2>
+          <div className="flex flex-wrap gap-4">
+            {userBooks.map((book, index) => (
+              <BorrowedBookCard key={book.id} book={book} borrowedBookInfo={borrowedBooksInfo[index]} />
+            ))}
+          </div>
+        </div>
+      </div>
 
       {/* 3. Render the BookList component with the title "Borrowed Books" and the list of books fetched in step 2. */}
 
-      <BookList title="Borrowed Books" books={latestBooks} />
+      {/* <BookList title="Borrowed Books" books={latestBooks} /> */}
     </>
   );
 }

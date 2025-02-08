@@ -24,7 +24,7 @@ export default function HeaderBrowsing() {
                     : 'text-light-100 hover:text-light-400',
                 )}
               >
-                <Icon size={24} />
+                <Icon size={24} className='hover:scale-110 transition-all duration-200' />
                 {/* Home */}
               </Link>
             </TooltipTrigger>

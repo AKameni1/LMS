@@ -4,8 +4,9 @@ import NoResults from '@/components/no-results';
 import Pagination from '@/components/pagination';
 import Search from '@/components/search';
 import { Separator } from '@/components/ui/separator';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { fetchBooksPages } from '@/lib/data';
-import { cn } from '@/lib/utils';
+import { truncateText } from '@/lib/utils';
 
 export default async function Page(
   props: Readonly<{
@@ -29,8 +30,8 @@ export default async function Page(
     <>
       <Search placeholder="Search for books" />
 
-      <div className="mt-12 flex items-center justify-between">
-        <div className={cn(query && 'mr-4')}>
+      <div className="mb-4 mt-12 flex items-center justify-between">
+        <div className={'mr-4'}>
           {!query ? (
             <h2 className="font-bebas-neue text-4xl text-light-100">
               All Library Books
@@ -38,7 +39,16 @@ export default async function Page(
           ) : (
             <h2 className="text-3xl font-semibold text-light-100">
               Search Result for:{' '}
-              <span className="max-w-28 text-light-200">{query}</span>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span className="max-w-2 text-light-200">{truncateText(query, 20)}</span>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p className="text-sm text-dark-200 font-medium">{query}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </h2>
           )}
         </div>
@@ -50,7 +60,7 @@ export default async function Page(
         <NoResults />
       ) : (
         <>
-            <FilterBookList
+          <FilterBookList
             query={query.trim()}
             currentPage={currentPage}
             filter={filter as Filter}

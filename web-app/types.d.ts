@@ -15,6 +15,23 @@ type Book = {
   isLoanedBook?: boolean;
 };
 
+type User = {
+  id: string;
+  fullName: string;
+  email: string;
+  universityId: number;
+  universityCard: string;
+  status: 'PENDING' | 'APPROVED' | 'REJECTED';
+}
+
+type BorrowedBookInfo = {
+  bookId: string;
+  borrowDate: Date;
+  dueDate: string;
+  returnDate: string;
+  status: 'BORROWED' | 'RETURNED';
+}
+
 type AuthCredentials = {
   fullName: string;
   email: string;

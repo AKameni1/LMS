@@ -59,7 +59,7 @@
   }
 
   .borrowed-book_cover {
-    @apply flex w-full items-center justify-center rounded-lg px-10 py-4 lg:px-16;
+    @apply mb-4 flex w-52 items-center justify-center rounded-xl px-4 py-4 lg:px-9;
   }
 
   /* Book Cover */
@@ -257,7 +257,7 @@
 
   /* Root */
   .root-container {
-    @apply flex min-h-dvh flex-1 flex-col overflow-hidden bg-dark-100 bg-pattern bg-cover bg-top px-5 xs:px-10 md:px-16;
+    @apply flex min-h-dvh flex-1 flex-col items-center justify-center bg-dark-100 bg-pattern bg-cover bg-top px-5 xs:px-10 md:px-16 lg:px-8;
   }
 
   /* Book Details */
