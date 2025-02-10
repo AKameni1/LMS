@@ -20,26 +20,25 @@ export default function SignOutButton() {
   };
 
   return (
-    <form action={handleAction}>
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <button
-              disabled={isPending}
-              className="rounded-full p-2 transition-all duration-300 hover:bg-red-600/50 hover:backdrop-blur-md"
-            >
-              {isPending ? (
-                <Loader2Icon className="animate-spin" color="red" size={24} />
-              ) : (
-                <LogOutIcon size={24} color="red" />
-              )}
-            </button>
-          </TooltipTrigger>
-          <TooltipContent className="bg-red-600">
-            <p className="font-semibold text-light-100">Sign Out</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
-    </form>
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <button
+            onClick={handleAction}
+            disabled={isPending}
+            className="rounded-full p-2 transition-all duration-300 hover:bg-red-600/50 hover:backdrop-blur-md"
+          >
+            {isPending ? (
+              <Loader2Icon className="animate-spin" color="red" size={24} />
+            ) : (
+              <LogOutIcon size={24} color="red" />
+            )}
+          </button>
+        </TooltipTrigger>
+        <TooltipContent className="bg-red-600">
+          <p className="font-semibold text-light-100">Sign Out</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 }
