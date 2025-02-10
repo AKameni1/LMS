@@ -17,7 +17,7 @@ export default function ProfileCard({
   return (
     <div className="gradient-blue relative rounded-2xl p-10 shadow-[0_0_70px_rgba(0,0,0,0.4)]">
       <div className="mb-6 p-8">
-        <div className="absolute -top-4 left-1/2 h-[88] w-14 -translate-x-1/2 rounded-b-full bg-dark-700">
+        <div className="absolute -top-4 left-1/2 h-[88px] w-14 -translate-x-1/2 rounded-b-full bg-dark-700">
           <div className="absolute inset-2 h-2 w-10 translate-y-14 rounded-full bg-dark-800" />
         </div>
       </div>
