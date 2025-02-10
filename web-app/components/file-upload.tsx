@@ -25,19 +25,23 @@ const {
 
 const authenticator = async () => {
   try {
-    const response = await fetch(`${config.env.prodApiEndpoint}/api/imagekit`);
+    const response = await fetch(`${config.env.apiEndpoint}/api/imagekit`);
 
     if (!response.ok) {
       const errorText = await response.text();
       throw new Error(
         'Authentication request failed with status: ' +
-        response.status +
-        ' ' +
-        errorText,
+          response.status +
+          ' ' +
+          errorText,
       );
     }
 
-    const data = await response.json();
+    const data: {
+      signature: string;
+      expire: number;
+      token: string;
+    } = await response.json();
 
     const { signature, expire, token } = data;
 
@@ -179,21 +183,21 @@ export default function FileUpload({
         </div>
       )}
 
-      {file && (
+      {file?.filePath && (
         <>
           {type === 'image' && (
             <IKImage
-              path={file.filePath!}
+              path={file.filePath}
               width={500}
               height={300}
               loading={'lazy'}
-              alt={file.filePath!}
+              alt={file.filePath}
               className="rounded-lg"
             />
           )}
           {type === 'video' && (
             <IKVideo
-              path={file.filePath!}
+              path={file.filePath}
               controls={true}
               className="h-96 w-full rounded-xl"
             />
