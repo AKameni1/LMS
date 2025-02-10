@@ -10,7 +10,7 @@ import SignOutButton from './sign-out-btn';
 export default function Header({ session }: Readonly<{ session: Session }>) {
 
   return (
-    <header className="my-10 flex justify-between gap-5">
+    <header className="my-10 w-full flex justify-between gap-5">
       <Link href="/" className="flex items-center gap-2">
         <Image
           src="/icons/logo.svg"

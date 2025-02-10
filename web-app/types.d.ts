@@ -13,6 +13,7 @@ type Book = {
   summary: string;
   createdAt: Date | null;
   isLoanedBook?: boolean;
+  borrowCount?: number;
 };
 
 type User = {

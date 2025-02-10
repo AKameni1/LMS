@@ -13,8 +13,8 @@ export default function Sidebar({ session }: Readonly<{ session: Session }>) {
   const pathname = usePathname();
 
   return (
-    <div className="admin-sidebar">
-      <div className="">
+    <aside className="admin-sidebar">
+      <div>
         <div className="logo">
           <Image
             src="/icons/admin/logo.svg"
@@ -26,7 +26,7 @@ export default function Sidebar({ session }: Readonly<{ session: Session }>) {
           <h1>BookWise</h1>
         </div>
 
-        <div className="mt-10 flex flex-col gap-5">
+        <nav className="mt-10 flex flex-col gap-5">
           {adminSideBarLinks.map((link) => {
             const isSelected =
               (link.route !== '/admin' &&
@@ -57,7 +57,7 @@ export default function Sidebar({ session }: Readonly<{ session: Session }>) {
               </Link>
             );
           })}
-        </div>
+        </nav>
       </div>
 
       <div className="user">
@@ -72,6 +72,6 @@ export default function Sidebar({ session }: Readonly<{ session: Session }>) {
           <p className="text-xs text-light-500">{session?.user?.email}</p>
         </div>
       </div>
-    </div>
+    </aside>
   );
 }

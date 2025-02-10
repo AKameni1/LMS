@@ -1,6 +1,7 @@
 import { auth } from '@/auth';
 import BookOverview from '@/components/book-overview';
 import BookVideo from '@/components/book-video';
+import SimilarBooks from '@/components/similar-books';
 import { db } from '@/db/drizzle';
 import { books } from '@/db/schema';
 import { eq } from 'drizzle-orm';
@@ -45,6 +46,7 @@ export default async function Page({
         </div>
 
         {/* SIMILAR BOOKS COMPONENT */}
+        <SimilarBooks currentBookId={id} genre={bookDetails.genre} />
       </div>
     </>
   );

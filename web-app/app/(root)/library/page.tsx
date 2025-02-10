@@ -4,7 +4,12 @@ import NoResults from '@/components/no-results';
 import Pagination from '@/components/pagination';
 import Search from '@/components/search';
 import { Separator } from '@/components/ui/separator';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { fetchBooksPages } from '@/lib/data';
 import { truncateText } from '@/lib/utils';
 
@@ -27,7 +32,13 @@ export default async function Page(
   );
 
   return (
-    <>
+    <main className="library">
+      <p className="library-subtitle">DISCOVER YOUR NEXT GREAT READ:</p>
+      <h1 className="library-title">
+        Explore and Search for <span className="text-light-200">Any Book</span>{' '}
+        In Our Library
+      </h1>
+
       <Search placeholder="Search for books" />
 
       <div className="mb-4 mt-12 flex items-center justify-between">
@@ -42,10 +53,12 @@ export default async function Page(
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <span className="max-w-2 text-light-200">{truncateText(query, 20)}</span>
+                    <span className="max-w-2 text-light-200">
+                      {truncateText(query, 20)}
+                    </span>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p className="text-sm text-dark-200 font-medium">{query}</p>
+                    <p className="text-sm font-medium text-dark-200">{query}</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
@@ -71,6 +84,6 @@ export default async function Page(
           <Pagination totalPages={totalPages} />
         </>
       )}
-    </>
+    </main>
   );
 }

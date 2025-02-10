@@ -95,7 +95,7 @@ export default async function BookOverview({
             coverColor={coverColor}
             coverImage={coverUrl}
           />
-          <div className="absolute left-16 top-10 rotate-12 blur-sm opacity-50 max-sm:hidden">
+          <div className="absolute left-40 top-5 rotate-[10.23deg] blur-sm opacity-50 max-sm:hidden">
             <BookCover
               bookTitle={title}
               variant="wide"

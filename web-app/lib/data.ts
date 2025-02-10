@@ -101,7 +101,7 @@ export async function fetchBooksPages(
     }
 
     if (conditions.length > 0) {
-      baseQuery = baseQuery.where(sql.join(conditions, sql` OR `));
+      baseQuery = baseQuery.where(sql.join(conditions, sql` AND `));
     }
 
     const res = await baseQuery;

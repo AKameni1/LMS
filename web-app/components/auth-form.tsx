@@ -26,6 +26,8 @@ import { FIELD_NAMES, FIELD_TYPES } from '@/constants';
 import FileUpload from './file-upload';
 import { toast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
+import { useTransition } from 'react';
+import { Loader2Icon } from 'lucide-react';
 
 type AuthFormPropsType<T extends FieldValues> = {
   schema: ZodType<T>;
@@ -41,7 +43,9 @@ export default function AuthForm<T extends FieldValues>({
   onSubmit,
 }: Readonly<AuthFormPropsType<T>>) {
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
   const isSignIn = type === 'SIGN_IN';
+  const message = isSignIn ? 'Sign in' : 'Sign up';
 
   const form: UseFormReturn<T> = useForm({
     resolver: zodResolver(schema),
@@ -49,22 +53,25 @@ export default function AuthForm<T extends FieldValues>({
   });
 
   const handleSubmit: SubmitHandler<T> = async (data) => {
-    const result = await onSubmit(data);
+    startTransition(async () => {
+      const result = await onSubmit(data);
 
-    if (result.success) {
-      toast({
-        title: 'Success',
-        description: `You have successfully ${isSignIn ? 'Signed in' : 'Signed up'} to BookWise.`,
-      });
+      if (result.success) {
+        toast({
+          title: 'Success',
+          description: `You have successfully ${isSignIn ? 'Signed in' : 'Signed up'} to BookWise.`,
+          variant: 'success'
+        });
 
-      router.push('/');
-    } else {
-      toast({
-        title: `Error ${isSignIn ? 'Signing in' : 'Signing up'}`,
-        description: result.error ?? 'An error occurred. Please try again.',
-        variant: 'destructive',
-      });
-    }
+        router.push('/');
+      } else {
+        toast({
+          title: `Error ${isSignIn ? 'Signing in' : 'Signing up'}`,
+          description: result.error ?? 'An error occurred. Please try again.',
+          variant: 'destructive',
+        });
+      }
+    });
   };
 
   return (
@@ -122,7 +129,11 @@ export default function AuthForm<T extends FieldValues>({
           ))}
 
           <Button type="submit" className="form-btn">
-            {isSignIn ? 'Sign in' : 'Sign up'}
+            {isPending ? (
+              <Loader2Icon className="animate-spin" size={24} />
+            ) : (
+              message
+            )}
           </Button>
         </form>
       </Form>

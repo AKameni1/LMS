@@ -2,6 +2,8 @@ import Image from 'next/image';
 import BookCover from './book-cover';
 import chroma from 'chroma-js';
 import { getDateWithSuffix } from '@/lib/utils';
+import { TriangleAlertIcon } from 'lucide-react';
+import Link from 'next/link';
 
 type BorrowedBookCardProps = {
   book: Book;
@@ -12,7 +14,7 @@ export default function BorrowedBookCard({
   book,
   borrowedBookInfo,
 }: Readonly<BorrowedBookCardProps>) {
-  const { title, genre, coverColor, coverUrl } = book;
+  const { id, title, genre, coverColor, coverUrl } = book;
   const { borrowDate, dueDate, returnDate, status } = borrowedBookInfo;
 
   const today = new Date();
@@ -34,14 +36,23 @@ export default function BorrowedBookCard({
           className="absolute -right-1 -top-1"
         />
       )}
-      <div className="borrowed-book_cover" style={{ backgroundColor }}>
-        <BookCover
-          bookTitle={title}
-          coverColor={coverColor}
-          coverImage={coverUrl}
-          variant="medium"
-          className="drop-shadow-[-30px_4px_30px_rgba(0,0,0,0.4)]"
+      {diffDays <= 1 && diffDays >= 0 && (
+        <TriangleAlertIcon
+          size={24}
+          className="absolute -right-1 -top-1"
+          color="orange"
         />
+      )}
+      <div className="borrowed-book_cover" style={{ backgroundColor }}>
+        <Link href={`/books/${id}`}>
+          <BookCover
+            bookTitle={title}
+            coverColor={coverColor}
+            coverImage={coverUrl}
+            variant="medium"
+            className="drop-shadow-[-30px_4px_30px_rgba(0,0,0,0.4)]"
+          />
+        </Link>
       </div>
 
       <div className="mt-4 max-w-28 xs:max-w-40">
@@ -84,7 +95,8 @@ export default function BorrowedBookCard({
                     height={18}
                     alt={`calendar icon for overdue book ${title}`}
                   />
-                  {diffDays.toString().padStart(2, '0')} days left to return
+                  {diffDays.toString().padStart(2, '0')} day
+                  {diffDays <= 1 ? '' : 's'} left to return
                 </>
               )}
             </p>

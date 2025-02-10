@@ -4,11 +4,26 @@ import { db } from '@/db/drizzle';
 import { books, borrowRecords } from '@/db/schema';
 import { eq, sql } from 'drizzle-orm';
 import dayjs from 'dayjs';
+import { revalidatePath } from 'next/cache';
 
 export const borrowBook = async (params: BorrowBookParams) => {
   const { bookId, userId } = params;
 
   try {
+    // Check if the book is available for borrowing
+    const [book] = await db
+      .select({ availableCopies: books.availableCopies })
+      .from(books)
+      .where(eq(books.id, bookId))
+      .limit(1);
+
+    if (!book || book.availableCopies <= 0) {
+      return {
+        success: false,
+        message: 'Book is not available for borrowing',
+      };
+    }
+
     // Check if the book is already borrowed by the user
     const existingBorrow = await db
       .select()
@@ -22,20 +37,6 @@ export const borrowBook = async (params: BorrowBookParams) => {
       return {
         success: false,
         message: 'You have already borrowed this book.',
-      };
-    }
-
-    // Check if the book is available for borrowing
-    const [book] = await db
-      .select({ availableCopies: books.availableCopies })
-      .from(books)
-      .where(eq(books.id, bookId))
-      .limit(1);
-
-    if (!book || book.availableCopies <= 0) {
-      return {
-        success: false,
-        message: 'Book is not available for borrowing',
       };
     }
 
@@ -53,6 +54,8 @@ export const borrowBook = async (params: BorrowBookParams) => {
       .set({ availableCopies: sql`${book.availableCopies} - 1` })
       .where(eq(books.id, bookId))
       .returning({ id: books.id });
+
+    revalidatePath('/my-profile');
 
     return {
       success: true,

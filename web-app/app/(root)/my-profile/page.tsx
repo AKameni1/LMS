@@ -20,7 +20,7 @@ export default async function Page() {
   // Breakdown of the code:
 
   // 1. Fetch all the borrowed books from the borrowRecords table where the userId is equal to the current user id.
-  const borrowedBooksInfo = await db
+  const borrowedBooksInfo = (await db
     .select({
       bookId: borrowRecords.bookId,
       borrowDate: borrowRecords.borrowDate,
@@ -29,7 +29,7 @@ export default async function Page() {
       status: borrowRecords.status,
     })
     .from(borrowRecords)
-    .where(eq(borrowRecords.userId, session?.user?.id!)) as BorrowedBookInfo[];
+    .where(eq(borrowRecords.userId, session?.user?.id!))) as BorrowedBookInfo[];
 
   // 2. Fetch all the books from the books table where the id is in the list of bookIds.
   const bookIds = borrowedBooksInfo.map((borrowedBook) => borrowedBook.bookId);
@@ -46,18 +46,22 @@ export default async function Page() {
 
   return (
     <>
-      <div className="grid w-full max-w-7xl gap-14 lg:grid-cols-[35%_auto]">
+      <div className={`grid w-full max-w-7xl gap-14 ${userBooks.length <= 2 ? 'lg:grid-cols-[40%_auto]' : ' lg:grid-cols-[35%_auto]'}`}>
         <div className="max-h-screen lg:sticky lg:top-6 lg:self-start">
           <ProfileCard {...user} />
         </div>
 
         <div>
-          <h2 className="text-3xl font-semibold text-light-100 mb-6">
+          <h2 className="mb-6 text-3xl font-semibold text-light-100">
             Borrowed Books
           </h2>
-          <div className="flex flex-wrap gap-4">
-            {userBooks.map((book, index) => (
-              <BorrowedBookCard key={book.id} book={book} borrowedBookInfo={borrowedBooksInfo[index]} />
+          <div className="flex flex-1 flex-wrap gap-4">
+            {userBooks.map((book) => (
+              <BorrowedBookCard
+                key={book.id}
+                book={book}
+                borrowedBookInfo={borrowedBooksInfo.find((borrowedBook) => borrowedBook.bookId === book.id)!}
+              />
             ))}
           </div>
         </div>

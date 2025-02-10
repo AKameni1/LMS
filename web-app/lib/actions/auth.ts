@@ -1,6 +1,6 @@
 'use server';
 
-import { signIn } from '@/auth';
+import { signIn, signOut } from '@/auth';
 import { db } from '@/db/drizzle';
 import { users } from '@/db/schema';
 import { hash } from 'bcryptjs';
@@ -105,4 +105,8 @@ export const signUp = async (params: AuthCredentials) => {
       message: `Error creating user. ${error}`,
     };
   }
+};
+
+export const signOutComplete = async () => {
+  await signOut();
 };

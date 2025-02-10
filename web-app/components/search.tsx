@@ -28,29 +28,21 @@ export default function Search({
   }, 400);
 
   return (
-    <section className="library">
-      <p className="library-subtitle">DISCOVER YOUR NEXT GREAT READ:</p>
-      <h1 className="library-title">
-        Explore and Search for <span className="text-light-200">Any Book</span>{' '}
-        In Our Library
-      </h1>
-
-      <div className="search">
-        <Image
-          src={'/icons/search-fill.svg'}
-          alt="search-icon"
-          className="size-6"
-          width={20}
-          height={20}
-        />
-        <Input
-          type="text"
-          className="search-input bg-transparent"
-          placeholder={placeholder}
-          onChange={(e) => handleSearch(e.target.value)}
-          defaultValue={searchParams.get('query')?.toString() ?? ''}
-        />
-      </div>
-    </section>
+    <div className="search">
+      <Image
+        src={'/icons/search-fill.svg'}
+        alt="search-icon"
+        className="size-6"
+        width={20}
+        height={20}
+      />
+      <Input
+        type="search"
+        className="search-input bg-transparent"
+        placeholder={placeholder}
+        onChange={(e) => handleSearch(e.target.value)}
+        defaultValue={searchParams.get('query')?.toString() ?? ''}
+      />
+    </div>
   );
 }

@@ -10,6 +10,8 @@ import { auth } from '@/auth';
 
 import { SessionProvider } from 'next-auth/react';
 
+export const experimental_ppr = true;
+
 const ibmPlexSans = localFont({
   src: [
     { path: '/fonts/IBMPlexSans-Regular.ttf', weight: '400', style: 'normal' },

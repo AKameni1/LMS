@@ -1,27 +1,38 @@
-import { signOut } from '@/auth';
-import React from 'react';
+'use client';
+
+import React, { useTransition } from 'react';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from './ui/tooltip';
-import { LogOutIcon } from 'lucide-react';
+import { Loader2Icon, LogOutIcon } from 'lucide-react';
+import { signOutComplete } from '@/lib/actions/auth';
 
 export default function SignOutButton() {
-  return (
-    <form
-      action={async () => {
-        'use server';
+  const [isPending, startTransition] = useTransition();
 
-        await signOut();
-      }}
-    >
+  const handleAction = () => {
+    startTransition(async () => {
+      await signOutComplete();
+    });
+  };
+
+  return (
+    <form action={handleAction}>
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
-            <button className="rounded-full p-2 transition-all duration-300 hover:bg-red-600/50 hover:backdrop-blur-md">
-              <LogOutIcon size={24} color="red" />
+            <button
+              disabled={isPending}
+              className="rounded-full p-2 transition-all duration-300 hover:bg-red-600/50 hover:backdrop-blur-md"
+            >
+              {isPending ? (
+                <Loader2Icon className="animate-spin" color="red" size={24} />
+              ) : (
+                <LogOutIcon size={24} color="red" />
+              )}
             </button>
           </TooltipTrigger>
           <TooltipContent className="bg-red-600">
