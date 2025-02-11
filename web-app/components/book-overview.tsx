@@ -3,8 +3,9 @@ import React from 'react';
 import BookCover from './book-cover';
 import BorrowBook from './borrow-book';
 import { db } from '@/db/drizzle';
-import { users } from '@/db/schema';
+import { borrowRecords, users } from '@/db/schema';
 import { eq } from 'drizzle-orm';
+import FavoriteBook from './favorite-book';
 
 type BookOverviewPropsType = Book & { userId: string };
 
@@ -27,12 +28,26 @@ export default async function BookOverview({
     .where(eq(users.id, userId))
     .limit(1);
 
+  const [book] = await db
+    .select()
+    .from(borrowRecords)
+    .where(eq(borrowRecords.bookId, id))
+    .limit(1);
+
   const borrowingEligibility = {
     isEligible: availableCopies > 0 && user?.status === 'APPROVED',
     message:
       availableCopies <= 0
         ? 'Book is not available for borrowing'
         : 'You are not eligible to borrow books',
+  };
+
+  const favoriteEligibility = {
+    isEligible: book.status !== 'BORROWED',
+    message:
+      book.status !== 'BORROWED'
+        ? ''
+        : 'You cannot add this book to your favorites',
   };
 
   return (
@@ -77,13 +92,22 @@ export default async function BookOverview({
 
         <p className="book-description">{description}</p>
 
-        {user && (
-          <BorrowBook
-            bookId={id}
-            userId={userId}
-            borrowingEligibility={borrowingEligibility}
-          />
-        )}
+        <div className="book-btns">
+          {user && (
+            <>
+              <BorrowBook
+                bookId={id}
+                userId={userId}
+                borrowingEligibility={borrowingEligibility}
+              />
+              <FavoriteBook
+                bookId={id}
+                userId={userId}
+                addFavoriteEligibility={favoriteEligibility}
+              />
+            </>
+          )}
+        </div>
       </div>
 
       <div className="relative flex flex-1 justify-center">
@@ -95,7 +119,7 @@ export default async function BookOverview({
             coverColor={coverColor}
             coverImage={coverUrl}
           />
-          <div className="absolute left-40 top-5 rotate-[10.23deg] blur-sm opacity-50 max-sm:hidden">
+          <div className="absolute left-40 top-5 rotate-[10.23deg] opacity-50 blur-sm max-sm:hidden">
             <BookCover
               bookTitle={title}
               variant="wide"

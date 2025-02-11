@@ -10,6 +10,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { books } from '@/db/schema';
 import { fetchBooksPages } from '@/lib/data';
 import { truncateText } from '@/lib/utils';
 
@@ -28,6 +29,7 @@ export default async function Page(
   const currentPage = Number(searchParams?.page) || 1;
   const totalPages = await fetchBooksPages(
     query.trim(),
+    books,
     filter.trim() as Filter,
   );
 
@@ -77,6 +79,7 @@ export default async function Page(
             query={query.trim()}
             currentPage={currentPage}
             filter={filter as Filter}
+            type="Library"
           />
 
           <Separator className="mt-10 h-1 rounded-full bg-dark-200/40" />

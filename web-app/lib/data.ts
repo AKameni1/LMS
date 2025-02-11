@@ -1,18 +1,24 @@
 import { db } from '@/db/drizzle';
-import { books } from '@/db/schema';
-import { asc, desc, sql } from 'drizzle-orm';
+import { books, favoriteBooks } from '@/db/schema';
+import { asc, desc, sql, eq } from 'drizzle-orm';
+import { PgTable, TableConfig } from 'drizzle-orm/pg-core';
 
 const ITEMS_PER_PAGE = 10;
 export async function fetchFilteredBooks(
   query: string,
   currentPage: number,
+  type: Type,
   filter?: Filter,
 ): Promise<Book[]> {
   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
 
+  let baseQuery
   try {
     // base query
-    let baseQuery = db.select().from(books).$dynamic(); // Dynamic mode enabled
+    if(type === 'Library'){baseQuery = db.select().from(books).$dynamic();}
+    else{baseQuery = db.select().from(books).innerJoin(favoriteBooks, eq(books.id, favoriteBooks.bookId)).$dynamic();}
+    
+    // Dynamic mode enabled
 
     const conditions = [];
 
@@ -58,7 +64,8 @@ export async function fetchFilteredBooks(
     // Apply pagination
     const allBooks = await baseQuery.limit(ITEMS_PER_PAGE).offset(offset);
 
-    return allBooks;
+    
+    return allBooks as Book[];
   } catch (error) {
     console.log(error);
     throw new Error('Failed to fetch books');
@@ -67,12 +74,13 @@ export async function fetchFilteredBooks(
 
 export async function fetchBooksPages(
   query: string,
-  filter?: Filter,
+  type: PgTable<TableConfig>,
+  filter?: Filter
 ): Promise<number> {
   try {
     let baseQuery = db
       .select({ count: sql<number>`cast(count(*) as integer)`.as('count') })
-      .from(books)
+      .from(type)
       .$dynamic(); // Dynamic mode enabled
 
     const conditions = [];

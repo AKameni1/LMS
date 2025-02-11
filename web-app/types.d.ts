@@ -54,9 +54,11 @@ type BookParams = {
   summary: string;
 };
 
-type BorrowBookParams = {
+type ButtonBookParams = {
   bookId: string;
   userId: string;
 };
 
 type Filter = 'oldest' | 'newest' | 'available' | 'highest_rated';
+
+type Type = 'Library' | 'Favorites' 
