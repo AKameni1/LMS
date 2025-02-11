@@ -71,6 +71,13 @@
       "when": 1738891190921,
       "tag": "0009_add_insert_update_search_text_trigger",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1739289609184,
+      "tag": "0010_short_joshua_kane",
+      "breakpoints": true
     }
   ]
 }
