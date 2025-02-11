@@ -1,4 +1,3 @@
-import config from '@/lib/config';
 import {
   Body,
   Button,
@@ -13,7 +12,6 @@ import {
   Text,
 } from '@react-email/components';
 import { Tailwind } from '@react-email/tailwind';
-import Config from '../tailwind.config'
 
 type WelcomeEmailProps = {
   studentName?: string;
@@ -30,51 +28,51 @@ export default function WelcomeEmail({
       <Preview>
         Welcome to the BookWise Library, Your Reading Companion!
       </Preview>
-      <Tailwind config={Config}>
-        <Body className="bg-dark-100 font-bebas-neue">
-          <Container className="mx-auto my-10 max-w-2xl p-5">
+      <Tailwind>
+        <Body tw="bg-[#16191E] font-['IBM Plex Sans']">
+          <Container tw="mx-auto my-[40px] w-[465px] p-[20px]">
             {/* Logo Section */}
-            <Section className="flex items-center gap-2 text-white">
+            <Section tw="flex items-center gap-2 text-white">
               <Img
-                src="../public/icons/logo.svg"
+                src="https://lms-university.vercel.app/icons/logo.svg"
                 alt="BookWise Library"
                 width={50}
                 height={50}
               />
-              <Text className="text-2xl font-bold">BookWise</Text>
+              <Text tw="text-2xl font-bold">BookWise</Text>
             </Section>
 
-            <Hr className="my-5 h-[1px] w-full shrink-0 rounded-full bg-border bg-dark-300" />
+            <Hr tw="my-[20px] h-[1px] w-[100%] shrink-0 rounded-full bg-[#232839] bg-border" />
 
             {/* Main Content */}
-            <Section className="mt-8">
-              <Heading className="m-0 text-3xl font-bold leading-tight">
+            <Section tw="mt-[32px]">
+              <Heading tw="m-[0px] text-3xl font-bold leading-tight">
                 Welcome to BookWise, Your Reading Companion!
               </Heading>
 
-              <Text className="mt-6 text-xl leading-relaxed text-light-100">
+              <Text tw="mt-[24px] text-xl leading-relaxed text-[#d6e0ff]">
                 Hi {studentName},
               </Text>
 
-              <Text className="mt-4 leading-relaxed text-light-100">
+              <Text tw="mt-[16px] leading-relaxed text-[#d6e0ff]">
                 Welcome to BookWise! We're excited to have you join our
                 community of book enthusiasts. Explore a wide range of books,
                 borrow with ease, and manage your reading journey seamlessly.
               </Text>
 
-              <Text className="mt-6 text-light-300">
+              <Text tw="mt-[24px] text-[#f8f8ff]">
                 Get started by logging in to your account:
               </Text>
 
               <Button
-                href={`${config.env.prodApiEndpoint}/sign-in`}
-                className="mt-6 rounded-md bg-primary px-8 py-4 text-center text-base font-bold text-dark-100"
+                href="https://lms-university.vercel.app/sign-in"
+                tw="mt-[24px] rounded-md bg-[#e7c9a5] px-[32px] py-[16px] text-center text-base font-bold text-[#16191e]"
               >
                 Login to BookWise
               </Button>
 
-              <Text className="mt-8 text-light-100">Happy reading,</Text>
-              <Text className="mt-1 text-light-100">The Bookwise Team</Text>
+              <Text tw="mt-[32px] text-[#d6e0ff]">Happy reading,</Text>
+              <Text tw="mt-[4px] text-[#d6e0ff]">The Bookwise Team</Text>
             </Section>
           </Container>
         </Body>

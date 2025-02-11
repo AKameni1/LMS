@@ -22,16 +22,28 @@ export const sendEmail = async ({
   subject: string;
   message: React.ReactNode | string;
 }) => {
-  await qstashClient.publishJSON({
-    api: {
-      name: 'email',
-      provider: resend({ token: config.env.resendToken }),
-    },
-    body: {
-      from: 'Arthur <contact@arthurkameni.com>',
-      to: [email],
-      subject: subject,
-      react: message,
-    },
-  });
+  try {
+    if (!email || !subject || !message) {
+      throw new Error('Missing required email parameters');
+    }
+
+    const response = await qstashClient.publishJSON({
+      api: {
+        name: 'email',
+        provider: resend({ token: config.env.resendToken }),
+      },
+      body: {
+        from: 'Arthur <contact@arthurkameni.com>',
+        to: [email],
+        subject: subject,
+        react: message,
+      },
+    });
+
+    console.log('Email sent successfully:', response);
+    return { success: true, data: response };
+  } catch (error) {
+    console.error('Error sending email:', error);
+    throw error;
+  }
 };
