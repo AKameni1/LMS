@@ -13,6 +13,7 @@ import {
   Text,
 } from '@react-email/components';
 import { Tailwind } from '@react-email/tailwind';
+import Config from '../tailwind.config'
 
 type WelcomeEmailProps = {
   studentName?: string;
@@ -29,7 +30,7 @@ export default function WelcomeEmail({
       <Preview>
         Welcome to the BookWise Library, Your Reading Companion!
       </Preview>
-      <Tailwind>
+      <Tailwind config={Config}>
         <Body className="bg-dark-100 font-bebas-neue">
           <Container className="mx-auto my-10 max-w-2xl p-5">
             {/* Logo Section */}
