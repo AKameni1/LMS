@@ -2,7 +2,6 @@ import { db } from '@/db/drizzle';
 import { users } from '@/db/schema';
 import WelcomeEmail from '@/emails/welcome-email';
 import { sendEmail } from '@/lib/workflow';
-import { render } from '@react-email/render';
 import { serve } from '@upstash/workflow/nextjs';
 import { eq } from 'drizzle-orm';
 import React from 'react';
@@ -51,13 +50,7 @@ export const { POST } = serve<InitialData>(async (context) => {
     await sendEmail({
       email,
       subject: 'Welcome to our platform',
-      message: await render(
-        React.createElement(WelcomeEmail, { studentName: fullName }),
-        {
-          pretty: true,
-          // plainText: true,
-        },
-      ),
+      message: React.createElement(WelcomeEmail, { studentName: fullName }),
     });
   });
 
