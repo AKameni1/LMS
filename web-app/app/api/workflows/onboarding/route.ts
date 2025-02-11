@@ -48,18 +48,16 @@ export const { POST } = serve<InitialData>(async (context) => {
 
   // Welcome email
   await context.run('new-signup', async () => {
-    const message = await render(
-      React.createElement(WelcomeEmail, { studentName: fullName }),
-      {
-        pretty: true,
-        plainText: true,
-      },
-    );
-    console.log(message);
     await sendEmail({
       email,
       subject: 'Welcome to our platform',
-      message,
+      message: await render(
+        React.createElement(WelcomeEmail, { studentName: fullName }),
+        {
+          pretty: true,
+          // plainText: true,
+        },
+      ),
     });
   });
 

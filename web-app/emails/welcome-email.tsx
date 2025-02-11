@@ -7,16 +7,16 @@ import {
   Heading,
   Hr,
   Html,
+  Img,
   Preview,
   Section,
   Text,
 } from '@react-email/components';
 import { Tailwind } from '@react-email/tailwind';
-import Image from 'next/image';
 
 type WelcomeEmailProps = {
   studentName?: string;
-}
+};
 
 export default function WelcomeEmail({
   studentName = '[Student Name]',
@@ -34,8 +34,8 @@ export default function WelcomeEmail({
           <Container className="mx-auto my-10 max-w-2xl p-5">
             {/* Logo Section */}
             <Section className="flex items-center gap-2 text-white">
-              <Image
-                src="/logo.png"
+              <Img
+                src="../public/icons/logo.svg"
                 alt="BookWise Library"
                 width={50}
                 height={50}
@@ -66,7 +66,7 @@ export default function WelcomeEmail({
               </Text>
 
               <Button
-                href={`${config.env.apiEndpoint}/sign-in`}
+                href={`${config.env.prodApiEndpoint}/sign-in`}
                 className="mt-6 rounded-md bg-primary px-8 py-4 text-center text-base font-bold text-dark-100"
               >
                 Login to BookWise
