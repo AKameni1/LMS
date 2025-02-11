@@ -60,7 +60,7 @@ export default function AuthForm<T extends FieldValues>({
         toast({
           title: 'Success',
           description: `You have successfully ${isSignIn ? 'Signed in' : 'Signed up'} to BookWise.`,
-          variant: 'success'
+          variant: 'success',
         });
 
         router.push('/');

@@ -100,6 +100,8 @@ export const signUp = async (params: AuthCredentials) => {
       message: 'User created successfully',
     };
   } catch (error) {
+    console.log(error);
+
     return {
       success: false,
       message: `Error creating user. ${error}`,

@@ -46,16 +46,15 @@ const getUserState = async (email: string): Promise<UserState> => {
 export const { POST } = serve<InitialData>(async (context) => {
   const { email, fullName } = context.requestPayload;
 
-  const message = await render(
-    React.createElement(WelcomeEmail, { studentName: fullName }),
-    {
-      pretty: true,
-      plainText: true,
-    },
-  );
-
   // Welcome email
   await context.run('new-signup', async () => {
+    const message = await render(
+      React.createElement(WelcomeEmail, { studentName: fullName }),
+      {
+        pretty: true,
+        plainText: true,
+      },
+    );
     console.log(message);
     await sendEmail({
       email,
