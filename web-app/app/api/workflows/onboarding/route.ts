@@ -4,7 +4,6 @@ import { WELCOME_EMAIL } from '@/emails/emails';
 import { sendEmail } from '@/lib/workflow';
 import { serve } from '@upstash/workflow/nextjs';
 import { eq } from 'drizzle-orm';
-import React from 'react';
 
 type UserState = 'non-active' | 'active';
 
