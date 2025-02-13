@@ -1,6 +1,6 @@
 import { db } from '@/db/drizzle';
 import { users } from '@/db/schema';
-import WelcomeEmail from '@/emails/welcome-email';
+import { WELCOME_EMAIL } from '@/emails/emails';
 import { sendEmail } from '@/lib/workflow';
 import { serve } from '@upstash/workflow/nextjs';
 import { eq } from 'drizzle-orm';
@@ -51,7 +51,7 @@ export const { POST } = serve<InitialData>(async (context) => {
       const response = await sendEmail({
         email,
         subject: 'Welcome to BookWise Library',
-        message: React.createElement(WelcomeEmail, { studentName: fullName }),
+        message: WELCOME_EMAIL.replace('[Student Name]', fullName),
       });
       console.log('Welcome email sent successfully', response.data);
       return response;

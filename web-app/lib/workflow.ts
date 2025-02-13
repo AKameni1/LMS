@@ -20,7 +20,7 @@ export const sendEmail = async ({
 }: {
   email: string;
   subject: string;
-  message: React.ReactNode | string;
+  message: string;
 }) => {
   try {
     if (!email || !subject || !message) {
