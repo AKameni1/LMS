@@ -36,7 +36,7 @@ export const sendEmail = async ({
         from: 'Arthur <contact@arthurkameni.com>',
         to: [email],
         subject: subject,
-        react: message,
+        html: message,
       },
     });
 
