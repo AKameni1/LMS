@@ -54,6 +54,7 @@ export const { POST } = serve<InitialData>(async (context) => {
         message: React.createElement(WelcomeEmail, { studentName: fullName }),
       });
       console.log('Welcome email sent successfully', response.data);
+      return response;
     } catch (error) {
       console.error('Error sending welcome email:', error);
     }

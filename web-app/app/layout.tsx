@@ -5,7 +5,7 @@ import './globals.css';
 
 import localFont from 'next/font/local';
 import { ReactNode } from 'react';
-import { Toaster } from '@/components/ui/toaster';
+import { Toaster } from '@/components/ui/sonner';
 import { auth } from '@/auth';
 
 import { SessionProvider } from 'next-auth/react';
@@ -48,7 +48,7 @@ export default async function RootLayout({
           className={`${ibmPlexSans.className} ${bebasNeue.variable} antialiased`}
         >
           {children}
-          <Toaster />
+          <Toaster closeButton richColors position="top-center" />
           <SpeedInsights />
         </body>
       </SessionProvider>

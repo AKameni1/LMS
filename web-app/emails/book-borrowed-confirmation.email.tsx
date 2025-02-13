@@ -11,20 +11,22 @@ import {
 } from '@react-email/components';
 import { Tailwind } from '@react-email/tailwind';
 
-type WelcomeEmailProps = {
+type BookBorrowedConfirmationEmailProps = {
   studentName: string;
+  borrowDate: string;
+  dueDate: string;
 };
 
-export default function WelcomeEmail({
+export default function BookBorrowedConfirmationEmail({
   studentName = '[Student Name]',
-}: Readonly<WelcomeEmailProps>) {
+  borrowDate = '[Borrowed Date]',
+  dueDate = '[Due Date]',
+}: Readonly<BookBorrowedConfirmationEmailProps>) {
   return (
     <Tailwind>
       <Html lang="en">
         <Head title="Welcome to the BookWise Library" />
-        <Preview>
-          Welcome to the BookWise Library, Your Reading Companion!
-        </Preview>
+        <Preview>You&apos;ve Borrowed a Book!</Preview>
 
         <Container className="mx-auto my-[40px] h-[640px] w-[649px] rounded-[12px] bg-[#111624] px-[40px] py-[20px] font-sans text-[#d6e0ff]">
           {/* Logo Section */}
@@ -100,7 +102,7 @@ export default function WelcomeEmail({
           {/* Main Content */}
           <Section className="mt-[32px]">
             <Heading className="m-[0px] text-2xl font-bold leading-tight text-white">
-              Welcome to BookWise, Your Reading Companion!
+              You&apos;ve Borrowed a Book!
             </Heading>
 
             <Text className="mt-[24px] text-xl leading-relaxed">
@@ -108,20 +110,32 @@ export default function WelcomeEmail({
             </Text>
 
             <Text className="mt-[16px] text-lg leading-relaxed">
-              Welcome to BookWise! We're excited to have you join our community
-              of book enthusiasts. Explore a wide range of books, borrow with
-              ease, and manage your reading journey seamlessly.
+              You&apos;ve successfully borrowed [Book Title]. Here are the
+              details:
+              <li className="ml-[16px] text-lg">
+                Borrowed On:{' '}
+                <Text className="inline text-lg font-semibold text-[#EED1AC]">
+                  {borrowDate}
+                </Text>
+              </li>
+              <li className="ml-[16px] text-lg">
+                Due Date:{' '}
+                <Text className="inline text-lg font-semibold text-[#EED1AC]">
+                  {dueDate}
+                </Text>
+              </li>
             </Text>
 
             <Text className="mt-[24px] text-lg leading-relaxed">
-              Get started by logging in to your account:
+              Enjoy your reading, and don&apos;t forget to return the book on
+              time!
             </Text>
 
             <Button
-              href="https://lms-university.vercel.app/sign-in"
+              href="https://lms-university.vercel.app/my-profile"
               className="mt-[24px] rounded-md bg-[#EED1AC] px-[32px] py-[16px] text-center text-base font-bold text-[#111624]"
             >
-              Login to BookWise
+              View Borrowed Books
             </Button>
 
             <Text className="mt-[32px] text-lg">Happy reading,</Text>
