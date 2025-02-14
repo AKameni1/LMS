@@ -1,6 +1,5 @@
 import { db } from '@/db/drizzle';
 import { users } from '@/db/schema';
-import { WELCOME_EMAIL } from '@/emails/emails';
 import { sendEmail } from '@/lib/workflow';
 import { serve } from '@upstash/workflow/nextjs';
 import { eq } from 'drizzle-orm';
