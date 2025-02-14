@@ -46,7 +46,9 @@ export default async function Page() {
 
   return (
     <>
-      <div className={`grid w-full max-w-7xl gap-14 ${userBooks.length <= 2 ? 'lg:grid-cols-[40%_auto]' : ' lg:grid-cols-[35%_auto]'}`}>
+      <div
+        className={`grid w-full max-w-7xl gap-14 ${userBooks.length <= 2 ? 'lg:grid-cols-[40%_auto]' : 'lg:grid-cols-[35%_auto]'}`}
+      >
         <div className="max-h-screen lg:sticky lg:top-6 lg:self-start">
           <ProfileCard {...user} />
         </div>
@@ -60,7 +62,11 @@ export default async function Page() {
               <BorrowedBookCard
                 key={book.id}
                 book={book}
-                borrowedBookInfo={borrowedBooksInfo.find((borrowedBook) => borrowedBook.bookId === book.id)!}
+                borrowedBookInfo={
+                  borrowedBooksInfo.find(
+                    (borrowedBook) => borrowedBook.bookId === book.id,
+                  )!
+                }
               />
             ))}
           </div>

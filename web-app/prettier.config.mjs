@@ -15,6 +15,7 @@ const config = {
   tabWidth: 2, // Largeur d'indentation
   trailingComma: 'all', // Virgules finales pour des structures plus propres
   useTabs: false, // Utiliser des espaces au lieu des tabulations
+  endOfLine: 'lf', // Fin de fichier en LF
 };
 
 export default config;

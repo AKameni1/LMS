@@ -2,10 +2,14 @@
 
 import { navigationLinks } from '@/constants/index';
 import { usePathname } from 'next/navigation';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from './ui/tooltip';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
-
 
 export default function HeaderBrowsing() {
   const pathname = usePathname();
@@ -24,7 +28,10 @@ export default function HeaderBrowsing() {
                     : 'text-light-100 hover:text-light-400',
                 )}
               >
-                <Icon size={24} className='hover:scale-110 transition-all duration-200' />
+                <Icon
+                  size={24}
+                  className="transition-all duration-200 hover:scale-110"
+                />
                 {/* Home */}
               </Link>
             </TooltipTrigger>

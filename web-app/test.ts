@@ -1,11 +1,11 @@
 /**
  * @file This script is used to test the insertion of a book record into the database.
- * 
+ *
  * It uses the `neon` library to connect to a serverless database and the `drizzle-orm` library
  * to interact with the database. The database connection details are loaded from a `.env.local` file.
- * 
+ *
  * The `run` function inserts a new book record into the `books` table with predefined values.
- * 
+ *
  * @module TestInsertion
  */
 
@@ -13,7 +13,6 @@ import { neon } from '@neondatabase/serverless';
 import { config } from 'dotenv';
 import { drizzle } from 'drizzle-orm/neon-http';
 import { books } from './db/schema';
-
 
 config({ path: '.env.local' });
 

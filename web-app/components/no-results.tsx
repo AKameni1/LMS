@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import Image from 'next/image';
 import { Button } from './ui/button';
@@ -15,7 +15,7 @@ export default function NoResults() {
     params.delete('query');
     router.replace(`${pathname}?${params.toString()}`);
     router.refresh();
-  }
+  };
   return (
     <div className="mt-10 flow-root">
       <div id="not-found" className="mt-10">
@@ -32,7 +32,9 @@ export default function NoResults() {
           different keywords or check for typos.
         </p>
 
-        <Button className="not-found-btn" onClick={handleClearSearch}>Clear Search</Button>
+        <Button className="not-found-btn" onClick={handleClearSearch}>
+          Clear Search
+        </Button>
       </div>
     </div>
   );

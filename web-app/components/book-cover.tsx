@@ -52,7 +52,7 @@ export default function BookCover({
           className="rounded-br-sm rounded-tr-sm border-b-2 border-black"
           alt={bookTitle}
           loading={'lazy'}
-        // lqip={{ active: true }}
+          // lqip={{ active: true }}
         />
       </div>
     </div>

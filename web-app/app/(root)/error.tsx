@@ -16,10 +16,8 @@ export default function Errors({
   }, [error]);
 
   return (
-    <div className='flex h-auto w-auto flex-col items-center justify-center space-y-4'>
-      <h2 className="text-3xl text-light-100">
-        Something went wrong!
-      </h2>
+    <div className="flex h-auto w-auto flex-col items-center justify-center space-y-4">
+      <h2 className="text-3xl text-light-100">Something went wrong!</h2>
       <Button
         onClick={
           // Attempt to recover by trying to re-render the segment
