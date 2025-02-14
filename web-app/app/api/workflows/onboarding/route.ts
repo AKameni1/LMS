@@ -1,8 +1,11 @@
 import { db } from '@/db/drizzle';
 import { users } from '@/db/schema';
+import WelcomeEmail from '@/emails/welcome-email';
 import { sendEmail } from '@/lib/workflow';
+import { render } from '@react-email/render';
 import { serve } from '@upstash/workflow/nextjs';
 import { eq } from 'drizzle-orm';
+import React from 'react';
 
 type UserState = 'non-active' | 'active';
 
@@ -46,10 +49,15 @@ export const { POST } = serve<InitialData>(async (context) => {
   // Welcome email
   await context.run('new-signup', async () => {
     try {
+      const htmlMessage = await render(
+        React.createElement(WelcomeEmail, { studentName: fullName }),
+        { pretty: true },
+      );
+      const message = String(htmlMessage);
       const response = await sendEmail({
         email,
         subject: 'Welcome to BookWise Library',
-        message: 'Welcome to the BookWise Library, Your Reading Companion!',
+        message,
       });
       console.log('Welcome email sent successfully', response.data);
       return response;
