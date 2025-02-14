@@ -50,7 +50,7 @@ export const { POST } = serve<InitialData>(async (context) => {
       const response = await sendEmail({
         email,
         subject: 'Welcome to BookWise Library',
-        message: WELCOME_EMAIL.replace('[Student Name]', fullName),
+        message: 'Welcome to the BookWise Library, Your Reading Companion!',
       });
       console.log('Welcome email sent successfully', response.data);
       return response;

@@ -35,7 +35,7 @@ export const sendEmail = async ({
         from: 'Arthur <contact@arthurkameni.com>',
         to: [email],
         subject: subject,
-        html: message,
+        html: typeof message === 'string' ? message : JSON.stringify(message),
       },
     });
 
