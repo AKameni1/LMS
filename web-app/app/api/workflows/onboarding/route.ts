@@ -55,7 +55,7 @@ export const { POST } = serve<InitialData>(async (context) => {
     try {
       const htmlMessage = await render(
         React.createElement(WelcomeEmail, { studentName: fullName }),
-        { pretty: true, plainText: true },
+        { pretty: true },
       );
       const message = String(htmlMessage);
       const response = await sendEmail({
@@ -75,14 +75,14 @@ export const { POST } = serve<InitialData>(async (context) => {
   const inactivityEmail = String(
     await render(
       React.createElement(InactivityReminderEmail, { studentName: fullName }),
-      { pretty: true, plainText: true },
+      { pretty: true },
     ),
   );
 
   const welcomeBackEmail = String(
     await render(
       React.createElement(WelcomeBackEmail, { studentName: fullName }),
-      { pretty: true, plainText: true },
+      { pretty: true },
     ),
   );
 
