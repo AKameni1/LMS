@@ -13,7 +13,7 @@ export default function GlobalError({
   return (
     // global-error must include html and body tags
     <html lang="en">
-      <body className="flex h-screen w-screen flex-col items-center justify-center space-y-4">
+      <body className="flex bg-pattern h-screen w-screen flex-col items-center justify-center space-y-4">
         <h2 className="text-7xl font-light text-light-100">
           Something went wrong!
         </h2>

@@ -14,8 +14,7 @@ import {
 } from '@react-email/components';
 import { Tailwind } from '@react-email/tailwind';
 
-type BookDueReminderEmailProps = {
-  studentName: string;
+type BookDueReminderEmailProps = EmailProps & {
   bookTitle: string;
   bookId: string;
   dueDate: string;
@@ -45,22 +44,23 @@ export default function BookDueReminderEmail({
 
         <Container className="mx-auto my-[40px] h-[640px] w-[649px] rounded-[12px] bg-[#111624] px-[40px] py-[20px] font-sans text-[#d6e0ff]">
           {/* Logo Section */}
-          <Section className="flex items-center text-white">
+          <Section className="flex flex-row text-white">
             <Img
               src="https://lms-university.vercel.app/images/logo.png"
               alt="bookwise logo"
-              className="inline"
+              className="inline size-auto"
               width="40"
               height="32"
             />
-            <Text className="m-[4px] inline text-2xl font-semibold">
+            <CodeInline className="m-[4px] text-2xl font-semibold">
               BookWise
-            </Text>
+            </CodeInline>
           </Section>
 
           <Hr
             color="#232839"
             className="my-[20px] h-[3px] w-[100%] shrink-0 rounded-[9999px] border-none outline-none"
+            style={{ borderTop: '0px' }}
           />
 
           {/* Main Content */}

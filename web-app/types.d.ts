@@ -60,3 +60,7 @@ type BorrowBookParams = {
 };
 
 type Filter = 'oldest' | 'newest' | 'available' | 'highest_rated';
+
+type EmailProps = {
+  studentName: string;
+};
