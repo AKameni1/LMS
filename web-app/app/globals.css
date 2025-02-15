@@ -123,11 +123,11 @@
 
   /* File Upload */
   .upload-btn {
-    @apply flex min-h-14 w-full items-center justify-center gap-1.5 rounded-md;
+    @apply flex min-h-14 w-full items-center flex-wrap p-1 justify-center gap-1.5 rounded-md;
   }
 
   .upload-filename {
-    @apply mt-1 text-center text-xs;
+    @apply mt-1 line-clamp-1 break-words text-center text-xs;
   }
 
   .progress {

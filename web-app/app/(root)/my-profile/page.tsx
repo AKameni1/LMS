@@ -53,7 +53,7 @@ export default async function Page() {
           <ProfileCard {...user} />
         </div>
 
-        <div>
+        <section>
           <h2 className="mb-6 text-3xl font-semibold text-light-100">
             Borrowed Books
           </h2>
@@ -70,7 +70,7 @@ export default async function Page() {
               />
             ))}
           </div>
-        </div>
+        </section>
       </div>
 
       {/* 3. Render the BookList component with the title "Borrowed Books" and the list of books fetched in step 2. */}

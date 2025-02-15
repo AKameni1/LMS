@@ -23,7 +23,7 @@ export default function FilterSelect() {
     } else {
       params.delete('filter'); // Remove the filter query param if 'all' is selected
     }
-    router.replace(`${pathname}?${params.toString()}`);
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
   return (

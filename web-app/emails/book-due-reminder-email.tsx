@@ -14,27 +14,34 @@ import {
 } from '@react-email/components';
 import { Tailwind } from '@react-email/tailwind';
 
-type BookBorrowedConfirmationEmailProps = {
+type BookDueReminderEmailProps = {
   studentName: string;
-  borrowDate: string;
-  dueDate: string;
   bookTitle: string;
+  bookId: string;
+  dueDate: string;
 };
 
-export default function BookBorrowedConfirmationEmail({
+export default function BookDueReminderEmail({
+  bookId,
   studentName = '[Student Name]',
-  borrowDate = '[Borrowed Date]',
-  dueDate = '[Due Date]',
   bookTitle = '[Book Title]',
-}: Readonly<BookBorrowedConfirmationEmailProps>) {
+  dueDate = '[Due Date]',
+}: Readonly<BookDueReminderEmailProps>) {
   return (
     <Tailwind>
       <Html lang="en">
         <Head>
-          <title>Book Borrowed Confirmation</title>
-          <Font fontFamily="IBM Plex Sans" fallbackFontFamily="sans-serif" />
+          <title>Book Due Reminder</title>
+          <Font
+            fontFamily="IBM Plex Sans"
+            fallbackFontFamily="sans-serif"
+            webFont={{
+              url: 'https://lms-university.vercel.app/fonts/IBMPlexSans-Regular.woff2',
+              format: 'woff2',
+            }}
+          />
         </Head>
-        <Preview>You&apos;ve Borrowed a Book!</Preview>
+        <Preview>Book Due Reminder</Preview>
 
         <Container className="mx-auto my-[40px] h-[640px] w-[649px] rounded-[12px] bg-[#111624] px-[40px] py-[20px] font-sans text-[#d6e0ff]">
           {/* Logo Section */}
@@ -59,7 +66,7 @@ export default function BookBorrowedConfirmationEmail({
           {/* Main Content */}
           <Section className="mt-[32px]">
             <Heading className="m-[0px] text-2xl font-bold leading-tight text-white">
-              You&apos;ve Borrowed a Book!
+              Reminder: {bookTitle} is Due Soon!
             </Heading>
 
             <Text className="mt-[24px] text-xl leading-relaxed">
@@ -67,36 +74,31 @@ export default function BookBorrowedConfirmationEmail({
             </Text>
 
             <Text className="mt-[16px] text-lg leading-relaxed">
-              You&apos;ve successfully borrowed {bookTitle}. Here are the
-              details:
-              <li className="ml-[16px] text-lg">
-                Borrowed On:{' '}
-                <CodeInline className="text-lg font-semibold text-[#EED1AC]">
-                  {borrowDate}
-                </CodeInline>
-              </li>
-              <li className="ml-[16px] text-lg">
-                Due Date:{' '}
-                <CodeInline className="text-lg font-semibold text-[#EED1AC]">
-                  {dueDate}
-                </CodeInline>
-              </li>
+              Just a reminder that{' '}
+              <CodeInline className="text-lg font-semibold text-[#EED1AC]">
+                {bookTitle}
+              </CodeInline>{' '}
+              is due for return on{' '}
+              <CodeInline className="text-lg font-semibold text-[#EED1AC]">
+                {dueDate}
+              </CodeInline>
+              . Kindly return it on time to avoid late fees.
             </Text>
 
             <Text className="mt-[24px] text-lg leading-relaxed">
-              Enjoy your reading, and don&apos;t forget to return the book on
-              time!
+              If you&apos;re still reading, you can renew the book in your
+              account.
             </Text>
 
             <Button
-              href="https://lms-university.vercel.app/my-profile"
+              href={`https://lms-university.vercel.app/books/${bookId}`}
               className="mt-[10px] rounded-md bg-[#EED1AC] px-[32px] py-[16px] text-center text-base font-bold text-[#111624]"
             >
-              View Borrowed Books
+              Renew Book Now
             </Button>
 
             <Text className="mt-[32px] text-lg">
-              Happy reading,
+              Keep reading,
               <br />
               The Bookwise Team
             </Text>

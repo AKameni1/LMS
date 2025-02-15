@@ -51,7 +51,7 @@ export const { POST } = serve<InitialData>(async (context) => {
     try {
       const htmlMessage = await render(
         React.createElement(WelcomeEmail, { studentName: fullName }),
-        { pretty: true },
+        { pretty: true, plainText: true },
       );
       const message = String(htmlMessage);
       const response = await sendEmail({

@@ -14,6 +14,9 @@ const config = {
       qstashUrl: process.env.QSTASH_URL!,
       qstashToken: process.env.QSTASH_TOKEN!,
     },
+    openai: {
+      apiKey: process.env.OPENAI_API_KEY!,
+    },
     resendToken: process.env.RESEND_TOKEN!,
   },
 };
