@@ -8,7 +8,7 @@ import { db } from '@/db/drizzle';
 import { users } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 
-export default async function Layout({
+export default async function AdminLayout({
   children,
 }: Readonly<{ children: ReactNode }>) {
   const session = await auth();

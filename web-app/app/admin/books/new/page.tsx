@@ -16,7 +16,7 @@ export default function Page() {
             width={16}
             height={16}
           />
-          <span className="font-medium text-[#3A354E]">Go back</span>
+          <span className="font-medium text-dark-200">Go back</span>
         </Link>
       </Button>
 

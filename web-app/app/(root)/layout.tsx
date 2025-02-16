@@ -7,7 +7,7 @@ import { redirect } from 'next/navigation';
 import { after } from 'next/server';
 import { ReactNode } from 'react';
 
-export default async function Layout({
+export default async function UserLayout({
   children,
 }: Readonly<{ children: ReactNode }>) {
   const session = await auth();
