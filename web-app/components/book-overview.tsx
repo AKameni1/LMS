@@ -2,9 +2,7 @@ import Image from 'next/image';
 import React from 'react';
 import BookCover from './book-cover';
 import BorrowBook from './borrow-book';
-import { db } from '@/db/drizzle';
-import { users } from '@/db/schema';
-import { eq } from 'drizzle-orm';
+import { fetchUserById } from '@/lib/data';
 
 type BookOverviewPropsType = Book & { userId: string };
 
@@ -21,11 +19,7 @@ export default async function BookOverview({
   coverColor,
   coverUrl,
 }: Readonly<BookOverviewPropsType>) {
-  const [user] = await db
-    .select()
-    .from(users)
-    .where(eq(users.id, userId))
-    .limit(1);
+  const user = await fetchUserById(userId);
 
   const borrowingEligibility = {
     isEligible: availableCopies > 0 && user?.status === 'APPROVED',

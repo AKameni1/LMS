@@ -4,24 +4,19 @@ import { ReactNode } from 'react';
 import '@/styles/admin.css';
 import Sidebar from '@/components/admin/sidebar';
 import Header from '@/components/admin/header';
-import { db } from '@/db/drizzle';
-import { users } from '@/db/schema';
-import { eq } from 'drizzle-orm';
+import { checkIsAdmin } from '@/lib/data';
 
 export default async function AdminLayout({
   children,
 }: Readonly<{ children: ReactNode }>) {
   const session = await auth();
+  const userId = session?.user?.id;
 
-  if (!session?.user?.id) {
+  if (!userId) {
     redirect('sign-in');
   }
 
-  const isAdmin = await db
-    .select({ isAdmin: users.role })
-    .from(users)
-    .where(eq(users.id, session?.user?.id))
-    .then((res) => res[0]?.isAdmin === 'ADMIN');
+  const isAdmin = await checkIsAdmin(userId);
 
   if (!isAdmin) {
     redirect('/');

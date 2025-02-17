@@ -2,9 +2,7 @@ import { auth } from '@/auth';
 import BookOverview from '@/components/book-overview';
 import BookVideo from '@/components/book-video';
 import SimilarBooks from '@/components/similar-books';
-import { db } from '@/db/drizzle';
-import { books } from '@/db/schema';
-import { eq } from 'drizzle-orm';
+import { fetchBookById } from '@/lib/data';
 import { redirect } from 'next/navigation';
 
 export default async function Page({
@@ -14,11 +12,7 @@ export default async function Page({
   const session = await auth();
 
   // Fetch data based on the id
-  const [bookDetails] = await db
-    .select()
-    .from(books)
-    .where(eq(books.id, id))
-    .limit(1);
+  const bookDetails = await fetchBookById(id);
 
   if (!bookDetails) {
     redirect('/404');

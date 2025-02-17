@@ -6,16 +6,14 @@ import { TriangleAlertIcon } from 'lucide-react';
 import Link from 'next/link';
 
 type BorrowedBookCardProps = {
-  book: Book;
   borrowedBookInfo: BorrowedBookInfo;
 };
 
 export default function BorrowedBookCard({
-  book,
   borrowedBookInfo,
 }: Readonly<BorrowedBookCardProps>) {
+  const { borrowDate, dueDate, returnDate, status, book } = borrowedBookInfo;
   const { id, title, genre, coverColor, coverUrl } = book;
-  const { borrowDate, dueDate, returnDate, status } = borrowedBookInfo;
 
   const today = new Date();
   const due = new Date(dueDate);
@@ -102,7 +100,7 @@ export default function BorrowedBookCard({
             </p>
           )}
 
-          {status === 'RETURNED' && (
+          {status === 'RETURNED' && returnDate && (
             <p className="flex items-center gap-2 text-xs">
               <Image
                 src={'/icons/tick.svg'}

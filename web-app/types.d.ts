@@ -26,11 +26,11 @@ type User = {
 };
 
 type BorrowedBookInfo = {
-  bookId: string;
   borrowDate: Date;
   dueDate: string;
-  returnDate: string;
+  returnDate: string | null;
   status: 'BORROWED' | 'RETURNED';
+  book: Book;
 };
 
 type AuthCredentials = {
