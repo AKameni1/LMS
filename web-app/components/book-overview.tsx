@@ -43,9 +43,9 @@ export default async function BookOverview({
   };
 
   const favoriteEligibility = {
-    isEligible: book.status !== 'BORROWED',
+    isEligible: !book || book.status !== 'BORROWED',
     message:
-      book.status !== 'BORROWED'
+     !book || book.status !== 'BORROWED'
         ? ''
         : 'You cannot add this book to your favorites',
   };
@@ -100,6 +100,10 @@ export default async function BookOverview({
                 userId={userId}
                 borrowingEligibility={borrowingEligibility}
               />
+            </>
+          )}
+          {user && (
+            <>
               <FavoriteBook
                 bookId={id}
                 userId={userId}
