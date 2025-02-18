@@ -5,7 +5,7 @@ import { Button } from './ui/button';
 import Image from 'next/image';
 import { useTransition } from 'react';
 import { toast } from '@/hooks/use-toast';
-import { borrowBook, favoriteBook } from '@/lib/actions/books';
+import { favoriteBook } from '@/lib/actions/books';
 
 type FavoriteBookProps = {
   userId: string;

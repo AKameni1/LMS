@@ -80,11 +80,6 @@ export const favoriteBook = async (params: ButtonBookParams)=> {
 
     try {
       // Check if the book is available for borrowing
-      const [book] = await db
-        .select({ availableCopies: books.availableCopies })
-        .from(books)
-        .where(eq(books.id, bookId))
-        .limit(1);
   
       // Check if the book is already borrowed by the user
       const [existingFavorite] = await db

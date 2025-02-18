@@ -20,6 +20,14 @@ export default function BorrowedBookCard({
   const diffTime = due.getTime() - today.getTime();
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   const isOverdue = diffDays < 0;
+  let dueMessage: string;
+
+  if (diffDays === 0) {
+    dueMessage = 'Book is due before 4PM';
+  } else {
+    const daysLabel = diffDays <= 1 ? 'day' : 'days';
+    dueMessage = `${diffDays.toString().padStart(2, '0')} ${daysLabel} left to return`;
+  }
 
   const backgroundColor = chroma(coverColor).alpha(0.5).css();
 
@@ -93,9 +101,7 @@ export default function BorrowedBookCard({
                     height={18}
                     alt={`calendar icon for overdue book ${title}`}
                   />
-                  {diffDays == 0 ? 'Book is due before 4PM' : `
-                  ${diffDays.toString().padStart(2, '0')} 
-                  ${diffDays <= 1 ? 'day' : 'days'} left to return`}
+                  {dueMessage}
                 </>
               )}
             </p>
