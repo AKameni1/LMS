@@ -20,7 +20,7 @@ import { Button } from '@/components/ui/button';
 import FileUpload from '@/components/file-upload';
 import ColorPicker from '../color-picker';
 import { createBook } from '@/lib/admin/actions/book';
-import { toast } from '@/hooks/use-toast';
+import { toast } from 'sonner';
 
 interface AuthFormPropsType extends Partial<Book> {
   type?: 'create' | 'update';
@@ -54,18 +54,14 @@ export default function BookForm({
     const result = await createBook(values);
 
     if (result.success) {
-      toast({
-        title: 'Success',
+      toast.info('Creating book', {
         description: 'Book has been created successfully.',
-        variant: 'success',
       });
 
       router.push(`/admin/books/${result.data.id}`);
     } else {
-      toast({
-        title: 'Error',
+      toast.error('Creating book', {
         description: `An error occurred while creating the book.\n${result?.error}`,
-        variant: 'destructive',
       });
     }
   };

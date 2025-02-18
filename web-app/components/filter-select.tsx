@@ -23,22 +23,23 @@ export default function FilterSelect() {
     } else {
       params.delete('filter'); // Remove the filter query param if 'all' is selected
     }
-    router.replace(`${pathname}?${params.toString()}`);
-  }
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  };
 
   return (
-    <Select defaultValue={searchParams.get('filter') ?? 'all'} onValueChange={handleFilterChange}>
+    <Select
+      defaultValue={searchParams.get('filter') ?? 'all'}
+      onValueChange={handleFilterChange}
+    >
       <SelectTrigger className="select-trigger">
         <SelectValue placeholder="Sort By" />
       </SelectTrigger>
       <SelectContent className="select-content">
-        {
-          filterOptions.map(({ value, label }) => (
-            <SelectItem key={value} className="select-item" value={value}>
-              {label}
-            </SelectItem>
-          ))
-        }
+        {filterOptions.map(({ value, label }) => (
+          <SelectItem key={value} className="select-item" value={value}>
+            {label}
+          </SelectItem>
+        ))}
       </SelectContent>
     </Select>
   );

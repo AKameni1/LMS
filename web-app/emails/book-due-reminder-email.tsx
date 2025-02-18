@@ -14,14 +14,23 @@ import {
 } from '@react-email/components';
 import { Tailwind } from '@react-email/tailwind';
 
-export default function WelcomeEmail({
+type BookDueReminderEmailProps = EmailProps & {
+  bookTitle: string;
+  bookId: string;
+  dueDate: string;
+};
+
+export default function BookDueReminderEmail({
+  bookId,
   studentName = '[Student Name]',
-}: Readonly<EmailProps>) {
+  bookTitle = '[Book Title]',
+  dueDate = '[Due Date]',
+}: Readonly<BookDueReminderEmailProps>) {
   return (
     <Tailwind>
       <Html lang="en">
         <Head>
-          <title>Welcome to the BookWise Library</title>
+          <title>Book Due Reminder</title>
           <Font
             fontFamily="IBM Plex Sans"
             fallbackFontFamily="sans-serif"
@@ -31,9 +40,7 @@ export default function WelcomeEmail({
             }}
           />
         </Head>
-        <Preview>
-          Welcome to the BookWise Library, Your Reading Companion!
-        </Preview>
+        <Preview>Book Due Reminder</Preview>
 
         <Container className="mx-auto my-[40px] h-[640px] w-[649px] rounded-[12px] bg-[#111624] px-[40px] py-[20px] font-sans text-[#d6e0ff]">
           {/* Logo Section */}
@@ -59,7 +66,7 @@ export default function WelcomeEmail({
           {/* Main Content */}
           <Section className="mt-[32px]">
             <Heading className="m-[0px] text-2xl font-bold leading-tight text-white">
-              Welcome to BookWise, Your Reading Companion!
+              Reminder: {bookTitle} is Due Soon!
             </Heading>
 
             <Text className="mt-[24px] text-xl leading-relaxed">
@@ -67,24 +74,31 @@ export default function WelcomeEmail({
             </Text>
 
             <Text className="mt-[16px] text-lg leading-relaxed">
-              Welcome to BookWise! We're excited to have you join our community
-              of book enthusiasts. Explore a wide range of books, borrow with
-              ease, and manage your reading journey seamlessly.
+              Just a reminder that{' '}
+              <CodeInline className="text-lg font-semibold text-[#EED1AC]">
+                {bookTitle}
+              </CodeInline>{' '}
+              is due for return on{' '}
+              <CodeInline className="text-lg font-semibold text-[#EED1AC]">
+                {dueDate}
+              </CodeInline>
+              . Kindly return it on time to avoid late fees.
             </Text>
 
             <Text className="mt-[24px] text-lg leading-relaxed">
-              Get started by logging in to your account:
+              If you&apos;re still reading, you can renew the book in your
+              account.
             </Text>
 
             <Button
-              href="https://lms-university.vercel.app/sign-in"
+              href={`https://lms-university.vercel.app/books/${bookId}`}
               className="mt-[10px] rounded-md bg-[#EED1AC] px-[32px] py-[16px] text-center text-base font-bold text-[#111624]"
             >
-              Login to BookWise
+              Renew Book Now
             </Button>
 
             <Text className="mt-[32px] text-lg">
-              Happy reading,
+              Keep reading,
               <br />
               The Bookwise Team
             </Text>

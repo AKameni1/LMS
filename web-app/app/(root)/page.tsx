@@ -3,7 +3,6 @@ import BookList from '@/components/book-list';
 import BookOverview from '@/components/book-overview';
 import { db } from '@/db/drizzle';
 import { books, borrowRecords } from '@/db/schema';
-import WelcomeEmail from '@/emails/welcome-email';
 import { count, desc, eq } from 'drizzle-orm';
 import React from 'react';
 
@@ -35,12 +34,6 @@ export default async function Home() {
     .limit(7)) as Book[];
 
   console.log(latestBooks[0].borrowCount);
-
-  const message = React.createElement(WelcomeEmail, { studentName: 'Arthur' });
-
-  console.log(message);
-
-  console.log(typeof message);
 
   return (
     <>

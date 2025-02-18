@@ -24,7 +24,7 @@ export default function Search({
     } else {
       params.delete('query');
     }
-    router.replace(`${pathname}?${params.toString()}`);
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   }, 400);
 
   return (

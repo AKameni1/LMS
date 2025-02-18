@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { Button } from './ui/button';
 import Image from 'next/image';
 import { useTransition } from 'react';
-import { toast } from '@/hooks/use-toast';
+import { toast } from 'sonner';
 import { borrowBook } from '@/lib/actions/books';
 
 type BorrowBookProps = {
@@ -26,10 +26,8 @@ export default function BorrowBook({
 
   const handleBorrowBook = async () => {
     if (!isEligible) {
-      toast({
-        title: 'Error',
+      toast.error('Error', {
         description: message,
-        variant: 'destructive',
       });
       return;
     }
@@ -39,25 +37,19 @@ export default function BorrowBook({
         const result = await borrowBook({ bookId, userId });
 
         if (result.success) {
-          toast({
-            title: 'Success',
+          toast.success('Success', {
             description: 'Book borrowed successfully',
-            variant: 'success',
           });
 
           router.push('/my-profile');
         } else {
-          toast({
-            title: 'Error',
+          toast.info('Info', {
             description: result.message,
-            variant: 'destructive',
           });
         }
       } catch (error) {
-        toast({
-          title: 'Error',
+        toast.error('Error', {
           description: `An error occurred while borrowing the book. ${error}`,
-          variant: 'destructive',
         });
       }
     });

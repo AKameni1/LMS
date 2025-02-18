@@ -14,14 +14,14 @@ import {
 } from '@react-email/components';
 import { Tailwind } from '@react-email/tailwind';
 
-export default function WelcomeEmail({
+export default function InactivityReminderEmail({
   studentName = '[Student Name]',
 }: Readonly<EmailProps>) {
   return (
     <Tailwind>
       <Html lang="en">
         <Head>
-          <title>Welcome to the BookWise Library</title>
+          <title>We Miss You</title>
           <Font
             fontFamily="IBM Plex Sans"
             fallbackFontFamily="sans-serif"
@@ -31,9 +31,7 @@ export default function WelcomeEmail({
             }}
           />
         </Head>
-        <Preview>
-          Welcome to the BookWise Library, Your Reading Companion!
-        </Preview>
+        <Preview>We Miss You at BookWise!</Preview>
 
         <Container className="mx-auto my-[40px] h-[640px] w-[649px] rounded-[12px] bg-[#111624] px-[40px] py-[20px] font-sans text-[#d6e0ff]">
           {/* Logo Section */}
@@ -59,7 +57,7 @@ export default function WelcomeEmail({
           {/* Main Content */}
           <Section className="mt-[32px]">
             <Heading className="m-[0px] text-2xl font-bold leading-tight text-white">
-              Welcome to BookWise, Your Reading Companion!
+              We Miss You at BookWise!
             </Heading>
 
             <Text className="mt-[24px] text-xl leading-relaxed">
@@ -67,24 +65,24 @@ export default function WelcomeEmail({
             </Text>
 
             <Text className="mt-[16px] text-lg leading-relaxed">
-              Welcome to BookWise! We're excited to have you join our community
-              of book enthusiasts. Explore a wide range of books, borrow with
-              ease, and manage your reading journey seamlessly.
+              It&apos;s been a while since we last saw you—over three days, to
+              be exact! New books are waiting for you, and your next great read
+              might just be a click away.
             </Text>
 
             <Text className="mt-[24px] text-lg leading-relaxed">
-              Get started by logging in to your account:
+              Come back and explore now:
             </Text>
 
             <Button
-              href="https://lms-university.vercel.app/sign-in"
+              href="https://lms-university.vercel.app/library"
               className="mt-[10px] rounded-md bg-[#EED1AC] px-[32px] py-[16px] text-center text-base font-bold text-[#111624]"
             >
-              Login to BookWise
+              Explore Books on BookWise
             </Button>
 
             <Text className="mt-[32px] text-lg">
-              Happy reading,
+              See you soon,
               <br />
               The Bookwise Team
             </Text>

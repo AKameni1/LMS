@@ -17,7 +17,9 @@ export default function BookList({
   }
   return (
     <section className={containerClassName}>
-      {title && <h2 className="font-bebas-neue text-4xl text-light-100">{title}</h2>}
+      {title && (
+        <h2 className="font-bebas-neue text-4xl text-light-100">{title}</h2>
+      )}
 
       <ul className="book-list">
         {books.map((book) => (

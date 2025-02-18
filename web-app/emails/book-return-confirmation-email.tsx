@@ -14,14 +14,19 @@ import {
 } from '@react-email/components';
 import { Tailwind } from '@react-email/tailwind';
 
-export default function WelcomeEmail({
+type BookReturnConfirmationEmailProps = EmailProps & {
+  bookTitle: string;
+};
+
+export default function BookReturnConfirmationEmail({
   studentName = '[Student Name]',
-}: Readonly<EmailProps>) {
+  bookTitle = '[Book Title]',
+}: Readonly<BookReturnConfirmationEmailProps>) {
   return (
     <Tailwind>
       <Html lang="en">
         <Head>
-          <title>Welcome to the BookWise Library</title>
+          <title>Book Return Confirmation</title>
           <Font
             fontFamily="IBM Plex Sans"
             fallbackFontFamily="sans-serif"
@@ -31,9 +36,7 @@ export default function WelcomeEmail({
             }}
           />
         </Head>
-        <Preview>
-          Welcome to the BookWise Library, Your Reading Companion!
-        </Preview>
+        <Preview>Book Return Confirmation</Preview>
 
         <Container className="mx-auto my-[40px] h-[640px] w-[649px] rounded-[12px] bg-[#111624] px-[40px] py-[20px] font-sans text-[#d6e0ff]">
           {/* Logo Section */}
@@ -55,11 +58,10 @@ export default function WelcomeEmail({
             className="my-[20px] h-[3px] w-[100%] shrink-0 rounded-[9999px] border-none outline-none"
             style={{ borderTop: '0px' }}
           />
-
           {/* Main Content */}
           <Section className="mt-[32px]">
             <Heading className="m-[0px] text-2xl font-bold leading-tight text-white">
-              Welcome to BookWise, Your Reading Companion!
+              Thank You for Returning {bookTitle}!
             </Heading>
 
             <Text className="mt-[24px] text-xl leading-relaxed">
@@ -67,24 +69,27 @@ export default function WelcomeEmail({
             </Text>
 
             <Text className="mt-[16px] text-lg leading-relaxed">
-              Welcome to BookWise! We're excited to have you join our community
-              of book enthusiasts. Explore a wide range of books, borrow with
-              ease, and manage your reading journey seamlessly.
+              We&apos;ve successfully received your return of{' '}
+              <CodeInline className="text-lg font-semibold text-[#EED1AC]">
+                {bookTitle}
+              </CodeInline>
+              . Thank you for returning it on time.
             </Text>
 
             <Text className="mt-[24px] text-lg leading-relaxed">
-              Get started by logging in to your account:
+              Looking for your next read? Browse our collection and borrow your
+              next favorite book!
             </Text>
 
             <Button
-              href="https://lms-university.vercel.app/sign-in"
+              href={`https://lms-university.vercel.app/library?filter=newest`}
               className="mt-[10px] rounded-md bg-[#EED1AC] px-[32px] py-[16px] text-center text-base font-bold text-[#111624]"
             >
-              Login to BookWise
+              Explore New Books
             </Button>
 
             <Text className="mt-[32px] text-lg">
-              Happy reading,
+              Happy exploring,
               <br />
               The Bookwise Team
             </Text>

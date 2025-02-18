@@ -14,14 +14,14 @@ import {
 } from '@react-email/components';
 import { Tailwind } from '@react-email/tailwind';
 
-export default function WelcomeEmail({
+export default function ApprovalEmail({
   studentName = '[Student Name]',
 }: Readonly<EmailProps>) {
   return (
     <Tailwind>
       <Html lang="en">
         <Head>
-          <title>Welcome to the BookWise Library</title>
+          <title>Your BookWise Account Has Been Approved!</title>
           <Font
             fontFamily="IBM Plex Sans"
             fallbackFontFamily="sans-serif"
@@ -31,9 +31,7 @@ export default function WelcomeEmail({
             }}
           />
         </Head>
-        <Preview>
-          Welcome to the BookWise Library, Your Reading Companion!
-        </Preview>
+        <Preview>Your BookWise Account Has Been Approved!</Preview>
 
         <Container className="mx-auto my-[40px] h-[640px] w-[649px] rounded-[12px] bg-[#111624] px-[40px] py-[20px] font-sans text-[#d6e0ff]">
           {/* Logo Section */}
@@ -59,7 +57,7 @@ export default function WelcomeEmail({
           {/* Main Content */}
           <Section className="mt-[32px]">
             <Heading className="m-[0px] text-2xl font-bold leading-tight text-white">
-              Welcome to BookWise, Your Reading Companion!
+              Your BookWise Account Has Been Approved!
             </Heading>
 
             <Text className="mt-[24px] text-xl leading-relaxed">
@@ -67,13 +65,13 @@ export default function WelcomeEmail({
             </Text>
 
             <Text className="mt-[16px] text-lg leading-relaxed">
-              Welcome to BookWise! We're excited to have you join our community
-              of book enthusiasts. Explore a wide range of books, borrow with
-              ease, and manage your reading journey seamlessly.
+              Congratulations! Your BookWise account has been approved. You can
+              now browse our library, borrow books, and enjoy all the features
+              of your new account.
             </Text>
 
             <Text className="mt-[24px] text-lg leading-relaxed">
-              Get started by logging in to your account:
+              Log in to get started:
             </Text>
 
             <Button
@@ -84,7 +82,7 @@ export default function WelcomeEmail({
             </Button>
 
             <Text className="mt-[32px] text-lg">
-              Happy reading,
+              Welcome aboard,
               <br />
               The Bookwise Team
             </Text>

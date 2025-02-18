@@ -14,14 +14,14 @@ import {
 } from '@react-email/components';
 import { Tailwind } from '@react-email/tailwind';
 
-export default function WelcomeEmail({
+export default function WelcomeBackEmail({
   studentName = '[Student Name]',
 }: Readonly<EmailProps>) {
   return (
     <Tailwind>
       <Html lang="en">
         <Head>
-          <title>Welcome to the BookWise Library</title>
+          <title>Welcome back to the BookWise Library</title>
           <Font
             fontFamily="IBM Plex Sans"
             fallbackFontFamily="sans-serif"
@@ -32,7 +32,7 @@ export default function WelcomeEmail({
           />
         </Head>
         <Preview>
-          Welcome to the BookWise Library, Your Reading Companion!
+          Welcome back to the BookWise Library, Your Reading Companion!
         </Preview>
 
         <Container className="mx-auto my-[40px] h-[640px] w-[649px] rounded-[12px] bg-[#111624] px-[40px] py-[20px] font-sans text-[#d6e0ff]">
@@ -59,7 +59,7 @@ export default function WelcomeEmail({
           {/* Main Content */}
           <Section className="mt-[32px]">
             <Heading className="m-[0px] text-2xl font-bold leading-tight text-white">
-              Welcome to BookWise, Your Reading Companion!
+              Welcome back to BookWise, Your Reading Companion!
             </Heading>
 
             <Text className="mt-[24px] text-xl leading-relaxed">
@@ -67,9 +67,9 @@ export default function WelcomeEmail({
             </Text>
 
             <Text className="mt-[16px] text-lg leading-relaxed">
-              Welcome to BookWise! We're excited to have you join our community
-              of book enthusiasts. Explore a wide range of books, borrow with
-              ease, and manage your reading journey seamlessly.
+              We're thrilled to see you back at BookWise! Dive back into your
+              reading journey, explore new titles, and continue enjoying our
+              vast collection of books.
             </Text>
 
             <Text className="mt-[24px] text-lg leading-relaxed">

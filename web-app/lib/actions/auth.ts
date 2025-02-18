@@ -5,11 +5,12 @@ import { db } from '@/db/drizzle';
 import { users } from '@/db/schema';
 import { hash } from 'bcryptjs';
 import { eq } from 'drizzle-orm';
-import { headers } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 import ratelimit from '../ratelimit';
 import { redirect } from 'next/navigation';
 import { workflowClient } from '../workflow';
 import config from '../config';
+import redis from '@/db/redis';
 
 export const signInWithCredentials = async (
   credentials: Pick<AuthCredentials, 'email' | 'password'>,
@@ -17,9 +18,8 @@ export const signInWithCredentials = async (
   const { email, password } = credentials;
 
   const ip = (await headers()).get('x-forwarded-for') ?? '127.0.0.1';
-  const { success } = await ratelimit.limit(ip);
 
-  if (!success) {
+  if (await checkLimitation(ip, email)) {
     return redirect('/too-fast');
   }
 
@@ -53,9 +53,8 @@ export const signUp = async (params: AuthCredentials) => {
   const { fullName, email, password, universityCard, universityId } = params;
 
   const ip = (await headers()).get('x-forwarded-for') ?? '127.0.0.1';
-  const { success } = await ratelimit.limit(ip);
 
-  if (!success) {
+  if (await checkLimitation(ip, email)) {
     return redirect('/too-fast');
   }
 
@@ -111,4 +110,42 @@ export const signUp = async (params: AuthCredentials) => {
 
 export const signOutComplete = async () => {
   await signOut();
+};
+
+const checkLimitation = async (ip: string, email: string): Promise<boolean> => {
+  const key = `${ip}-${email}`;
+
+  try {
+    // Check if the user is locked out in redis
+    const lockedUntil = (await redis.get(`locked_until:${email}`)) as string;
+    const now = Date.now();
+
+    if (lockedUntil && parseInt(JSON.stringify(lockedUntil)) > now) {
+      (await cookies()).set('locked_until', lockedUntil, {
+        maxAge: 300,
+        httpOnly: true,
+      });
+      return true;
+    }
+
+    // Check if the user is ratelimited
+    const { success } = await ratelimit.limit(key);
+    if (!success) {
+      const lockDuration = 5 * 60 * 1000; // 5 minutes
+      const expiry = now + lockDuration;
+
+      await redis.set(`locked_until:${email}`, expiry, { ex: 300 });
+      (await cookies()).set('locked_until', String(expiry), {
+        maxAge: 300,
+        httpOnly: true,
+      });
+
+      return true;
+    }
+
+    return false;
+  } catch (error) {
+    console.log(error);
+    throw new Error('Error checking ratelimit');
+  }
 };

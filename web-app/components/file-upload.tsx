@@ -1,6 +1,6 @@
 'use client';
 
-import { toast } from '@/hooks/use-toast';
+import { toast } from 'sonner';
 import config from '@/lib/config';
 import { cn } from '@/lib/utils';
 import { IKImage, ImageKitProvider, IKUpload, IKVideo } from 'imagekitio-next';
@@ -86,10 +86,8 @@ export default function FileUpload({
       console.error('Upload error: Unknown error');
     }
 
-    toast({
-      title: `${type[0].toUpperCase() + type.slice(1)} upload failed`,
+    toast.error(`${type[0].toUpperCase() + type.slice(1)} upload failed`, {
       description: `Your ${type} could not be uploaded. Please try again.`,
-      variant: 'destructive',
     });
   };
 
@@ -97,29 +95,27 @@ export default function FileUpload({
     setFile(res);
     onFileChange(res.filePath);
 
-    toast({
-      title: `${type[0].toUpperCase() + type.slice(1)} uploaded successfully`,
-      description: `${res.filePath} uploaded successfully`,
-    });
+    toast.success(
+      `${type[0].toUpperCase() + type.slice(1)} uploaded successfully`,
+      {
+        description: `${res.filePath} uploaded successfully`,
+      },
+    );
   };
 
   const onValidate = (file: File) => {
     if (type === 'image') {
       if (file.size > 20 * 1024 * 1024) {
-        toast({
-          title: 'File size too large',
+        toast.warning('File size too large', {
           description: 'Please upload a file less than 20MB',
-          variant: 'destructive',
         });
 
         return false;
       }
     } else if (type === 'video') {
       if (file.size > 50 * 1024 * 1024) {
-        toast({
-          title: 'File size too large',
+        toast.warning('File size too large', {
           description: 'Please upload a file less than 50MB',
-          variant: 'destructive',
         });
 
         return false;

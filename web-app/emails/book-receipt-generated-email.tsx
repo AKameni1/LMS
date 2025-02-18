@@ -14,14 +14,23 @@ import {
 } from '@react-email/components';
 import { Tailwind } from '@react-email/tailwind';
 
-export default function WelcomeEmail({
+type BookReceiptGeneratedEmailProps = EmailProps & {
+  borrowDate: string;
+  dueDate: string;
+  bookTitle: string;
+};
+
+export default function BookReceiptGeneratedEmail({
   studentName = '[Student Name]',
-}: Readonly<EmailProps>) {
+  borrowDate = '[Borrowed Date]',
+  dueDate = '[Due Date]',
+  bookTitle = '[Book Title]',
+}: Readonly<BookReceiptGeneratedEmailProps>) {
   return (
     <Tailwind>
       <Html lang="en">
         <Head>
-          <title>Welcome to the BookWise Library</title>
+          <title>Book Borrowed Confirmation</title>
           <Font
             fontFamily="IBM Plex Sans"
             fallbackFontFamily="sans-serif"
@@ -31,9 +40,7 @@ export default function WelcomeEmail({
             }}
           />
         </Head>
-        <Preview>
-          Welcome to the BookWise Library, Your Reading Companion!
-        </Preview>
+        <Preview>Your Receipt is ready</Preview>
 
         <Container className="mx-auto my-[40px] h-[640px] w-[649px] rounded-[12px] bg-[#111624] px-[40px] py-[20px] font-sans text-[#d6e0ff]">
           {/* Logo Section */}
@@ -59,7 +66,7 @@ export default function WelcomeEmail({
           {/* Main Content */}
           <Section className="mt-[32px]">
             <Heading className="m-[0px] text-2xl font-bold leading-tight text-white">
-              Welcome to BookWise, Your Reading Companion!
+              Your Receipt for {bookTitle} is Ready!
             </Heading>
 
             <Text className="mt-[24px] text-xl leading-relaxed">
@@ -67,24 +74,35 @@ export default function WelcomeEmail({
             </Text>
 
             <Text className="mt-[16px] text-lg leading-relaxed">
-              Welcome to BookWise! We're excited to have you join our community
-              of book enthusiasts. Explore a wide range of books, borrow with
-              ease, and manage your reading journey seamlessly.
+              Your receipt for borrowing {bookTitle} has been generated. Here
+              are the details:
+              <li className="ml-[16px] text-lg">
+                Borrowed On:{' '}
+                <CodeInline className="text-lg font-semibold text-[#EED1AC]">
+                  {borrowDate}
+                </CodeInline>
+              </li>
+              <li className="ml-[16px] text-lg">
+                Due Date:{' '}
+                <CodeInline className="text-lg font-semibold text-[#EED1AC]">
+                  {dueDate}
+                </CodeInline>
+              </li>
             </Text>
 
             <Text className="mt-[24px] text-lg leading-relaxed">
-              Get started by logging in to your account:
+              You can download the receipt here:
             </Text>
 
             <Button
-              href="https://lms-university.vercel.app/sign-in"
+              href="https://lms-university.vercel.app/my-profile"
               className="mt-[10px] rounded-md bg-[#EED1AC] px-[32px] py-[16px] text-center text-base font-bold text-[#111624]"
             >
-              Login to BookWise
+              Dowload Receipt
             </Button>
 
             <Text className="mt-[32px] text-lg">
-              Happy reading,
+              Keep pages turning,
               <br />
               The Bookwise Team
             </Text>

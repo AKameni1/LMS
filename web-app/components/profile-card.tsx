@@ -22,14 +22,14 @@ export default function ProfileCard({
         </div>
       </div>
 
-      <div className="flex items-center justify-center lg:items-start lg:justify-normal gap-8">
+      <div className="flex items-center justify-center gap-8 lg:items-start lg:justify-normal">
         {/* Add profile image here */}
-        <Avatar className="h-16 w-16 lg:h-20 lg:w-20 outline outline-[10px] outline-dark-600/20">
-          <AvatarFallback className="bg-cyan-400 text-2xl lg:text-3xl font-semibold">
+        <Avatar className="h-16 w-16 outline outline-[10px] outline-dark-600/20 lg:h-20 lg:w-20">
+          <AvatarFallback className="bg-cyan-400 text-2xl font-semibold lg:text-3xl">
             {getInitials(fullName ?? 'IN')}
           </AvatarFallback>
         </Avatar>
-        <div className='flex flex-col gap-1'>
+        <div className="flex flex-col gap-1">
           <div className="flex items-center gap-1">
             {status === 'APPROVED' ? (
               <Image
@@ -54,19 +54,23 @@ export default function ProfileCard({
                 : 'Not Verified Account'}
             </p>
           </div>
-          <h1 className="lg:text-2xl text-xl font-semibold text-white">{fullName}</h1>
-          <p className='text-light-100 text-base'>{email}</p>
+          <h1 className="text-xl font-semibold text-white lg:text-2xl">
+            {fullName}
+          </h1>
+          <p className="text-base text-light-100">{email}</p>
         </div>
       </div>
 
       <div className="mt-8 space-y-4">
         <div className="">
-          <p className=' text-light-100'>University</p>
-          <p className='text-xl uppercase font-semibold text-white'>Cité Collégiale</p>
+          <p className="text-light-100">University</p>
+          <p className="text-xl font-semibold uppercase text-white">
+            Cité Collégiale
+          </p>
         </div>
         <div className="mt-4">
-          <p className=' text-light-100'>StudentID</p>
-          <p className='text-xl font-semibold text-white'>{universityId}</p>
+          <p className="text-light-100">StudentID</p>
+          <p className="text-xl font-semibold text-white">{universityId}</p>
         </div>
       </div>
 
@@ -79,7 +83,7 @@ export default function ProfileCard({
           className="rounded-md"
           alt={'university card'}
           loading={'eager'}
-        // lqip={{ active: true }}
+          // lqip={{ active: true }}
         />
       </div>
     </div>

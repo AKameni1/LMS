@@ -24,7 +24,7 @@ import { Input } from '@/components/ui/input';
 import Link from 'next/link';
 import { FIELD_NAMES, FIELD_TYPES } from '@/constants';
 import FileUpload from './file-upload';
-import { toast } from '@/hooks/use-toast';
+import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 import { Loader2Icon } from 'lucide-react';
@@ -57,18 +57,14 @@ export default function AuthForm<T extends FieldValues>({
       const result = await onSubmit(data);
 
       if (result.success) {
-        toast({
-          title: 'Success',
+        toast.success('Welcome to BookWise', {
           description: `You have successfully ${isSignIn ? 'Signed in' : 'Signed up'} to BookWise.`,
-          variant: 'success',
         });
 
         router.push('/');
       } else {
-        toast({
-          title: `Error ${isSignIn ? 'Signing in' : 'Signing up'}`,
+        toast.error(`Error ${isSignIn ? 'Signing in' : 'Signing up'}`, {
           description: result.error ?? 'An error occurred. Please try again.',
-          variant: 'destructive',
         });
       }
     });

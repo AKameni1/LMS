@@ -5,7 +5,7 @@ import './globals.css';
 
 import localFont from 'next/font/local';
 import { ReactNode } from 'react';
-import { Toaster } from '@/components/ui/toaster';
+import { Toaster } from '@/components/ui/sonner';
 import { auth } from '@/auth';
 
 import { SessionProvider } from 'next-auth/react';
@@ -14,16 +14,16 @@ export const experimental_ppr = true;
 
 const ibmPlexSans = localFont({
   src: [
-    { path: '/fonts/IBMPlexSans-Regular.ttf', weight: '400', style: 'normal' },
-    { path: '/fonts/IBMPlexSans-Medium.ttf', weight: '500', style: 'normal' },
-    { path: '/fonts/IBMPlexSans-SemiBold.ttf', weight: '600', style: 'normal' },
-    { path: '/fonts/IBMPlexSans-Bold.ttf', weight: '700', style: 'normal' },
+    { path: '../public/fonts/IBMPlexSans-Regular.woff2', weight: '400', style: 'normal' },
+    { path: '../public/fonts/IBMPlexSans-Medium.woff2', weight: '500', style: 'normal' },
+    { path: '../public/fonts/IBMPlexSans-SemiBold.woff2', weight: '600', style: 'normal' },
+    { path: '../public/fonts/IBMPlexSans-Bold.woff2', weight: '700', style: 'normal' },
   ],
 });
 
 const bebasNeue = localFont({
   src: [
-    { path: '/fonts/BebasNeue-Regular.ttf', weight: '400', style: 'normal' },
+    { path: '../public/fonts/BebasNeue-Regular.woff2', weight: '400', style: 'normal' },
   ],
   variable: '--bebas-neue',
 });
@@ -48,7 +48,7 @@ export default async function RootLayout({
           className={`${ibmPlexSans.className} ${bebasNeue.variable} antialiased`}
         >
           {children}
-          <Toaster />
+          <Toaster closeButton richColors position="top-center" />
           <SpeedInsights />
         </body>
       </SessionProvider>

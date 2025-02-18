@@ -23,7 +23,7 @@ type User = {
   universityId: number;
   universityCard: string;
   status: 'PENDING' | 'APPROVED' | 'REJECTED';
-}
+};
 
 type BorrowedBookInfo = {
   bookId: string;
@@ -31,7 +31,7 @@ type BorrowedBookInfo = {
   dueDate: string;
   returnDate: string;
   status: 'BORROWED' | 'RETURNED';
-}
+};
 
 type AuthCredentials = {
   fullName: string;
@@ -60,5 +60,9 @@ type ButtonBookParams = {
 };
 
 type Filter = 'oldest' | 'newest' | 'available' | 'highest_rated';
+
+type EmailProps = {
+  studentName: string;
+};
 
 type Type = 'Library' | 'Favorites' 
