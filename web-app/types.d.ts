@@ -64,3 +64,19 @@ type Filter = 'oldest' | 'newest' | 'available' | 'highest_rated';
 type EmailProps = {
   studentName: string;
 };
+
+type CachedBorrowedBooksResult = {
+  user: User;
+  userBooks: Book[];
+  borrowedBooksMap: BorrowBooksMap;
+};
+
+type BorrowBooksMap = {
+  [key: string]: {
+    borrowDate: Date;
+    returnDate: string | null;
+    dueDate: string;
+    status: 'BORROWED' | 'RETURNED';
+    book: Book;
+  };
+};

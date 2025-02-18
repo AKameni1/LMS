@@ -5,6 +5,7 @@ import { books, borrowRecords } from '@/db/schema';
 import { eq, sql } from 'drizzle-orm';
 import dayjs from 'dayjs';
 import { revalidatePath } from 'next/cache';
+import redis from '@/db/redis';
 
 export const borrowBook = async (params: BorrowBookParams) => {
   const { bookId, userId } = params;
@@ -54,6 +55,9 @@ export const borrowBook = async (params: BorrowBookParams) => {
       .set({ availableCopies: sql`${book.availableCopies} - 1` })
       .where(eq(books.id, bookId))
       .returning({ id: books.id });
+
+    await redis.del(`borrowed_books:${userId}`);
+    await redis.del('popular_books');
 
     revalidatePath('/my-profile');
 

@@ -1,14 +1,38 @@
 import { db } from '@/db/drizzle';
+import redis from '@/db/redis';
 import { books, borrowRecords, users } from '@/db/schema';
 import { and, asc, count, desc, eq, not, sql } from 'drizzle-orm';
 
 const ITEMS_PER_PAGE = 10;
+/**
+ * Fetches a list of books based on the provided query and filter, with pagination support.
+ * The results are cached for 1 hour to improve performance.
+ *
+ * @param query - The search query to filter books by title, author, description, or summary.
+ * @param currentPage - The current page number for pagination.
+ * @param filter - An optional filter to sort the books. Possible values are 'oldest', 'newest', 'highest_rated'.
+ * @returns A promise that resolves to an array of books matching the search criteria and filter.
+ * @throws An error if the books could not be fetched.
+ */
 export async function fetchFilteredBooks(
   query: string,
   currentPage: number,
   filter?: Filter,
 ): Promise<Book[]> {
   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+
+  let cache_key;
+
+  if (query.length > 0) {
+    query = query.trim();
+    cache_key = `filtered_books:${query}:${filter}:${currentPage}`;
+  } else {
+    cache_key = `filtered_books:${filter}:${currentPage}`;
+  }
+  const cachedBooks = await redis.get<Book[]>(cache_key);
+  if (cachedBooks) {
+    return cachedBooks;
+  }
 
   try {
     // base query
@@ -58,6 +82,8 @@ export async function fetchFilteredBooks(
     // Apply pagination
     const allBooks = await baseQuery.limit(ITEMS_PER_PAGE).offset(offset);
 
+    await redis.setex(cache_key, 60 * 60, allBooks); // Cache for 1 hour
+
     return allBooks;
   } catch (error) {
     console.log(error);
@@ -65,6 +91,14 @@ export async function fetchFilteredBooks(
   }
 }
 
+/**
+ * Fetches the total number of pages based on the provided query and filter.
+ *
+ * @param query - The search query to filter books by title, author, description, or summary.
+ * @param filter - An optional filter to sort the books. Possible values are 'oldest', 'newest', 'highest_rated'.
+ * @returns A promise that resolves to the total number of pages required to display all books.
+ * @throws An error if the total number of pages could not be fetched.
+ */
 export async function fetchBooksPages(
   query: string,
   filter?: Filter,
@@ -114,13 +148,34 @@ export async function fetchBooksPages(
   }
 }
 
-export async function fetchBookById(id: string): Promise<Book> {
+/**
+ * Fetches a single book record by its ID.
+ * The result is cached for 1 hour to improve performance.
+ *
+ * @param bookId - The ID of the book to fetch.
+ * @returns A promise that resolves to the book record with the specified ID.
+ * @throws An error if the book could not be fetched.
+ */
+export async function fetchBookById(bookId: string): Promise<Book> {
+  const CACHE_KEY = `book:${bookId}`;
+
+  const cachedBook = await redis.get<Book>(CACHE_KEY);
+  if (cachedBook) {
+    return cachedBook;
+  }
+
   try {
     const [book] = await db
       .select()
       .from(books)
-      .where(eq(books.id, id))
+      .where(eq(books.id, bookId))
       .limit(1);
+
+    if (!book) {
+      throw new Error('Book not found');
+    }
+
+    await redis.setex(CACHE_KEY, 60 * 60, book); // Cache for 1 hour
 
     return book;
   } catch (error) {
@@ -129,6 +184,16 @@ export async function fetchBookById(id: string): Promise<Book> {
   }
 }
 
+// Put the result of the fetchUserBorrowedBooks function in a cache
+
+/**
+ * Fetches a user's borrowed books and user details.
+ * The results are cached for 1 hour to improve performance.
+ *
+ * @param userId - The ID of the user to fetch borrowed books for.
+ * @returns A promise that resolves to an object containing the user details, borrowed books, and a map of borrowed book info.
+ * @throws An error if the user or borrowed books could not be fetched.
+ */
 export async function fetchUserBorrowedBooks(userId: string) {
   if (!userId) throw new Error('User ID is required');
 
@@ -170,7 +235,22 @@ export async function fetchUserBorrowedBooks(userId: string) {
   return { user, userBooks, borrowedBooksMap };
 }
 
+/**
+ * Fetches a list of popular books based on the number of times they have been borrowed.
+ * The results are cached for 1 hour to improve performance.
+ *
+ * @returns A promise that resolves to an array of popular books.
+ * @throws An error if the popular books could not be fetched.
+ */
 export async function fetchPopularBooks(): Promise<Book[]> {
+  const CACHE_KEY = 'popular_books';
+  const CACHE_EXPIRATION = 60 * 60;
+
+  const cachedBooks = await redis.get<Book[]>(CACHE_KEY);
+  if (cachedBooks) {
+    return cachedBooks;
+  }
+
   const popularBooks = await db
     .select({
       id: books.id,
@@ -204,20 +284,48 @@ export async function fetchPopularBooks(): Promise<Book[]> {
       .limit(7);
   }
 
+  await redis.setex(CACHE_KEY, CACHE_EXPIRATION, popularBooks);
   return popularBooks;
 }
 
+/**
+ * Fetches a list of recently added books.
+ * The results are cached for 1 hour to improve performance.
+ *
+ * @returns A promise that resolves to an array of recently added books.
+ * @throws An error if the recently added books could not be fetched.
+ */
 export async function fetchRecentlyAddedBooks(): Promise<Book[]> {
   return await db.select().from(books).orderBy(desc(books.createdAt)).limit(7);
 }
 
+/**
+ * Fetches a user by their ID.
+ * The result is cached for 1 hour to improve performance.
+ *
+ * @param userId - The ID of the user to fetch.
+ * @returns A promise that resolves to the user record with the specified ID.
+ * @throws An error if the user could not be fetched.
+ */
 export async function fetchUserById(userId: string): Promise<User> {
+  const CACHE_KEY = `user:${userId}`;
+  const cachedUser = await redis.get<User>(CACHE_KEY);
+  if (cachedUser) {
+    return cachedUser;
+  }
+
   try {
     const [user] = await db
       .select()
       .from(users)
       .where(eq(users.id, userId))
       .limit(1);
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    await redis.setex(CACHE_KEY, 60 * 60, user); // Cache for 1 hour
 
     return user;
   } catch (error) {
@@ -226,19 +334,43 @@ export async function fetchUserById(userId: string): Promise<User> {
   }
 }
 
+/**
+ * Fetches a list of books similar to the current book based on the genre.
+ * The results are cached for 1 hour to improve performance.
+ *
+ * @param currentBookId - The ID of the current book to find similar books for.
+ * @param genre - The genre of the current book.
+ * @returns A promise that resolves to an array of similar books.
+ * @throws An error if the similar books could not be fetched.
+ */
 export async function fetchSimilarBooks(
   currentBookId: string,
   genre: string,
 ): Promise<Book[]> {
+  const CACHE_KEY = `similar_books:${currentBookId}`;
+  const cachedBooks = await redis.get<Book[]>(CACHE_KEY);
+  if (cachedBooks) {
+    return cachedBooks;
+  }
+
   const similarBooks = await db
     .select()
     .from(books)
     .where(and(eq(books.genre, genre), not(eq(books.id, currentBookId))))
     .limit(6);
 
+  await redis.setex(CACHE_KEY, 60 * 60, similarBooks); // Cache for 1 hour
+
   return similarBooks;
 }
 
+/**
+ * Checks if a user is an admin.
+ *
+ * @param userId - The ID of the user to check.
+ * @returns A promise that resolves to a boolean indicating whether the user is an admin.
+ * @throws An error if the user's admin status could not be checked.
+ */
 export async function checkIsAdmin(userId: string): Promise<boolean> {
   const isAdmin = await db
     .select({ isAdmin: users.role })
