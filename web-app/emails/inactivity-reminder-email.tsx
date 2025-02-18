@@ -22,14 +22,7 @@ export default function InactivityReminderEmail({
       <Html lang="en">
         <Head>
           <title>We Miss You</title>
-          <Font
-            fontFamily="IBM Plex Sans"
-            fallbackFontFamily="sans-serif"
-            webFont={{
-              url: 'https://lms-university.vercel.app/fonts/IBMPlexSans-Regular.woff2',
-              format: 'woff2',
-            }}
-          />
+          <Font fontFamily="Trebuchet MS" fallbackFontFamily="sans-serif" />
         </Head>
         <Preview>We Miss You at BookWise!</Preview>
 
