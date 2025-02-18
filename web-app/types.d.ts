@@ -54,7 +54,7 @@ type BookParams = {
   summary: string;
 };
 
-type BorrowBookParams = {
+type ButtonBookParams = {
   bookId: string;
   userId: string;
 };
@@ -80,3 +80,5 @@ type BorrowBooksMap = {
     book: Book;
   };
 };
+
+type Type = 'Library' | 'Favorites' 

@@ -1,3 +1,4 @@
+import { table } from 'console';
 import {
   integer,
   text,
@@ -111,3 +112,18 @@ export const borrowRecords = pgTable(
   },
   (table) => [unique('unq').on(table.userId, table.bookId)],
 );
+
+export const favoriteBooks = pgTable(
+    'favorite_books', 
+    {
+    id: uuid('id').notNull().primaryKey().defaultRandom().unique(),
+    userId: uuid('user_id')
+      .references(() => users.id)
+      .notNull(),
+    bookId: uuid('book_id')
+      .references(() => books.id)
+      .notNull(),
+      createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  },
+  (table) => [unique('uni').on(table.userId, table.bookId)],
+)

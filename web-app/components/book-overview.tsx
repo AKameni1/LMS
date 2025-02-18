@@ -3,6 +3,10 @@ import React from 'react';
 import BookCover from './book-cover';
 import BorrowBook from './borrow-book';
 import { fetchUserById } from '@/lib/data';
+import { db } from '@/db/drizzle';
+import { borrowRecords } from '@/db/schema';
+import { eq } from 'drizzle-orm';
+import FavoriteBook from './favorite-book';
 
 type BookOverviewPropsType = Book & { userId: string };
 
@@ -21,12 +25,26 @@ export default async function BookOverview({
 }: Readonly<BookOverviewPropsType>) {
   const user = await fetchUserById(userId);
 
+  const [book] = await db
+    .select()
+    .from(borrowRecords)
+    .where(eq(borrowRecords.bookId, id))
+    .limit(1);
+
   const borrowingEligibility = {
     isEligible: availableCopies > 0 && user?.status === 'APPROVED',
     message:
       availableCopies <= 0
         ? 'Book is not available for borrowing'
         : 'You are not eligible to borrow books',
+  };
+
+  const favoriteEligibility = {
+    isEligible: !book || book.status !== 'BORROWED',
+    message:
+      !book || book.status !== 'BORROWED'
+        ? ''
+        : 'You cannot add this book to your favorites',
   };
 
   return (
@@ -71,13 +89,22 @@ export default async function BookOverview({
 
         <p className="book-description">{description}</p>
 
-        {user && (
-          <BorrowBook
-            bookId={id}
-            userId={userId}
-            borrowingEligibility={borrowingEligibility}
-          />
-        )}
+        <div className="book-btns">
+          {user && (
+            <BorrowBook
+              bookId={id}
+              userId={userId}
+              borrowingEligibility={borrowingEligibility}
+            />
+          )}
+          {user && (
+            <FavoriteBook
+              bookId={id}
+              userId={userId}
+              addFavoriteEligibility={favoriteEligibility}
+            />
+          )}
+        </div>
       </div>
 
       <div className="relative flex flex-1 justify-center">

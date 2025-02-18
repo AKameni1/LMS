@@ -93,8 +93,9 @@ export default function BorrowedBookCard({
                     height={18}
                     alt={`calendar icon for overdue book ${title}`}
                   />
-                  {diffDays.toString().padStart(2, '0')} day
-                  {diffDays <= 1 ? '' : 's'} left to return
+                  {diffDays == 0 ? 'Book is due before 4PM' : `
+                  ${diffDays.toString().padStart(2, '0')} 
+                  ${diffDays <= 1 ? 'day' : 'days'} left to return`}
                 </>
               )}
             </p>

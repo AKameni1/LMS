@@ -10,7 +10,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { books } from '@/db/schema';
+import { favoriteBooks } from '@/db/schema';
 import { fetchBooksPages } from '@/lib/data';
 import { truncateText } from '@/lib/utils';
 
@@ -29,7 +29,7 @@ export default async function Page(
   const currentPage = Number(searchParams?.page) || 1;
   const totalPages = await fetchBooksPages(
     query.trim(),
-    books,
+    favoriteBooks,
     filter.trim() as Filter,
   );
 
@@ -37,8 +37,9 @@ export default async function Page(
     <main className="library">
       <p className="library-subtitle">DISCOVER YOUR NEXT GREAT READ:</p>
       <h1 className="library-title">
-        Explore and Search for <span className="text-light-200">Any Book</span>{' '}
-        In Our Library
+        Discover and Find All{' '}
+        <span className="text-light-200">Your Favorite Books</span> In Our
+        Library
       </h1>
 
       <Search placeholder="Search for books" />
@@ -47,7 +48,7 @@ export default async function Page(
         <div className={'mr-4'}>
           {!query ? (
             <h2 className="font-bebas-neue text-4xl text-light-100">
-              All Library Books
+              All Favorite Books
             </h2>
           ) : (
             <h2 className="text-3xl font-semibold text-light-100">
@@ -79,7 +80,7 @@ export default async function Page(
             query={query.trim()}
             currentPage={currentPage}
             filter={filter as Filter}
-            type="Library"
+            type='Favorites'
           />
 
           <Separator className="mt-10 h-1 rounded-full bg-dark-200/40" />

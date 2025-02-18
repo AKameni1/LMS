@@ -1,7 +1,8 @@
 import { db } from '@/db/drizzle';
 import redis from '@/db/redis';
-import { books, borrowRecords, users } from '@/db/schema';
+import { books, borrowRecords, users, favoriteBooks } from '@/db/schema';
 import { and, asc, count, desc, eq, not, sql } from 'drizzle-orm';
+import { PgTable, TableConfig } from 'drizzle-orm/pg-core';
 
 const ITEMS_PER_PAGE = 10;
 /**
@@ -17,6 +18,7 @@ const ITEMS_PER_PAGE = 10;
 export async function fetchFilteredBooks(
   query: string,
   currentPage: number,
+  type: Type,
   filter?: Filter,
 ): Promise<Book[]> {
   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
@@ -34,9 +36,20 @@ export async function fetchFilteredBooks(
     return cachedBooks;
   }
 
+  let baseQuery;
   try {
     // base query
-    let baseQuery = db.select().from(books).$dynamic(); // Dynamic mode enabled
+    if (type === 'Library') {
+      baseQuery = db.select().from(books).$dynamic();
+    } else {
+      baseQuery = db
+        .select()
+        .from(books)
+        .innerJoin(favoriteBooks, eq(books.id, favoriteBooks.bookId))
+        .$dynamic();
+    }
+
+    // Dynamic mode enabled
 
     const conditions = [];
 
@@ -84,7 +97,7 @@ export async function fetchFilteredBooks(
 
     await redis.setex(cache_key, 60 * 60, allBooks); // Cache for 1 hour
 
-    return allBooks;
+    return allBooks as Book[];
   } catch (error) {
     console.log(error);
     throw new Error('Failed to fetch books');
@@ -101,12 +114,13 @@ export async function fetchFilteredBooks(
  */
 export async function fetchBooksPages(
   query: string,
+  type: PgTable<TableConfig>,
   filter?: Filter,
 ): Promise<number> {
   try {
     let baseQuery = db
       .select({ count: sql<number>`cast(count(*) as integer)`.as('count') })
-      .from(books)
+      .from(type)
       .$dynamic(); // Dynamic mode enabled
 
     const conditions = [];
