@@ -17,7 +17,7 @@ export default function StatCard({
   return (
     <div className="stat">
       <div className="stat-info">
-        <p className="stat-label">{title}</p>
+        <p className="stat-label truncate">{title}</p>
         <div
           className={cn('flex items-center justify-center gap-1', {
             'text-red-500': color === 'red',

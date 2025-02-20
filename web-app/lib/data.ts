@@ -1,3 +1,4 @@
+import { auth } from '@/auth';
 import { db } from '@/db/drizzle';
 import redis from '@/db/redis';
 import { books, borrowRecords, users, favoriteBooks } from '@/db/schema';
@@ -21,38 +22,64 @@ export async function fetchFilteredBooks(
   type: Type,
   filter?: Filter,
 ): Promise<Book[]> {
+  const session = await auth();
+  const userId = session?.user?.id;
+
   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+  query = query.trim();
 
-  let cache_key;
+  // Cache key
+  const baseKey =
+    type === 'Favorites'
+      ? `filtered_books:favorites:${userId}`
+      : 'filtered_books';
+  const querySegment = query.length > 0 ? `${query}:` : '';
+  const cache_key = `${baseKey}:${querySegment}${filter}:${currentPage}`;
 
-  if (query.length > 0) {
-    query = query.trim();
-    cache_key = `filtered_books:${query}:${filter}:${currentPage}`;
-  } else {
-    cache_key = `filtered_books:${filter}:${currentPage}`;
-  }
+  // Check cache
   const cachedBooks = await redis.get<Book[]>(cache_key);
   if (cachedBooks) {
     return cachedBooks;
   }
 
-  let baseQuery;
   try {
+    let baseQuery = db
+      .select({
+        id: books.id,
+        title: books.title,
+        author: books.author,
+        genre: books.genre,
+        rating: books.rating,
+        totalCopies: books.totalCopies,
+        availableCopies: books.availableCopies,
+        description: books.description,
+        coverColor: books.coverColor,
+        coverUrl: books.coverUrl,
+        videoUrl: books.videoUrl,
+        summary: books.summary,
+        createdAt: books.createdAt,
+        updatedAt: books.updatedAt,
+        searchText: books.searchText,
+      })
+      .from(books)
+      .$dynamic(); // Dynamic mode enabled
+
     // base query
-    if (type === 'Library') {
-      baseQuery = db.select().from(books).$dynamic();
-    } else {
-      baseQuery = db
-        .select()
-        .from(books)
+    if (type === 'Favorites') {
+      if (!userId) {
+        throw new Error('User must be authenticated to access favorites.');
+      }
+
+      baseQuery = baseQuery
         .innerJoin(favoriteBooks, eq(books.id, favoriteBooks.bookId))
-        .$dynamic();
+        .where(eq(favoriteBooks.userId, userId));
     }
 
     // Dynamic mode enabled
 
     const conditions = [];
 
+    // Apply search if necessary
     if (query.length > 0) {
       conditions.push(
         sql`${books.title} ILIKE ${'%' + query + '%'} OR
@@ -60,12 +87,9 @@ export async function fetchFilteredBooks(
              ${books.description} ILIKE ${'%' + query + '%'} OR
              ${books.summary} ILIKE ${'%' + query + '%'}`,
       );
-    }
 
-    // Apply search if necessary
-    if (query.length > 0) {
       conditions.push(
-        sql`${books.searchText} @@ to_tsquery('english', ${query.replace(/\s+/g, ' & ')})`,
+        sql`${books.searchText} @@ plainto_tsquery('english', ${query})`,
       );
     }
 

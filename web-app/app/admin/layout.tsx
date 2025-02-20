@@ -8,7 +8,9 @@ import { checkIsAdmin } from '@/lib/data';
 
 export default async function AdminLayout({
   children,
-}: Readonly<{ children: ReactNode }>) {
+}: Readonly<{
+  children: ReactNode;
+}>) {
   const session = await auth();
   const userId = session?.user?.id;
 

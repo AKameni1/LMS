@@ -26,8 +26,8 @@ type BookCoverProps = {
 
 export default function BookCover({
   className,
-  coverColor = '#012B48',
-  coverImage = 'https://placehold.co/400x600.png',
+  coverColor,
+  coverImage,
   variant = 'regular',
   bookTitle,
 }: Readonly<BookCoverProps>) {
@@ -49,7 +49,9 @@ export default function BookCover({
           path={coverImage}
           urlEndpoint={config.env.imageKit.urlEndpoint}
           fill
-          className="rounded-br-sm rounded-tr-sm border-b-2 border-black"
+          className={cn('rounded-br-sm rounded-tr-sm', {
+            'border-b-2 border-black': variant === 'small',
+          })}
           alt={bookTitle}
           loading={'eager'}
           // lqip={{ active: true }}
