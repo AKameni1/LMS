@@ -186,7 +186,7 @@
   }
 
   .admin-sidebar .user {
-    @apply my-8 flex w-full flex-row gap-2 rounded-full border border-light-400 px-6 py-2 shadow-sm max-md:px-2;
+    @apply my-8 flex w-full flex-row gap-2 rounded-full border border-light-400 px-4 py-2 shadow-sm max-md:px-2;
   }
 
   /* User Card */

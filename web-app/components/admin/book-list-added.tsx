@@ -1,62 +1,35 @@
 import React from 'react';
 import BookCover from '../book-cover';
 import Image from 'next/image';
+import { fetchBooksAdded } from '@/lib/actions/admin/book';
+import { notFound } from 'next/navigation';
 
-export default function BookListAdded() {
-  const books = [
-    {
-      id: '9084986f-456c-449b-ae6e-59ef1f26b129',
-      bookTitle: 'CSS in Depth',
-      coverUrl: '/books/covers/CSS_in_Depth_EDRf7KJ0V.jpg',
-      coverColor: '#6c6e94',
-      author: 'Keith J. Grant',
-      genre: 'Web Development',
-      date: '12/01/24',
-      status: 'pending',
-    },
-    // Add more requests as needed
-    {
-      id: 'b7a1c8d4-6c8b-4d2b-9f8e-1f2e4b6e8a2a',
-      bookTitle: 'HTML and CSS: Design and Build Websites',
-      coverUrl:
-        '/books/covers/HTML_and_CSS__Design_and_Build_Websites_QOjLRAOI1F.jpg',
-      coverColor: '#3a2931',
-      author: 'Jon Duckett',
-      genre: 'Web Development',
-      date: '15/01/24',
-      status: 'pending',
-    },
-    {
-      id: 'c9d4e8f2-7b8c-4d3b-9f9e-2f3e5b7e9b3b',
-      bookTitle: 'System Design Interview',
-      coverUrl: '/books/covers/System_Design_Interview_jkLx8Pp3C.jpg',
-      coverColor: '#363b63',
-      genre: 'System Design',
-      author: 'Alex Xu',
-      date: '18/01/24',
-      status: 'pending',
-    },
-  ];
+export default async function BookListAdded() {
+  const { success, data } = await fetchBooksAdded();
+
+  if (!success || !data) {
+    return notFound();
+  }
 
   return (
     <div className="space-y-4 divide-y divide-border">
-      {books.length === 0 ? (
+      {data.length === 0 ? (
         <div className="py-6 text-center text-muted-foreground">
           There are no borrow book requests awaiting your review at this time.
         </div>
       ) : (
-        books.map(
-          ({ id, coverUrl, coverColor, bookTitle, author, genre, date }) => (
+        data.map(
+          ({ id, coverUrl, coverColor, title, author, genre, createdAt }) => (
             <div className="book-stripe" key={id}>
               <BookCover
                 variant="small"
                 coverImage={coverUrl}
                 coverColor={coverColor}
-                bookTitle={bookTitle}
+                bookTitle={title}
               />
 
               <div className="flex-1 space-y-1">
-                <h3 className="title">{bookTitle}</h3>
+                <h3 className="title">{title}</h3>
                 <div className="author">
                   <p>By {author}</p>
                   <span className="text-light-500">•</span>
@@ -70,7 +43,12 @@ export default function BookListAdded() {
                       height={14}
                       alt="Calendar"
                     />
-                    <p>{date}</p>
+                    <p>
+                      {createdAt?.toLocaleString('en-US', { month: 'short' })}{' '}
+                      {createdAt?.toLocaleString('en-US', { day: '2-digit' })}
+                      {', '}
+                      {createdAt?.toLocaleString('en-US', { year: 'numeric' })}
+                    </p>
                   </div>
                 </div>
               </div>

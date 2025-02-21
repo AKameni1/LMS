@@ -1,18 +1,16 @@
 import BookListAdded from '@/components/admin/book-list-added';
-import { Button } from '@/components/ui/button';
+import LinkButton from '@/components/admin/link-button';
+import { ScrollArea } from '@/components/admin/scroll-area';
 import Image from 'next/image';
-import React from 'react';
 
-export default function Page() {
+export default async function Page() {
   return (
     <div className="mt-4 flex-1 space-y-5 rounded-xl bg-white p-5">
       <div className="stat-info">
         <p className="truncate whitespace-nowrap text-lg font-semibold text-dark-400">
           Recently Added Books
         </p>
-        <Button className="bg-light-300 text-primary-admin transition-all duration-300 hover:bg-light-300/20">
-          View all
-        </Button>
+        <LinkButton href="/admin/books" />
       </div>
 
       {/* Add Button here */}
@@ -32,12 +30,9 @@ export default function Page() {
         </button>
       </div>
 
-      <div className="relative">
-        <div className="hide-scrollbar overflow-auto">
-          <BookListAdded />
-        </div>
-        <div className="pointer-events-none absolute bottom-0 left-0 right-0 z-50 h-20 bg-gradient-to-t from-background to-transparent" />
-      </div>
+      <ScrollArea className="max-h-[475px]">
+        <BookListAdded />
+      </ScrollArea>
     </div>
   );
 }

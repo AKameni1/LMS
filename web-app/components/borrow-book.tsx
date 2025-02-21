@@ -28,7 +28,7 @@ export default function BorrowBook({
     if (!isEligible) {
       toast.error('Error', {
         description: message,
-      });
+      });      
       return;
     }
 

@@ -3,77 +3,71 @@ import BookCover from '../book-cover';
 import { Avatar, AvatarFallback } from '../ui/avatar';
 import { getInitials } from '@/lib/utils';
 import Image from 'next/image';
+import { fetchBookRequests } from '@/lib/actions/admin/book';
 
-export default function RequestList() {
-  const requests = [
-    {
-      id: '9084986f-456c-449b-ae6e-59ef1f26b129',
-      bookTitle: 'CSS in Depth',
-      coverUrl: '/books/covers/CSS_in_Depth_EDRf7KJ0V.jpg',
-      coverColor: '#6c6e94',
-      author: 'Keith J. Grant',
-      genre: 'Web Development',
-      userName: 'Darrell Stewards',
-      date: '12/01/24',
-      status: 'pending',
-    },
-    // Add more requests as needed
-    {
-      id: 'b7a1c8d4-6c8b-4d2b-9f8e-1f2e4b6e8a2a',
-      bookTitle: 'HTML and CSS: Design and Build Websites',
-      coverUrl:
-        '/books/covers/HTML_and_CSS__Design_and_Build_Websites_QOjLRAOI1F.jpg',
-      coverColor: '#3a2931',
-      author: 'Jon Duckett',
-      genre: 'Web Development',
-      userName: 'Jane Doe',
-      date: '15/01/24',
-      status: 'pending',
-    },
-    {
-      id: 'c9d4e8f2-7b8c-4d3b-9f9e-2f3e5b7e9b3b',
-      bookTitle: 'System Design Interview',
-      coverUrl: '/books/covers/System_Design_Interview_jkLx8Pp3C.jpg',
-      coverColor: '#363b63',
-      genre: 'System Design',
-      author: 'Alex Xu',
-      userName: 'John Smith',
-      date: '18/01/24',
-      status: 'pending',
-    },
-  ];
+export default async function RequestList() {
+  const { success, error, ...requests } = await fetchBookRequests();
+
+  if (!success && error) {
+    return <div className="error">{error}</div>;
+  }
+
+  if (!requests.data?.length || requests.data?.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center gap-5">
+        <Image
+          src="/images/borrow-requests.svg"
+          width={200}
+          height={200}
+          alt="Borrow Requests"
+        />
+
+        <p className="text-base font-semibold text-dark-400">
+          No Pending Borrow Requests
+        </p>
+        <p className="text-sm text-dark-700">
+          There are no borrow requests awaiting your review at this time
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-4 divide-y divide-border">
-      {requests.length === 0 ? (
-        <div className="py-6 text-center text-muted-foreground">
-          There are no borrow book requests awaiting your review at this time.
-        </div>
-      ) : (
-        requests.map((request) => (
-          <div className="book-stripe" key={request.id}>
+      {requests.data.map(
+        ({
+          id,
+          coverColor,
+          coverUrl,
+          title,
+          author,
+          genre,
+          date,
+          userName,
+        }) => (
+          <div className="book-stripe" key={id}>
             <BookCover
               variant="small"
-              coverImage={request.coverUrl}
-              coverColor={request.coverColor}
-              bookTitle={request.bookTitle}
+              coverImage={coverUrl}
+              coverColor={coverColor}
+              bookTitle={title}
             />
 
             <div className="flex-1 space-y-1">
-              <h3 className="title">{request.bookTitle}</h3>
+              <h3 className="title">{title}</h3>
               <div className="author">
-                <p>By {request.author}</p>
-                <span className='text-light-500'>•</span>
-                <p>{request.genre}</p>
+                <p>
+                  By {author} • {genre}
+                </p>
               </div>
               <div className="user">
                 <div className="avatar">
                   <Avatar className="size-6">
-                    <AvatarFallback className="bg-amber-100 text-xs font-medium">
-                      {getInitials(request.userName ?? 'IN')}
+                    <AvatarFallback className="bg-blue-600 text-xs font-medium text-light-100">
+                      {getInitials(userName ?? 'IN')}
                     </AvatarFallback>
                   </Avatar>
-                  <p>{request.userName}</p>
+                  <p>{userName}</p>
                 </div>
                 <div className="borrow-date">
                   <Image
@@ -82,12 +76,23 @@ export default function RequestList() {
                     height={14}
                     alt="Calendar"
                   />
-                  <p>{request.date}</p>
+                  <p>
+                    {date?.toLocaleString('en-US', {
+                      month: 'short',
+                    })}{' '}
+                    {date?.toLocaleString('en-US', {
+                      day: '2-digit',
+                    })}
+                    {', '}
+                    {date?.toLocaleString('en-US', {
+                      year: 'numeric',
+                    })}
+                  </p>
                 </div>
               </div>
             </div>
 
-            <div className="flex h-8 w-8 p-1 drop-shadow-sm items-center justify-center rounded-md bg-white text-dark-400 transition-colors duration-300 group-hover:bg-dark-200/10">
+            <div className="flex h-8 w-8 items-center justify-center rounded-md bg-white p-1 text-dark-400 drop-shadow-sm transition-colors duration-300 group-hover:bg-dark-200/10">
               <Image
                 src="/icons/admin/eye.svg"
                 width={16}
@@ -96,7 +101,7 @@ export default function RequestList() {
               />
             </div>
           </div>
-        ))
+        ),
       )}
     </div>
   );

@@ -29,7 +29,7 @@ export default function ProfileCard({
             {getInitials(fullName ?? 'IN')}
           </AvatarFallback>
         </Avatar>
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-1 overflow-hidden">
           <div className="flex items-center gap-1">
             {status === 'APPROVED' ? (
               <Image
@@ -57,7 +57,7 @@ export default function ProfileCard({
           <h1 className="text-xl font-semibold text-white lg:text-2xl">
             {fullName}
           </h1>
-          <p className="text-base text-light-100">{email}</p>
+          <p className="truncate text-base text-light-100">{email}</p>
         </div>
       </div>
 

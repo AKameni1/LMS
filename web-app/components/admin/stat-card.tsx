@@ -30,10 +30,12 @@ export default function StatCard({
             height={16}
             alt={`caret ${color === 'red' ? 'down' : 'up'} ${title}`}
           />
-          <span className="text-sm font-semibold">{valueChange}</span>
+          <span className="text-sm font-semibold">
+            {valueChange}
+          </span>
         </div>
       </div>
-      <p className="stat-count">{value}</p>
+      <p className="stat-count">{value.toString().padStart(2, '0')}</p>
     </div>
   );
 }

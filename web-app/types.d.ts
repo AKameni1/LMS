@@ -81,4 +81,29 @@ type BorrowBooksMap = {
   };
 };
 
-type Type = 'Library' | 'Favorites' 
+type Type = 'Library' | 'Favorites';
+
+type DashboardStatsProps = {
+  totalBooks: number;
+  totalUsers: number;
+  totalBorrowedBooks: number;
+  totalBooksChange: number;
+  totalUsersChange: number;
+  totalBorrowedBooksChange: number;
+};
+
+type DashboardStatsClientProps = {
+  initialData: DashboardStatsProps;
+};
+
+
+type UserRow = {
+  id: string;
+  fullName: string;
+  email: string;
+  dateJoined: Date;
+  role: 'USER' | 'ADMIN';
+  booksBorrowed: number;
+  universityId: number;
+  universityCard: string;
+}

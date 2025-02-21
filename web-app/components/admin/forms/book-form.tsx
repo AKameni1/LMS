@@ -19,7 +19,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import FileUpload from '@/components/file-upload';
 import ColorPicker from '../color-picker';
-import { createBook } from '@/lib/admin/actions/book';
+import { createBook } from '@/lib/actions/admin/book';
 import { toast } from 'sonner';
 
 interface AuthFormPropsType extends Partial<Book> {

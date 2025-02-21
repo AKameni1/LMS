@@ -15,10 +15,10 @@ export default function Default() {
       </div>
       <div className="flex flex-col items-center justify-center gap-5">
         <Image
-          src="/images/borrow-requests.svg"
+          src="/images/account-requests.svg"
           width={200}
           height={200}
-          alt="Borrow Requests"
+          alt="Account Requests"
         />
 
         <p className="text-base font-semibold text-dark-400">

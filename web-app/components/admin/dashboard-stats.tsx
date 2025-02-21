@@ -1,29 +1,38 @@
-import React from 'react'
-import StatCard from './stat-card'
+import React from 'react';
+import {
+  getDashboardStats,
+  getDashboardStatsLastWeek,
+} from '@/lib/actions/admin/users';
+import { notFound } from 'next/navigation';
+import DashboardStatsClient from './dashboard-stats-client';
 
-export default function DashboardStats() {
-  return (
-    <div className="mb-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        <StatCard
-          title="Total Books Borrowed"
-          value={145}
-          color="red"
-          valueChange={-2}
-        />
+export default async function DashboardStats() {
+  const { success, ...initialDataCurrent } = await getDashboardStats();
+  const { success: successLastWeek, ...initialDataLastWeek } =
+    await getDashboardStatsLastWeek();
 
-        <StatCard
-          title="Total Users"
-          value={317}
-          color="green"
-          valueChange={4}
-        />
+  if (!success || !successLastWeek) {
+    return notFound();
+  }
 
-        <StatCard
-          title="Total Books"
-          value={163}
-          color="green"
-          valueChange={2}
-        />
-      </div>
-  )
+  if (!initialDataCurrent || !initialDataLastWeek) {
+    return notFound();
+  }
+
+  const initialData = {
+    totalBooks: initialDataCurrent?.totalBooks ?? 0,
+    totalUsers: initialDataCurrent?.totalUsers ?? 0,
+    totalBorrowedBooks: initialDataCurrent?.totalBorrowedBooks ?? 0,
+    totalBooksChange:
+      (initialDataCurrent?.totalBooks ?? 0) -
+      (initialDataLastWeek?.totalBooksLast ?? 0),
+    totalUsersChange:
+      (initialDataCurrent?.totalUsers ?? 0) -
+      (initialDataLastWeek?.totalUsersLast ?? 0),
+    totalBorrowedBooksChange:
+      (initialDataCurrent?.totalBorrowedBooks ?? 0) -
+      (initialDataLastWeek?.totalBorrowedBooksLast ?? 0),
+  };
+
+  return <DashboardStatsClient initialData={initialData} />;
 }
