@@ -29,7 +29,7 @@ type BorrowedBookInfo = {
   borrowDate: Date;
   dueDate: string;
   returnDate: string | null;
-  status: 'BORROWED' | 'RETURNED';
+  status: 'PENDING' | 'REJECTED' | 'BORROWED' | 'RETURNED';
   book: Book;
 };
 
