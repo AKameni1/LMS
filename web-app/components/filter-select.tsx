@@ -9,7 +9,6 @@ import {
   SelectValue,
 } from './ui/select';
 import { filterOptions } from '@/constants';
-import Link from 'next/link';
 
 export default function FilterSelect() {
   const searchParams = useSearchParams();
@@ -38,7 +37,9 @@ export default function FilterSelect() {
       <SelectContent className="select-content">
         {filterOptions.map(({ value, label }) => (
           <SelectItem key={value} className="select-item" value={value}>
-            <Link href={`?filter=${label}`}>{label}</Link>
+            <button onClick={() => router.push(`?filter=${value}`)}>
+              {label}
+            </button>
           </SelectItem>
         ))}
       </SelectContent>
