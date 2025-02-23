@@ -4,9 +4,9 @@ import {
   getDashboardStats,
   getDashboardStatsLastWeek,
 } from '@/lib/actions/admin/users';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
-export const GET = auth(async function GET() {
+export const GET = auth(async function GET(_req: NextRequest) {
   try {
     const CACHE_KEY = 'dashboard_stats';
     const cachedData = await redis.get<DashboardStatsProps>(CACHE_KEY);
