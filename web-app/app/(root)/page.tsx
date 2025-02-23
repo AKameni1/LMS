@@ -9,8 +9,6 @@ export default async function Home() {
 
   const latestBooks = await fetchPopularBooks();
 
-  console.log(latestBooks[0].borrowCount);
-
   if (latestBooks.length === 0) {
     return (
       <p className="text-center text-xl font-semibold">

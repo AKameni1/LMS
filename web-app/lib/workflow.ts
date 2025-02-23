@@ -37,9 +37,7 @@ export const sendEmail = async ({
         subject: subject,
         html: typeof message === 'string' ? message : JSON.stringify(message),
       },
-    });
-
-    console.log('Email sent successfully:', response);
+    });    
     return { success: true, data: response };
   } catch (error) {
     console.error('Error sending email:', error);

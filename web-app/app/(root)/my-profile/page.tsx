@@ -18,8 +18,6 @@ export default async function Page() {
   const { user, userBooks, borrowedBooksMap } =
     await fetchUserBorrowedBooks(userId);
 
-  console.log(userBooks);
-
   return (
     <>
       {/* 3. Render the BookList component with the title "Borrowed Books" and the list of books fetched in step 2. */}
@@ -35,7 +33,7 @@ export default async function Page() {
           <h2 className="mb-6 text-3xl font-semibold text-light-100">
             Borrowed Books
           </h2>
-          <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
             {userBooks.map((book) => {
               const borrowedBookInfo = borrowedBooksMap.get(book.id);
               if (!borrowedBookInfo) return null;

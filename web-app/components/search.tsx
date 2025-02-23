@@ -10,13 +10,11 @@ export default function Search({
 }: Readonly<{
   placeholder: string;
 }>) {
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const handleSearch = useDebouncedCallback((term: string) => {
-    console.log(`Searching... ${term}`);
-
     const params = new URLSearchParams(searchParams);
     params.set('page', '1');
     if (term) {
@@ -24,7 +22,7 @@ export default function Search({
     } else {
       params.delete('query');
     }
-    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    router.push(`${pathname}?${params.toString()}`, { scroll: false });
   }, 400);
 
   return (
