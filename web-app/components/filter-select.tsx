@@ -9,27 +9,40 @@ import {
   SelectValue,
 } from './ui/select';
 import { filterOptions } from '@/constants';
+import { useEffect, useState, useTransition } from 'react';
 
-export default function FilterSelect() {
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
+export default function FilterSelect({
+  initialFilter,
+}: Readonly<{ initialFilter: string }>) {
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const [filter, setFilter] = useState(initialFilter);
+  const [isPending, startTransition] = useTransition();
+
+  useEffect(() => {
+    setFilter(searchParams.get('filter') ?? 'all');
+  }, [searchParams]);
 
   const handleFilterChange = (value: string) => {
-    const params = new URLSearchParams(searchParams);
-    params.set('page', '1');
-    if (value !== 'all') {
-      params.set('filter', value);
-    } else {
-      params.delete('filter'); // Remove the filter query param if 'all' is selected
-    }
-    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    setFilter(value);
+    startTransition(() => {
+      const params = new URLSearchParams(searchParams);
+      params.set('page', '1');
+      if (value !== 'all') {
+        params.set('filter', value);
+      } else {
+        params.delete('filter'); // Remove the filter query param if 'all' is selected
+      }
+      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    });
   };
 
   return (
     <Select
-      defaultValue={searchParams.get('filter') ?? 'all'}
+      value={filter}
       onValueChange={handleFilterChange}
+      disabled={isPending}
     >
       <SelectTrigger className="select-trigger">
         <SelectValue placeholder="Sort By" />
@@ -37,9 +50,7 @@ export default function FilterSelect() {
       <SelectContent className="select-content">
         {filterOptions.map(({ value, label }) => (
           <SelectItem key={value} className="select-item" value={value}>
-            <button onClick={() => router.push(`?filter=${value}`)}>
-              {label}
-            </button>
+            {label}
           </SelectItem>
         ))}
       </SelectContent>

@@ -13,6 +13,7 @@ import {
 import { books } from '@/db/schema';
 import { fetchBooksPages } from '@/lib/data';
 import { truncateText } from '@/lib/utils';
+import { Suspense } from 'react';
 
 export default async function Page(
   props: Readonly<{
@@ -68,19 +69,21 @@ export default async function Page(
           )}
         </div>
 
-        <FilterSelect />
+        <FilterSelect initialFilter={filter} />
       </div>
 
       {totalPages === 0 ? (
         <NoResults />
       ) : (
         <>
-          <FilterBookList
-            query={query.trim()}
-            currentPage={currentPage}
-            filter={filter as Filter}
-            type="Library"
-          />
+          <Suspense fallback={<p className="text-light-300">Loading...</p>}>
+            <FilterBookList
+              query={query.trim()}
+              currentPage={currentPage}
+              filter={filter as Filter}
+              type="Library"
+            />
+          </Suspense>
 
           <Separator className="mt-10 h-1 rounded-full bg-dark-200/40" />
 
