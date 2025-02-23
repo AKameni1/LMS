@@ -17,37 +17,37 @@ export default function FilterSelect({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+
   const [filter, setFilter] = useState(initialFilter);
+  const [key, setKey] = useState(0);
   const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
-    setFilter(searchParams.get('filter') ?? 'all');
-    console.log('UseEffect: FilterSelect rendered');
-  }, [searchParams, setFilter]);
+    const currentFilter = searchParams.get('filter') ?? 'all';
+    if (currentFilter !== filter) {
+      setFilter(currentFilter);
+      setKey((prev) => prev + 1);
+    }
+  }, [searchParams]);
 
   const handleFilterChange = (value: string) => {
     setFilter(value);
-    console.log('Entering transition');
     startTransition(() => {
       const params = new URLSearchParams(searchParams);
-      console.log('Start transition');
       params.set('page', '1');
-      console.log('Set page to 1');
+
       if (value !== 'all') {
-        console.log('Set filter to value');
         params.set('filter', value);
       } else {
-        console.log('Delete filter');
         params.delete('filter'); // Remove the filter query param if 'all' is selected
       }
-      console.log('Pushing to router with params');
       router.push(`${pathname}?${params.toString()}`, { scroll: false });
     });
-    console.log('Exiting transition');
   };
 
   return (
     <Select
+      key={key}
       value={filter}
       onValueChange={handleFilterChange}
       disabled={isPending}
