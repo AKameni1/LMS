@@ -4,9 +4,7 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
-  DialogClose,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -15,13 +13,18 @@ import {
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import config from '@/lib/config';
-import { getInitials } from '@/lib/utils';
+import { cn, getInitials } from '@/lib/utils';
 import { ColumnDef } from '@tanstack/react-table';
 import { IKImage } from 'imagekitio-next';
 import Image from 'next/image';
+import { useState } from 'react';
+import ConfirmationDialog from '../dialog/confirmation-dialog';
 
 /**
  * Defines the columns for the data table in the admin panel.
@@ -55,7 +58,7 @@ export const columns: ColumnDef<UserRow>[] = [
       return (
         <div className="flex flex-row items-center gap-2 overflow-auto text-left">
           <Avatar className="size-10">
-            <AvatarFallback className="border border-blue-700 bg-blue-400 text-lg font-medium text-light-300">
+            <AvatarFallback className="border border-blue-700 bg-blue-400 text-base font-medium text-blue-950">
               {getInitials(user.fullName)}
             </AvatarFallback>
           </Avatar>
@@ -110,47 +113,9 @@ export const columns: ColumnDef<UserRow>[] = [
       );
     },
     cell: ({ row }) => {
-      const role = row.original.role;
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant={'link'}
-              className={`rounded-md px-2.5 text-sm font-medium !no-underline hover:no-underline ${role === 'USER' ? 'bg-pink-50 text-[#C11574]' : 'bg-green-100 text-green'}`}
-            >
-              {role[0] + role.slice(1).toLowerCase()}
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="flex flex-col gap-3 space-y-2 p-3">
-            <div className="flex flex-row items-center justify-between">
-              <button className="rounded-md bg-pink-50 px-2.5 py-0.5 text-sm font-medium text-[#C11574]">
-                User
-              </button>
-              {role === 'USER' && (
-                <Image
-                  src={'/icons/admin/check.svg'}
-                  width={16}
-                  height={16}
-                  alt={'checkmark'}
-                />
-              )}
-            </div>
-            <div className="flex flex-row items-center justify-between">
-              <button className="rounded-md bg-green-100 px-2.5 py-0.5 text-sm font-medium text-green">
-                Admin
-              </button>
-              {role === 'ADMIN' && (
-                <Image
-                  src={'/icons/admin/check.svg'}
-                  width={16}
-                  height={16}
-                  alt={'checkmark'}
-                />
-              )}
-            </div>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
+      const { role: initialRole } = row.original;
+
+      return <RoleCell initialRole={initialRole} />;
     },
   },
   {
@@ -209,9 +174,10 @@ export const columns: ColumnDef<UserRow>[] = [
       return (
         <Dialog>
           <DialogTrigger asChild>
-            <button className="flex flex-row items-center gap-1.5 text-sm font-medium tracking-tight text-blue-100">
+            <button className="group flex flex-row items-center gap-1.5 text-sm font-medium tracking-tight text-blue-100 transition-all duration-300 hover:brightness-125 hover:filter">
               View ID Card
               <Image
+                className="transition-all duration-200 group-hover:-translate-y-[0.125rem] group-hover:translate-x-[0.125rem]"
                 src={'/icons/admin/link.svg'}
                 width={16}
                 height={16}
@@ -221,7 +187,9 @@ export const columns: ColumnDef<UserRow>[] = [
           </DialogTrigger>
           <DialogContent className="sm:max-w-md">
             <DialogHeader>
-              <DialogTitle>University ID Card</DialogTitle>
+              <DialogTitle className="text-dark-400">
+                University ID Card
+              </DialogTitle>
               <DialogDescription>
                 Here is the university ID card for {fullName}.
               </DialogDescription>
@@ -238,13 +206,6 @@ export const columns: ColumnDef<UserRow>[] = [
                 // lqip={{ active: true }}
               />
             </div>
-            <DialogFooter className="sm:justify-start">
-              <DialogClose asChild>
-                <Button type="button" variant="secondary">
-                  Close
-                </Button>
-              </DialogClose>
-            </DialogFooter>
           </DialogContent>
         </Dialog>
       );
@@ -270,3 +231,94 @@ export const columns: ColumnDef<UserRow>[] = [
     },
   },
 ];
+
+export const ROLES = [
+  {
+    id: 1,
+    role: 'USER',
+    value: 'User',
+    color: 'bg-pink-50 text-[#C11574]',
+  },
+  {
+    id: 2,
+    role: 'ADMIN',
+    value: 'Admin',
+    color: 'bg-green-100 text-green',
+  },
+] as const;
+
+export function RoleCell({ initialRole }: Readonly<{ initialRole: UserRole }>) {
+  const [open, setOpen] = useState(false);
+  const [selectedRole, setSelectedRole] = useState<UserRole | null>(null);
+
+  const currentRole =
+    ROLES.find((role) => role.role === initialRole) ?? ROLES[0];
+
+  return (
+    <>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant={'link'}
+            className={cn(
+              'rounded-md px-2.5 text-sm font-medium !no-underline hover:no-underline',
+              currentRole.color,
+            )}
+          >
+            {initialRole[0] + initialRole.slice(1).toLowerCase()}
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="flex flex-col gap-2 p-3">
+          <div>
+            <DropdownMenuLabel>Change Role</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+          </div>
+          {ROLES.map(({ id, role, value, color }) => (
+            <DropdownMenuItem
+              key={id}
+              onClick={() => {
+                if (role === initialRole) return;
+                setSelectedRole(role);
+                setOpen(true);
+              }}
+              className="flex flex-row items-center justify-between"
+            >
+              <span
+                className={cn(
+                  'rounded-md px-2.5 py-0.5 text-sm font-medium',
+                  color,
+                )}
+              >
+                {value}
+              </span>
+              {initialRole === role && (
+                <Image
+                  src={'/icons/admin/check.svg'}
+                  width={20}
+                  height={20}
+                  alt={`checkmark ${role}`}
+                />
+              )}
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      {selectedRole && (
+        <ConfirmationDialog
+          link="USER"
+          type={selectedRole === 'USER' ? 'DENY' : 'APPROVE'}
+          open={open}
+          onOpenChange={(state) => {
+            if (!state) setSelectedRole(null);
+            setOpen(state);
+          }}
+          onConfirm={() => {
+            // Logic to change the role of a user
+            console.log(`Changing role to ${selectedRole}`);
+          }}
+        />
+      )}
+    </>
+  );
+}

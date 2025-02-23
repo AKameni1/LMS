@@ -11,14 +11,14 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import {
-  ColumnDef,
-  ColumnFiltersState,
+  type ColumnDef,
+  type ColumnFiltersState,
+  type SortingState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  SortingState,
   useReactTable,
 } from '@tanstack/react-table';
 import { useState } from 'react';
@@ -27,14 +27,18 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   initialSorting?: SortingState;
+  columnName: string;
+  placeholder: string;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
-  initialSorting,
+  initialSorting = [],
+  columnName,
+  placeholder,
 }: Readonly<DataTableProps<TData, TValue>>) {
-  const [sorting, setSorting] = useState<SortingState>(initialSorting!);
+  const [sorting, setSorting] = useState<SortingState>(initialSorting);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
   const table = useReactTable({
@@ -56,12 +60,12 @@ export function DataTable<TData, TValue>({
     <section>
       <div className="mb-4">
         <Input
-          placeholder="Filter by name..."
+          placeholder={placeholder}
           value={
-            (table.getColumn('fullName')?.getFilterValue() as string) ?? ''
+            (table.getColumn(columnName)?.getFilterValue() as string) ?? ''
           }
           onChange={(e) =>
-            table.getColumn('fullName')?.setFilterValue(e.target.value)
+            table.getColumn(columnName)?.setFilterValue(e.target.value)
           }
           className="max-w-sm focus-visible:ring-0"
         />

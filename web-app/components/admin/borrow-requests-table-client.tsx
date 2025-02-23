@@ -1,26 +1,26 @@
 'use client';
 
-import { columns } from '@/components/admin/data-table/columns';
 import { DataTable } from '@/components/admin/data-table/data-table';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import { useMemo, useState } from 'react';
+import { columns } from './data-table/columns-borrow-requests';
 
-export default function UsersTableClient({
-  users,
-}: Readonly<{ users: UserRow[] }>) {
+export default function BorrowRequestsTableClient({
+  borrowRequests,
+}: Readonly<{ borrowRequests: BorrowRequestsRow[] }>) {
   const [nameSort, setNameSort] = useState<'asc' | 'desc' | null>(null);
 
-  const sortedUsers = useMemo(() => {
-    if (nameSort === null) return users;
-    return [...users].sort((a, b) => {
+  const sortedBorrowRequests = useMemo(() => {
+    if (nameSort === null) return borrowRequests;
+    return [...borrowRequests].sort((a, b) => {
       if (nameSort === 'asc') {
-        return a.fullName.localeCompare(b.fullName);
+        return a.bookTitle.localeCompare(b.bookTitle);
       } else {
-        return b.fullName.localeCompare(a.fullName);
+        return b.bookTitle.localeCompare(a.bookTitle);
       }
     });
-  }, [users, nameSort]);
+  }, [borrowRequests, nameSort]);
 
   const handleNameSort = () => {
     setNameSort((current) => {
@@ -32,7 +32,7 @@ export default function UsersTableClient({
   return (
     <section className="w-full rounded-2xl bg-white p-7">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h2 className="text-xl font-semibold">All Users</h2>
+        <h2 className="text-xl font-semibold">Borrow Requests</h2>
         <Button
           className="text-dark-200"
           variant="outline"
@@ -50,12 +50,12 @@ export default function UsersTableClient({
 
       <div className="mt-7 w-full overflow-hidden">
         <DataTable
-          columnName="fullName"
-          placeholder="Filter by name..."
+          columnName="bookTitle"
+          placeholder="Filter by title..."
           columns={columns}
-          data={sortedUsers}
+          data={sortedBorrowRequests}
           initialSorting={
-            nameSort ? [{ id: 'fullName', desc: nameSort === 'desc' }] : []
+            nameSort ? [{ id: 'booktitle', desc: nameSort === 'desc' }] : []
           }
         />
       </div>

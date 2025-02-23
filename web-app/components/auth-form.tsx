@@ -124,7 +124,7 @@ export default function AuthForm<T extends FieldValues>({
             />
           ))}
 
-          <Button type="submit" className="form-btn">
+          <Button disabled={isPending} type="submit" className="form-btn">
             {isPending ? (
               <Loader2Icon className="animate-spin" size={24} />
             ) : (

@@ -8,7 +8,7 @@ export default async function Page() {
     throw new Error(error ?? 'Failed to fetch users');
   }
 
-  if (!allUsers) {
+  if (typeof allUsers === 'undefined') {
     throw new Error('No users found');
   }
 

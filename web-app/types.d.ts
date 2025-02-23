@@ -96,7 +96,6 @@ type DashboardStatsClientProps = {
   initialData: DashboardStatsProps;
 };
 
-
 type UserRow = {
   id: string;
   fullName: string;
@@ -106,4 +105,21 @@ type UserRow = {
   booksBorrowed: number;
   universityId: number;
   universityCard: string;
-}
+};
+
+type UserRole = 'USER' | 'ADMIN';
+
+type BorrowRequestsRow = {
+  id: string;
+  bookTitle: string;
+  coverUrl: string;
+  coverColor: string;
+  fullName: string;
+  email: string;
+  borrowedDate: Date;
+  returnDate: Date | null;
+  dueDate: Date;
+  status: 'PENDING' | 'REJECTED' | 'BORROWED' | 'RETURNED';
+};
+
+type BorrowRequestStatus = 'PENDING' | 'REJECTED' | 'BORROWED' | 'RETURNED';

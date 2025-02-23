@@ -23,10 +23,10 @@ export default function DashboardStatsClient({
       return res.json();
     },
     initialData,
-    refetchInterval: 1000 * 60 * 5, // 5 minutes
+    refetchInterval: 1000 * 60 * 60 * 12, // 12 hours
   });
 
-  if (isLoading) {    
+  if (isLoading) {
     return <p>Loading...</p>;
   }
 

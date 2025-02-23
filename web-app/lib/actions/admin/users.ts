@@ -50,9 +50,6 @@ export const getDashboardStatsLastWeek = async () => {
         ),
       ]);
 
-    // Log the results
-    console.log(totalBooksLast, totalUsersLast, totalBorrowedBooksLast);
-
     return {
       success: true,
       totalBooksLast,
@@ -128,6 +125,36 @@ export const getAllUsers = async () => {
     return {
       success: false,
       error: `Failed to fetch all users. ${error}`,
+    };
+  }
+};
+
+export const changeUserRole = async (userId: string, role: UserRole) => {
+  try {
+    // check if it is necessary to update the user's role
+    const [user] = await db
+      .select({
+        role: users.role,
+      })
+      .from(users)
+      .where(eq(users.id, userId))
+      .limit(1);
+
+    // if the user's role is already the same as the new role, return
+    if (user.role === role) {
+      return {
+        success: true,
+      };
+    }
+
+    await db.update(users).set({ role }).where(eq(users.id, userId));
+    return {
+      success: true,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: `Failed to change user role. ${error}`,
     };
   }
 };

@@ -1,3 +1,4 @@
+import { auth } from '@/auth';
 import redis from '@/db/redis';
 import {
   getDashboardStats,
@@ -5,7 +6,7 @@ import {
 } from '@/lib/actions/admin/users';
 import { NextResponse } from 'next/server';
 
-export async function GET() {
+export const GET = auth(async function GET() {
   try {
     const CACHE_KEY = 'dashboard_stats';
     const cachedData = await redis.get<DashboardStatsProps>(CACHE_KEY);
@@ -42,4 +43,4 @@ export async function GET() {
     console.error(error);
     return NextResponse.json({ success: false }, { status: 500 });
   }
-}
+});
