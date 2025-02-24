@@ -4,23 +4,40 @@ import { DataTable } from '@/components/admin/data-table/data-table';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import { useMemo, useState } from 'react';
-import { columns } from './data-table/columns-borrow-requests';
+import { columns } from './data-table/borrow-requests-columns';
+import { useSearch } from '@/context/search-context';
 
 export default function BorrowRequestsTableClient({
   borrowRequests,
 }: Readonly<{ borrowRequests: BorrowRequestsRow[] }>) {
   const [nameSort, setNameSort] = useState<'asc' | 'desc' | null>(null);
+  const { searchTerm } = useSearch();
 
   const sortedBorrowRequests = useMemo(() => {
-    if (nameSort === null) return borrowRequests;
-    return [...borrowRequests].sort((a, b) => {
-      if (nameSort === 'asc') {
-        return a.bookTitle.localeCompare(b.bookTitle);
-      } else {
-        return b.bookTitle.localeCompare(a.bookTitle);
-      }
-    });
-  }, [borrowRequests, nameSort]);
+    const result = borrowRequests.filter(
+      (borrowRequest) =>
+        borrowRequest.bookTitle
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
+        borrowRequest.fullName
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
+        borrowRequest.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        borrowRequest.status.toLowerCase().includes(searchTerm.toLowerCase()),
+    );
+
+    if (nameSort !== null) {
+      result.sort((a, b) => {
+        if (nameSort === 'asc') {
+          return a.fullName.localeCompare(b.fullName);
+        } else {
+          return b.fullName.localeCompare(a.fullName);
+        }
+      });
+    }
+
+    return result;
+  }, [borrowRequests, nameSort, searchTerm]);
 
   const handleNameSort = () => {
     setNameSort((current) => {
@@ -50,8 +67,6 @@ export default function BorrowRequestsTableClient({
 
       <div className="mt-7 w-full overflow-hidden">
         <DataTable
-          columnName="bookTitle"
-          placeholder="Filter by title..."
           columns={columns}
           data={sortedBorrowRequests}
           initialSorting={

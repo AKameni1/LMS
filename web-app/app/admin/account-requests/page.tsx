@@ -1,25 +1,16 @@
-import { Button } from '@/components/ui/button';
-import Image from 'next/image';
+import AccountRequestsTableClient from '@/components/admin/account-requests-table-client';
+import { getAllUsers } from '@/lib/actions/admin/users';
 
-export default function Page() {
-  return (
-    <section className="w-full rounded-2xl bg-white p-7">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <h2 className="text-xl font-semibold">Account Requests</h2>
-        <Button className="text-dark-200" variant="outline">
-          A-Z
-          <Image
-            src="/icons/admin/arrow-swap.svg"
-            alt="arrow-swap"
-            width={16}
-            height={16}
-          />
-        </Button>
-      </div>
+export default async function Page() {
+  const { success, error, allUsers } = await getAllUsers();
 
-      <div className="mt-7 w-full overflow-hidden">
-        <p>Table</p>
-      </div>
-    </section>
-  );
+  if (!success || error) {
+    throw new Error(error ?? 'Failed to fetch users');
+  }
+
+  if (typeof allUsers === 'undefined') {
+    throw new Error('No users found');
+  }
+
+  return <AccountRequestsTableClient accountRequests={allUsers} />;
 }

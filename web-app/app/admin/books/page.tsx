@@ -1,33 +1,20 @@
-import { Button } from '@/components/ui/button';
-import Image from 'next/image';
-import Link from 'next/link';
+import BooksTableClient from '@/components/admin/books-table-client';
+import { fetchAllBooks } from '@/lib/actions/admin/book';
 
-export default function Page() {
-  return (
-    <section className="w-full rounded-2xl bg-white p-7">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <h2 className="text-xl font-semibold">All Books</h2>
-        <div className="flex gap-2">
-          <Button className="text-dark-200" variant="outline">
-            A-Z
-            <Image
-              src="/icons/admin/arrow-swap.svg"
-              alt="arrow-swap"
-              width={16}
-              height={16}
-            />
-          </Button>
-          <Button className="bg-primary-admin" asChild>
-            <Link href="/admin/books/new" className="text-white">
-              + Create a New Book
-            </Link>
-          </Button>
-        </div>
-      </div>
+export default async function Page() {
+  const { success, error, data } = await fetchAllBooks();
+  if (!success || error) {
+    throw new Error(error ?? 'Failed to fetch books.');
+  }
 
-      <div className="mt-7 w-full overflow-hidden">
-        <p>Table</p>
-      </div>
-    </section>
-  );
+  if (typeof data === 'undefined') {
+    throw new Error('No books found.');
+  }
+
+  // Convert the string dates to Date objects
+  const books = data.map((row) => ({
+    ...row,
+    createdAt: new Date(row.createdAt!),
+  }));
+  return <BooksTableClient books={books} />;
 }

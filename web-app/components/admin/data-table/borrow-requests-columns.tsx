@@ -106,7 +106,19 @@ export const columns: ColumnDef<BorrowRequestsRow>[] = [
             <span className="truncate font-medium text-dark-400">
               {fullName}
             </span>
-            <span className="truncate text-sm text-light-500">{email}</span>
+            {/* <span className="line-clamp-2 text-sm text-light-500">{email}</span> */}
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <span className="text-sm text-light-500">
+                    {truncateText(email, 25)}
+                  </span>
+                </TooltipTrigger>
+                <TooltipContent className="bg-light-700 text-dark-400">
+                  {email}
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </div>
         </div>
       );
@@ -154,10 +166,10 @@ export const columns: ColumnDef<BorrowRequestsRow>[] = [
       const { returnDate } = row.original;
       const date = returnDate
         ? new Date(returnDate).toLocaleDateString('en-US', {
-          year: 'numeric',
-          month: 'short',
-          day: 'numeric',
-        })
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+          })
         : '---';
       return <span className="text-sm font-medium text-dark-200">{date}</span>;
     },

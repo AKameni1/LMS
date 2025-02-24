@@ -1,9 +1,13 @@
+'use client';
+
 import { Session } from 'next-auth';
-import React from 'react';
 import { Input } from '../ui/input';
 import Image from 'next/image';
+import { useSearch } from '@/context/search-context';
 
 export default function Header({ session }: Readonly<{ session: Session }>) {
+  const { searchTerm, setSearchTerm } = useSearch();
+
   return (
     <header className="admin-header">
       <div>
@@ -25,6 +29,8 @@ export default function Header({ session }: Readonly<{ session: Session }>) {
         />
         <Input
           type="search"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
           placeholder="Search users, books by title, author, or genre."
           className="admin-search_input"
         />

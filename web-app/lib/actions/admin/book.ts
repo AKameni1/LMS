@@ -16,11 +16,7 @@ export const createBook = async (params: BookParams) => {
       .returning()
       .then((res) => res[0]);
 
-    await redis.del('filtered_book:*');
-    await redis.del('popular_books');
     await redis.del('dashboard_stats');
-    await redis.setex(`book:${newBook.id}`, 60 * 60, newBook);
-
     return {
       success: true,
       data: JSON.parse(JSON.stringify(newBook)),
@@ -92,6 +88,72 @@ export const fetchBookRequests = async () => {
     return {
       success: false,
       error: `Failed to fetch book requests. ${error}`,
+    };
+  }
+};
+
+export const fetchBorrowRequests = async () => {
+  try {
+    const borrowRequests = await db
+      .select({
+        id: borrowRecords.id,
+        bookTitle: books.title,
+        coverUrl: books.coverUrl,
+        fullName: users.fullName,
+        coverColor: books.coverColor,
+        email: users.email,
+        borrowedDate: borrowRecords.createdAt,
+        returnDate: borrowRecords.returnDate,
+        dueDate: borrowRecords.dueDate,
+        status: borrowRecords.status,
+      })
+      .from(borrowRecords)
+      .innerJoin(books, eq(borrowRecords.bookId, books.id))
+      .innerJoin(users, eq(borrowRecords.userId, users.id))
+      .orderBy(desc(borrowRecords.createdAt))
+      .limit(100);
+
+    return {
+      success: true,
+      data: borrowRequests,
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      success: false,
+      error: `Failed to fetch borrow requests. ${error}`,
+    };
+  }
+};
+
+export const fetchAllBooks = async () => {
+  try {
+    const allBooks = await db
+      .select({
+        id: books.id,
+        title: books.title,
+        author: books.author,
+        genre: books.genre,
+        rating: books.rating,
+        coverColor: books.coverColor,
+        coverUrl: books.coverUrl,
+        videoUrl: books.videoUrl,
+        summary: books.summary,
+        createdAt: books.createdAt,
+      })
+      .from(books)
+      .orderBy(desc(books.createdAt))
+      .limit(100);
+
+    return {
+      success: true,
+      data: allBooks,
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      success: false,
+      error: `Failed to fetch all books. ${error}`,
     };
   }
 };

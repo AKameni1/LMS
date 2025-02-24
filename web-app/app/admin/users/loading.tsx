@@ -9,7 +9,6 @@ export default function Loading() {
       </div>
 
       <div className="mt-7 flex w-full flex-col gap-2 overflow-hidden">
-        <Skeleton className="h-8 w-40 rounded-md bg-gray-200" />
         <table className="hidden min-w-full text-gray-900 md:table">
           <thead className="rounded-lg bg-light-300 text-left text-sm font-normal">
             <tr>
@@ -64,7 +63,7 @@ export function TableRowSkeleton() {
         <Skeleton className="h-6 w-32 rounded bg-gray-200" />
       </td>
       <td className="whitespace-nowrap px-3 py-3">
-        <Skeleton className="h-6 w-1/2 rounded bg-gray-200" />
+        <Skeleton className="h-6 w-10 rounded bg-gray-200" />
       </td>
       <td className="whitespace-nowrap px-3 py-3">
         <Skeleton className="h-6 w-1/2 rounded bg-gray-200" />

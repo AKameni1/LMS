@@ -1,7 +1,6 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import {
   Table,
   TableBody,
@@ -27,16 +26,12 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   initialSorting?: SortingState;
-  columnName: string;
-  placeholder: string;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   initialSorting = [],
-  columnName,
-  placeholder,
 }: Readonly<DataTableProps<TData, TValue>>) {
   const [sorting, setSorting] = useState<SortingState>(initialSorting);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -58,19 +53,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <section>
-      <div className="mb-4">
-        <Input
-          placeholder={placeholder}
-          value={
-            (table.getColumn(columnName)?.getFilterValue() as string) ?? ''
-          }
-          onChange={(e) =>
-            table.getColumn(columnName)?.setFilterValue(e.target.value)
-          }
-          className="max-w-sm focus-visible:ring-0"
-        />
-      </div>
-      <div>
+      <div className="mt-4">
         <Table className="text-center">
           <TableHeader className="h-14 bg-light-300 text-center">
             {table.getHeaderGroups().map((headerGroup) => (
@@ -132,8 +115,9 @@ export function DataTable<TData, TValue>({
           Previous
         </Button>
         <span className="text-sm font-medium text-dark-200">
-          Page {table.getState().pagination.pageIndex + 1} of{' '}
-          {table.getPageCount()}
+          {table.getPageCount() > 0
+            ? `Page ${table.getState().pagination.pageIndex + 1} of ${table.getPageCount()}`
+            : 'No Pages'}
         </span>
         <Button
           variant={'outline'}

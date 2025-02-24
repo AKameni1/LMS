@@ -2,13 +2,12 @@ import React from 'react';
 import BookCover from '../book-cover';
 import Image from 'next/image';
 import { fetchBooksAdded } from '@/lib/actions/admin/book';
-import { notFound } from 'next/navigation';
 
 export default async function BookListAdded() {
   const { success, data } = await fetchBooksAdded();
 
   if (!success || !data) {
-    return notFound();
+    throw new Error('Failed to fetch books added.');
   }
 
   return (

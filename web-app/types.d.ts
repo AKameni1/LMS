@@ -100,6 +100,7 @@ type UserRow = {
   id: string;
   fullName: string;
   email: string;
+  status?: 'PENDING' | 'APPROVED' | 'REJECTED';
   dateJoined: Date;
   role: 'USER' | 'ADMIN';
   booksBorrowed: number;
@@ -123,3 +124,16 @@ type BorrowRequestsRow = {
 };
 
 type BorrowRequestStatus = 'PENDING' | 'REJECTED' | 'BORROWED' | 'RETURNED';
+
+type BookRequest = {
+  id: string;
+  title: string;
+  author: string;
+  genre: string;
+  rating: number;
+  coverColor: string;
+  coverUrl: string;
+  videoUrl: string;
+  summary: string;
+  createdAt: Date;
+};

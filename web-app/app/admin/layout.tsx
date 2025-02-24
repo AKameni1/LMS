@@ -5,6 +5,7 @@ import '@/styles/admin.css';
 import Sidebar from '@/components/admin/sidebar';
 import Header from '@/components/admin/header';
 import { checkIsAdmin } from '@/lib/data';
+import { SearchProvider } from '@/context/search-context';
 
 export default async function AdminLayout({
   children,
@@ -24,13 +25,15 @@ export default async function AdminLayout({
     redirect('/');
   }
   return (
-    <main className="flex min-h-dvh w-full flex-row">
-      <Sidebar session={session} />
+    <SearchProvider>
+      <main className="flex min-h-dvh w-full flex-row">
+        <Sidebar session={session} />
 
-      <div className="admin-container">
-        <Header session={session} />
-        {children}
-      </div>
-    </main>
+        <div className="admin-container">
+          <Header session={session} />
+          {children}
+        </div>
+      </main>
+    </SearchProvider>
   );
 }

@@ -1,6 +1,7 @@
+'use server';
+
 import { auth } from '@/auth';
 import { db } from '@/db/drizzle';
-import redis from '@/db/redis';
 import { books, borrowRecords, users, favoriteBooks } from '@/db/schema';
 import { and, asc, count, desc, eq, not, sql } from 'drizzle-orm';
 import { PgTable, TableConfig } from 'drizzle-orm/pg-core';
@@ -27,20 +28,6 @@ export async function fetchFilteredBooks(
 
   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
   query = query.trim();
-
-  // Cache key
-  const baseKey =
-    type === 'Favorites'
-      ? `filtered_books:favorites:${userId}`
-      : 'filtered_books';
-  const querySegment = query.length > 0 ? `${query}:` : '';
-  const cache_key = `${baseKey}:${querySegment}${filter}:${currentPage}`;
-
-  // Check cache
-  const cachedBooks = await redis.get<Book[]>(cache_key);
-  if (cachedBooks) {
-    return cachedBooks;
-  }
 
   try {
     let baseQuery = db
@@ -119,8 +106,6 @@ export async function fetchFilteredBooks(
     // Apply pagination
     const allBooks = await baseQuery.limit(ITEMS_PER_PAGE).offset(offset);
 
-    await redis.setex(cache_key, 60 * 60, allBooks); // Cache for 1 hour
-
     return allBooks as Book[];
   } catch (error) {
     console.log(error);
@@ -195,13 +180,6 @@ export async function fetchBooksPages(
  * @throws An error if the book could not be fetched.
  */
 export async function fetchBookById(bookId: string): Promise<Book> {
-  const CACHE_KEY = `book:${bookId}`;
-
-  const cachedBook = await redis.get<Book>(CACHE_KEY);
-  if (cachedBook) {
-    return cachedBook;
-  }
-
   try {
     const [book] = await db
       .select()
@@ -212,8 +190,6 @@ export async function fetchBookById(bookId: string): Promise<Book> {
     if (!book) {
       throw new Error('Book not found');
     }
-
-    await redis.setex(CACHE_KEY, 60 * 60, book); // Cache for 1 hour
 
     return book;
   } catch (error) {
@@ -281,14 +257,6 @@ export async function fetchUserBorrowedBooks(userId: string) {
  * @throws An error if the popular books could not be fetched.
  */
 export async function fetchPopularBooks(): Promise<Book[]> {
-  const CACHE_KEY = 'popular_books';
-  const CACHE_EXPIRATION = 60 * 60;
-
-  const cachedBooks = await redis.get<Book[]>(CACHE_KEY);
-  if (cachedBooks) {
-    return cachedBooks;
-  }
-
   const popularBooks = await db
     .select({
       id: books.id,
@@ -322,7 +290,6 @@ export async function fetchPopularBooks(): Promise<Book[]> {
       .limit(7);
   }
 
-  await redis.setex(CACHE_KEY, CACHE_EXPIRATION, popularBooks);
   return popularBooks;
 }
 
@@ -346,12 +313,6 @@ export async function fetchRecentlyAddedBooks(): Promise<Book[]> {
  * @throws An error if the user could not be fetched.
  */
 export async function fetchUserById(userId: string): Promise<User> {
-  const CACHE_KEY = `user:${userId}`;
-  const cachedUser = await redis.get<User>(CACHE_KEY);
-  if (cachedUser) {
-    return cachedUser;
-  }
-
   try {
     const [user] = await db
       .select()
@@ -362,8 +323,6 @@ export async function fetchUserById(userId: string): Promise<User> {
     if (!user) {
       throw new Error('User not found');
     }
-
-    await redis.setex(CACHE_KEY, 60 * 60, user); // Cache for 1 hour
 
     return user;
   } catch (error) {
@@ -385,19 +344,11 @@ export async function fetchSimilarBooks(
   currentBookId: string,
   genre: string,
 ): Promise<Book[]> {
-  const CACHE_KEY = `similar_books:${currentBookId}`;
-  const cachedBooks = await redis.get<Book[]>(CACHE_KEY);
-  if (cachedBooks) {
-    return cachedBooks;
-  }
-
   const similarBooks = await db
     .select()
     .from(books)
     .where(and(eq(books.genre, genre), not(eq(books.id, currentBookId))))
     .limit(6);
-
-  await redis.setex(CACHE_KEY, 60 * 60, similarBooks); // Cache for 1 hour
 
   return similarBooks;
 }

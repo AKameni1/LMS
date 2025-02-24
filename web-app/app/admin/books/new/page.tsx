@@ -13,10 +13,10 @@ export default function Page() {
             src="/icons/admin/arrow-left.svg"
             className="size-auto"
             alt="return at all books"
-            width={16}
-            height={16}
+            width={18}
+            height={18}
           />
-          <span className="font-medium text-dark-200">Go back</span>
+          <span className="text-sm font-medium -tracking-wider">Go back</span>
         </Link>
       </Button>
 

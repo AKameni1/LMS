@@ -19,16 +19,14 @@ export default function FilterSelect({
   const searchParams = useSearchParams();
 
   const [filter, setFilter] = useState(initialFilter);
-  const [key, setKey] = useState(0);
   const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
     const currentFilter = searchParams.get('filter') ?? 'all';
     if (currentFilter !== filter) {
       setFilter(currentFilter);
-      setKey((prev) => prev + 1);
     }
-  }, [searchParams]);
+  }, [filter, searchParams]);
 
   const handleFilterChange = (value: string) => {
     setFilter(value);
@@ -47,7 +45,6 @@ export default function FilterSelect({
 
   return (
     <Select
-      key={key}
       value={filter}
       onValueChange={handleFilterChange}
       disabled={isPending}

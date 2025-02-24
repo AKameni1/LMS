@@ -9,7 +9,7 @@ export default async function RequestList() {
   const { success, error, ...requests } = await fetchBookRequests();
 
   if (!success && error) {
-    return <div className="error">{error}</div>;
+    throw new Error(error);
   }
 
   if (!requests.data?.length || requests.data?.length === 0) {

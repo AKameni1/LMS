@@ -98,6 +98,7 @@ export const getAllUsers = async () => {
         email: users.email,
         dateJoined: users.createdAt,
         role: users.role,
+        status: users.status,
         booksBorrowed: db.$count(
           borrowRecords,
           eq(borrowRecords.userId, users.id),

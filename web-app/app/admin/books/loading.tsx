@@ -4,11 +4,11 @@ export default function Loading() {
   return (
     <section className="w-full rounded-2xl bg-white p-7">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h2 className="text-xl font-semibold">Borrow Requests</h2>
+        <h2 className="text-xl font-semibold">All Books</h2>
         <Skeleton className="h-8 w-20 rounded-md bg-gray-200" />
       </div>
 
-      <div className="mt-7 flex w-full flex-col gap-2 overflow-hidden">        
+      <div className="mt-7 flex w-full flex-col gap-2 overflow-hidden">
         <table className="hidden min-w-full text-gray-900 md:table">
           <thead className="rounded-lg bg-light-300 text-left text-sm font-normal">
             <tr>
@@ -16,23 +16,21 @@ export default function Loading() {
                 Book
               </th>
               <th scope="col" className="px-3 py-5 font-medium">
-                User Requested
+                Author
               </th>
               <th scope="col" className="px-3 py-5 font-medium">
-                Borrowed Date
+                Genre
               </th>
               <th scope="col" className="px-3 py-5 font-medium">
-                Return Date
+                Date Created
               </th>
               <th scope="col" className="px-3 py-5 font-medium">
-                Due Date
+                View
               </th>
               <th scope="col" className="px-3 py-5 font-medium">
-                Status
-              </th>
-              <th scope="col" className="px-3 py-5 font-medium">
-                Receipt{''}
+                Action{''}
                 <span className="sr-only">Delete</span>
+                <span className="sr-only">Edit</span>
               </th>
             </tr>
           </thead>
@@ -56,29 +54,26 @@ export function TableRowSkeleton() {
       <td className="whitespace-nowrap px-3 py-3">
         <div className="flex items-center gap-3">
           <Skeleton className="h-14 w-11 rounded bg-gray-200" />
-          <Skeleton className="h-6 w-24 rounded bg-gray-200" />
+          <Skeleton className="h-6 w-full rounded bg-gray-200" />
         </div>
       </td>
       <td className="relative overflow-hidden whitespace-nowrap py-3 pl-6 pr-3">
-        <div className="flex items-center gap-3">
-          <Skeleton className="h-10 w-10 rounded-full bg-gray-200" />
-          <Skeleton className="h-5 w-24 rounded bg-gray-200" />
+        <Skeleton className="h-5 w-full rounded bg-gray-200" />
+      </td>
+      <td className="whitespace-nowrap px-3 py-3">
+        <Skeleton className="h-5 w-full rounded bg-gray-200" />
+      </td>
+      <td className="whitespace-nowrap px-3 py-3">
+        <Skeleton className="h-5 w-full rounded bg-gray-200" />
+      </td>
+      <td className="whitespace-nowrap px-3 py-3">
+        <Skeleton className="h-6 w-4/6 rounded bg-gray-200" />
+      </td>
+      <td className="whitespace-nowrap px-3 py-3">
+        <div className="flex items-center justify-between gap-3">
+          <Skeleton className="h-6 w-full rounded bg-gray-200" />
+          <Skeleton className="h-6 w-full rounded bg-gray-200" />
         </div>
-      </td>
-      <td className="whitespace-nowrap px-3 py-3">
-        <Skeleton className="h-5 w-1/2 rounded bg-gray-200" />
-      </td>
-      <td className="whitespace-nowrap px-3 py-3">
-        <Skeleton className="h-5 w-1/2 rounded bg-gray-200" />
-      </td>
-      <td className="whitespace-nowrap px-3 py-3">
-        <Skeleton className="h-5 w-1/2 rounded bg-gray-200" />
-      </td>
-      <td className="whitespace-nowrap px-3 py-3">
-        <Skeleton className="h-5 w-1/2 rounded bg-gray-200" />
-      </td>
-      <td className="whitespace-nowrap px-3 py-3">
-        <Skeleton className="h-6 w-full rounded bg-gray-200" />
       </td>
     </tr>
   );

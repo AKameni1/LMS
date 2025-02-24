@@ -1,23 +1,25 @@
 'use client';
 
-import { columns } from '@/components/admin/data-table/users-columns';
 import { DataTable } from '@/components/admin/data-table/data-table';
 import { Button } from '@/components/ui/button';
-import { useSearch } from '@/context/search-context';
 import Image from 'next/image';
 import { useMemo, useState } from 'react';
+import { columns } from './data-table/account-requests-columns';
+import { useSearch } from '@/context/search-context';
 
-export default function UsersTableClient({
-  users,
-}: Readonly<{ users: UserRow[] }>) {
+export default function AccountRequestsTableClient({
+  accountRequests,
+}: Readonly<{ accountRequests: UserRow[] }>) {
   const [nameSort, setNameSort] = useState<'asc' | 'desc' | null>(null);
   const { searchTerm } = useSearch();
 
-  const sortedUsers = useMemo(() => {
-    const result = users.filter(
-      (user) =>
-        user.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user.email.toLowerCase().includes(searchTerm.toLowerCase()),
+  const sortedAccountRequests = useMemo(() => {
+    const result = accountRequests.filter(
+      (accountRequest) =>
+        accountRequest.fullName
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
+        accountRequest.email.toLowerCase().includes(searchTerm.toLowerCase()),
     );
 
     if (nameSort !== null) {
@@ -31,7 +33,7 @@ export default function UsersTableClient({
     }
 
     return result;
-  }, [users, nameSort, searchTerm]);
+  }, [accountRequests, nameSort, searchTerm]);
 
   const handleNameSort = () => {
     setNameSort((current) => {
@@ -43,7 +45,7 @@ export default function UsersTableClient({
   return (
     <section className="w-full rounded-2xl bg-white p-7">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h2 className="text-xl font-semibold">All Users</h2>
+        <h2 className="text-xl font-semibold">Account Requests</h2>
         <Button
           className="text-dark-200"
           variant="outline"
@@ -62,7 +64,7 @@ export default function UsersTableClient({
       <div className="mt-7 w-full overflow-hidden">
         <DataTable
           columns={columns}
-          data={sortedUsers}
+          data={sortedAccountRequests}
           initialSorting={
             nameSort ? [{ id: 'fullName', desc: nameSort === 'desc' }] : []
           }

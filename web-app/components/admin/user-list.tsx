@@ -6,8 +6,8 @@ import Image from 'next/image';
 
 export default async function UserList() {
   const { success, error, ...users } = await getUsersPendingApproval();
-  if (!success && error) {
-    return <div className="error">{error}</div>;
+  if (!success || error) {
+    throw new Error(error ?? 'Failed to fetch users pending approval');
   }
 
   if (

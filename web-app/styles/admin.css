@@ -4,11 +4,11 @@
 
 @layer components {
   .admin-container {
-    @apply container flex w-[calc(100%-264px)] flex-1 flex-col rounded-l-xl bg-light-300 p-5 xs:p-10;
+    @apply container flex w-[calc(100%-264px)] flex-1 flex-col rounded-l-xl border border-light-400 bg-light-300 p-5 xs:p-10;
   }
 
   .back-btn {
-    @apply mb-10 w-fit border border-light-300 bg-white text-xs font-medium text-dark-200 hover:bg-light-300 !important;
+    @apply mb-10 flex w-fit items-center gap-1 border border-light-300 bg-white px-4 py-2 text-xs font-medium text-dark-200 transition-all duration-300 hover:bg-light-300 !important;
   }
 
   /* Confirmation Dialog */
@@ -186,7 +186,7 @@
   }
 
   .admin-sidebar .user {
-    @apply my-8 flex w-full flex-row gap-2 rounded-full border border-light-400 px-4 py-2 shadow-sm max-md:px-2;
+    @apply my-8 flex w-full flex-row gap-2 rounded-full border border-light-400 px-3 py-2 shadow-sm max-md:px-2;
   }
 
   /* User Card */
