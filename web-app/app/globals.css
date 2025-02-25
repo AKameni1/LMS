@@ -126,7 +126,7 @@
   }
 
   .book-btns {
-    @apply flex-row items-center
+    @apply flex flex-row items-center
   }
 
   /* File Upload */
