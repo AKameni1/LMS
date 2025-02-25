@@ -1,28 +1,23 @@
-import { Button } from '@/components/ui/button';
-import Image from 'next/image';
-import Link from 'next/link';
+import BookForm from '@/components/admin/forms/book-form';
+import GoBackButton from '@/components/admin/go-back-button';
+import { fetchBookById } from '@/lib/data';
 import React from 'react';
 
 export default async function Page({
   params,
 }: Readonly<{ params: Promise<{ id: string }> }>) {
   const id = (await params).id;
+
+  // In a real application, you would fetch the book data here
+  const book = await fetchBookById(id);
+
   return (
     <>
-      <Button asChild className="back-btn">
-        <Link href="/admin/books">
-          <Image
-            src="/icons/admin/arrow-left.svg"
-            className="size-auto"
-            alt="return at all books"
-            width={18}
-            height={18}
-          />
-          <span className="font-medium text-sm -tracking-wider">Go back</span>
-        </Link>
-      </Button>
+      <GoBackButton />
 
-      <div>Edit Book {id}</div>
+      <section className="w-full max-w-2xl">
+        <BookForm type="update" {...book} />
+      </section>
     </>
   );
 }

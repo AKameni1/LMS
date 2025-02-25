@@ -4,7 +4,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 import localFont from 'next/font/local';
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { Toaster } from '@/components/ui/sonner';
 import { auth } from '@/auth';
 

@@ -78,6 +78,7 @@ export default function BooksTableClient({
           initialSorting={
             nameSort ? [{ id: 'booktitle', desc: nameSort === 'desc' }] : []
           }
+          className="text-left"
         />
       </div>
     </section>

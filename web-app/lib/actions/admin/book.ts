@@ -7,25 +7,77 @@ import { desc, eq } from 'drizzle-orm';
 
 export const createBook = async (params: BookParams) => {
   try {
-    const newBook = await db
+    const [newId] = await db
       .insert(books)
       .values({
         ...params,
         availableCopies: params.totalCopies,
       })
-      .returning()
-      .then((res) => res[0]);
+      .returning({
+        id: books.id,
+      });
 
     await redis.del('dashboard_stats');
     return {
       success: true,
-      data: JSON.parse(JSON.stringify(newBook)),
+      data: newId,
     };
   } catch (error) {
     console.log(error);
     return {
       success: false,
       error: `Failed to create book. ${error}`,
+    };
+  }
+};
+
+export const updateBook = async (params: Partial<BookParams>, id: string) => {
+  try {
+    if (!id) {
+      return {
+        success: false,
+        error: 'Book ID is required for update',
+      };
+    }
+
+    const [existingBook] = await db
+      .select()
+      .from(books)
+      .where(eq(books.id, id));
+
+    const [data] = await db
+      .update(books)
+      .set({
+        ...params,
+        availableCopies:
+          params.totalCopies !== undefined
+            ? Number(params.totalCopies) -
+              (existingBook.totalCopies - existingBook.availableCopies)
+            : existingBook.availableCopies,
+      })
+      .where(eq(books.id, id))
+      .returning({
+        id: books.id,
+      });
+
+    await redis.del('dashboard_stats');
+
+    if (!data) {
+      return {
+        success: false,
+        error: 'Book not found',
+      };
+    }
+
+    return {
+      success: true,
+      data,
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      success: false,
+      error: `Failed to update book. ${error}`,
     };
   }
 };
@@ -134,11 +186,8 @@ export const fetchAllBooks = async () => {
         title: books.title,
         author: books.author,
         genre: books.genre,
-        rating: books.rating,
         coverColor: books.coverColor,
         coverUrl: books.coverUrl,
-        videoUrl: books.videoUrl,
-        summary: books.summary,
         createdAt: books.createdAt,
       })
       .from(books)

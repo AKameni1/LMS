@@ -1,27 +1,14 @@
 import BookForm from '@/components/admin/forms/book-form';
-import { Button } from '@/components/ui/button';
-import Image from 'next/image';
-import Link from 'next/link';
+import GoBackButton from '@/components/admin/go-back-button';
 import React from 'react';
 
 export default function Page() {
   return (
     <>
-      <Button asChild className="back-btn">
-        <Link href="/admin/books">
-          <Image
-            src="/icons/admin/arrow-left.svg"
-            className="size-auto"
-            alt="return at all books"
-            width={18}
-            height={18}
-          />
-          <span className="text-sm font-medium -tracking-wider">Go back</span>
-        </Link>
-      </Button>
+      <GoBackButton />
 
       <section className="w-full max-w-2xl">
-        <BookForm />
+        <BookForm type="create" />
       </section>
     </>
   );

@@ -9,6 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { cn } from '@/lib/utils';
 import {
   type ColumnDef,
   type ColumnFiltersState,
@@ -26,12 +27,14 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   initialSorting?: SortingState;
+  className?: string;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   initialSorting = [],
+  className,
 }: Readonly<DataTableProps<TData, TValue>>) {
   const [sorting, setSorting] = useState<SortingState>(initialSorting);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -54,7 +57,7 @@ export function DataTable<TData, TValue>({
   return (
     <section>
       <div className="mt-4">
-        <Table className="text-center">
+        <Table className={cn('text-center', className)}>
           <TableHeader className="h-14 bg-light-300 text-center">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id} className="">

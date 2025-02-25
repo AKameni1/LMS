@@ -1,7 +1,5 @@
-import { Button } from '@/components/ui/button';
-import Image from 'next/image';
-import Link from 'next/link';
-import React from 'react';
+import BookView from '@/components/admin/book-view';
+import GoBackButton from '@/components/admin/go-back-button';
 
 export default async function Page({
   params,
@@ -9,20 +7,9 @@ export default async function Page({
   const id = (await params).id;
   return (
     <>
-      <Button asChild className="back-btn">
-        <Link href="/admin/books">
-          <Image
-            src="/icons/admin/arrow-left.svg"
-            className="size-auto"
-            alt="return at all books"
-            width={18}
-            height={18}
-          />
-          <span className="font-medium text-sm -tracking-wider">Go back</span>
-        </Link>
-      </Button>
+      <GoBackButton />
 
-      <div>Book {id}</div>
+      <BookView id={id} />
     </>
   );
 }

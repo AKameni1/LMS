@@ -74,10 +74,12 @@ export default function BorrowedBookCard({
             height={18}
             alt="book-2 icon"
           />
-          Borrowed on {borrowDate.toLocaleString('en-US', { month: 'short' })}{' '}
-          {borrowDate.toLocaleString('en-US', { day: '2-digit' })}
-          {', '}
-          {borrowDate.toLocaleString('en-US', { year: 'numeric' })}
+          Borrowed on{' '}
+          {borrowDate.toLocaleString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: '2-digit',
+          })}
         </p>
 
         <div className="flex justify-between">
@@ -116,9 +118,8 @@ export default function BorrowedBookCard({
                 alt={`check icon for returned book ${title}`}
               />
               Returned on {getDateWithSuffix(new Date(returnDate).getDate())}{' '}
-              {new Date(returnDate).toLocaleString('en-US', { month: 'short' })}
-              {', '}
               {new Date(returnDate).toLocaleString('en-US', {
+                month: 'short',
                 year: '2-digit',
               })}
             </p>

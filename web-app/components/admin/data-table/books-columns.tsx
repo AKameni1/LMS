@@ -181,7 +181,7 @@ export const columns: ColumnDef<BookRequest>[] = [
     cell: ({ row }) => {
       const { id } = row.original;
       return (
-        <div className="flex flex-row items-center justify-between gap-2">
+        <div className="flex flex-row items-center justify-around">
           <button
             onClick={() => {
               // logic to delete the book

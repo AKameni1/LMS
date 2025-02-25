@@ -6,19 +6,20 @@ import { checkIsAdmin } from '@/lib/data';
 import { eq } from 'drizzle-orm';
 import { redirect } from 'next/navigation';
 import { after } from 'next/server';
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 export default async function UserLayout({
   children,
 }: Readonly<{ children: ReactNode }>) {
   const session = await auth();
+  const userId = session?.user?.id;
 
-  if (!session) {
+  if (!session || !userId) {
     redirect('/sign-in');
   }
 
   // check if the current user is an admin
-  const userId = session?.user?.id!;
+
   const isAdmin = await checkIsAdmin(userId);
 
   if (isAdmin) {
