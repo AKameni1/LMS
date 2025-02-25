@@ -125,14 +125,21 @@ export async function fetchBooksPages(
   query: string,
   type: PgTable<TableConfig>,
   filter?: Filter,
+  id?: string,
 ): Promise<number> {
   try {
-    let baseQuery = db
-      .select({ count: sql<number>`cast(count(*) as integer)`.as('count') })
-      .from(type)
-      .$dynamic(); // Dynamic mode enabled
+    if (type === favoriteBooks) {
 
-    const conditions = [];
+        const res = await db.$count(favoriteBooks, eq(favoriteBooks.userId, id!))
+        const totalPages = Math.ceil(Number(res) / ITEMS_PER_PAGE);
+    return totalPages;
+    } else {
+        let baseQuery =  db
+          .select({ count: sql<number>`cast(count(*) as integer)`.as('count') })
+          .from(type)
+          .$dynamic(); // Dynamic mode enabled
+
+          const conditions = [];
 
     // Apply search if necessary
     if (query.length > 0) {
@@ -148,7 +155,7 @@ export async function fetchBooksPages(
     // Apply search if necessary
     if (query.length > 0) {
       conditions.push(
-        sql`${books.searchText} @@ to_tsquery('english', ${query.replace(/\s+/g, ' & ')})`,
+        sql`${books.searchText} @@ plainto_tsquery('english', ${query.replace(/\s+/g, ' & ')})`,
       );
     }
 
@@ -161,10 +168,13 @@ export async function fetchBooksPages(
       baseQuery = baseQuery.where(sql.join(conditions, sql` AND `));
     }
 
-    const res = await baseQuery;
+    const [res] = await baseQuery
 
-    const totalPages = Math.ceil(Number(res[0].count) / ITEMS_PER_PAGE);
-    return totalPages;
+    const totalPages = Math.ceil(Number(res.count) / ITEMS_PER_PAGE);
+    return totalPages;    
+    }    
+
+    
   } catch (error) {
     console.log('Failed to fetch total number of books.', error);
     throw new Error('Failed to fetch total number of books.');

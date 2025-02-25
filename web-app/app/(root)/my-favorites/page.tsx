@@ -1,3 +1,5 @@
+import { auth } from '@/auth';
+import EmptyList from '@/components/empty-list';
 import FilterBookList from '@/components/filter-book-list';
 import FilterSelect from '@/components/filter-select';
 import NoResults from '@/components/no-results';
@@ -23,6 +25,7 @@ export default async function Page(
     }>;
   }>,
 ) {
+    const session = await auth()
   const searchParams = await props.searchParams;
   const query = searchParams?.query ?? '';
   const filter = searchParams?.filter ?? 'all';
@@ -31,6 +34,7 @@ export default async function Page(
     query.trim(),
     favoriteBooks,
     filter.trim() as Filter,
+    session?.user?.id
   );
 
   return (
@@ -73,7 +77,7 @@ export default async function Page(
       </div>
 
       {totalPages === 0 ? (
-        <NoResults />
+        <EmptyList/>
       ) : (
         <>
           <FilterBookList

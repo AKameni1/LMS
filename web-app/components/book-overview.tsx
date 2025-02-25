@@ -4,8 +4,8 @@ import BookCover from './book-cover';
 import BorrowBook from './borrow-book';
 import { fetchUserById } from '@/lib/data';
 import { db } from '@/db/drizzle';
-import { borrowRecords } from '@/db/schema';
-import { eq } from 'drizzle-orm';
+import { borrowRecords, favoriteBooks } from '@/db/schema';
+import { eq, exists, sql } from 'drizzle-orm';
 import FavoriteBook from './favorite-book';
 
 type BookOverviewPropsType = Book & { userId: string };
@@ -31,6 +31,11 @@ export default async function BookOverview({
     .where(eq(borrowRecords.bookId, id))
     .limit(1);
 
+    const [favoriteBook] = await db
+        .select()
+        .from(favoriteBooks)
+        .where(sql`${favoriteBooks.userId} = ${userId} AND ${favoriteBooks.bookId} = ${id}`)
+
   const borrowingEligibility = {
     isEligible: availableCopies > 0 && user.status === 'APPROVED',
     message:
@@ -40,7 +45,7 @@ export default async function BookOverview({
   };
 
   const favoriteEligibility = {
-    isEligible: !book || book.status !== 'BORROWED',
+    isEligible: !book && !favoriteBook ? true : false,
     message:
       !book || book.status !== 'BORROWED'
         ? ''
