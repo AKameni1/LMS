@@ -221,7 +221,7 @@ export const columns: ColumnDef<BorrowRequestsRow>[] = [
       return <span className="text-sm font-medium text-dark-200">Receipt</span>;
     },
     cell: ({ row }) => {
-      const { status } = row.original;
+      const { status, bookTitle } = row.original;
       return (
         <a
           href={
@@ -230,6 +230,7 @@ export const columns: ColumnDef<BorrowRequestsRow>[] = [
               : '/Receipt.pdf'
           }
           download={!(status === 'PENDING' || status === 'REJECTED')}
+          aria-label={`Download book receipt for ${bookTitle}`}
           className={cn(
             'inline-flex h-9 items-center justify-center gap-2 whitespace-nowrap rounded-md bg-light-300 px-3 py-2 text-sm font-medium text-primary-admin shadow transition-all duration-300 hover:bg-light-300/20 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
             {
@@ -242,7 +243,7 @@ export const columns: ColumnDef<BorrowRequestsRow>[] = [
         >
           <Image
             src="/icons/admin/receipt.svg"
-            alt="download"
+            alt=""
             width={16}
             height={16}
             className="size-4"

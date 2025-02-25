@@ -19,7 +19,7 @@ export default async function RequestList() {
           src="/images/borrow-requests.svg"
           width={200}
           height={200}
-          alt="Borrow Requests"
+          alt="Borrow Requests Empty State"
         />
 
         <p className="text-base font-semibold text-dark-400">

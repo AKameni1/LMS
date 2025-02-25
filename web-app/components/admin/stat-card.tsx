@@ -35,7 +35,7 @@ export default function StatCard({
           </span>
         </div>
       </div>
-      <p className="stat-count">{value.toString().padStart(2, '0')}</p>
+      <h2 className="stat-count">{value.toString().padStart(2, '0')}</h2>
     </div>
   );
 }

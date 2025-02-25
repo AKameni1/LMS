@@ -30,6 +30,7 @@ export default function Header({ session }: Readonly<{ session: Session }>) {
         <Input
           type="search"
           value={searchTerm}
+          aria-label="search bar for users and books"
           onChange={(e) => setSearchTerm(e.target.value)}
           placeholder="Search users, books by title, author, or genre."
           className="admin-search_input"

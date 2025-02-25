@@ -20,7 +20,7 @@ export default async function UserList() {
           src="/images/account-requests.svg"
           width={200}
           height={200}
-          alt="Account Requests"
+          alt="Account Requests Empty State"
         />
 
         <p className="text-base font-semibold text-dark-400">
