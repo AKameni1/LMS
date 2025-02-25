@@ -2,6 +2,7 @@ import BookListAdded from '@/components/admin/book-list-added';
 import LinkButton from '@/components/admin/link-button';
 import { ScrollArea } from '@/components/admin/scroll-area';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default async function Page() {
   return (
@@ -15,7 +16,10 @@ export default async function Page() {
 
       {/* Add Button here */}
       <div className="book-stripe items-center">
-        <button className="group flex items-center gap-2 font-medium text-dark-400">
+        <Link
+          href={'/admin/books/new'}
+          className="group flex items-center gap-2 font-medium text-dark-400"
+        >
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white text-dark-400 shadow-sm transition-colors duration-300 group-hover:bg-dark-200/10">
             <Image
               src="/icons/admin/plus.svg"
@@ -27,7 +31,7 @@ export default async function Page() {
           <p className="font-medium text-dark-400 transition-colors duration-300 group-hover:text-dark-600">
             Add New Book
           </p>
-        </button>
+        </Link>
       </div>
 
       <ScrollArea className="max-h-[475px]">
