@@ -46,7 +46,7 @@ export const borrowBook = async (params: ButtonBookParams) => {
       userId,
       bookId,
       dueDate,
-      status: 'BORROWED',
+      status: 'PENDING',
     });
 
     await db
@@ -71,53 +71,47 @@ export const borrowBook = async (params: ButtonBookParams) => {
   }
 };
 
-export const favoriteBook = async (params: ButtonBookParams)=> {
-    const { bookId, userId } = params;
+export const favoriteBook = async (params: ButtonBookParams) => {
+  const { bookId, userId } = params;
 
-    try {
-      // Check if the book is available for borrowing
-      const [book] = await db
-        .select({ availableCopies: books.availableCopies })
-        .from(books)
-        .where(eq(books.id, bookId))
-        .limit(1);
-  
-      // Check if the book is already borrowed by the user
-      const [existingFavorite] = await db
-        .select()
-        .from(favoriteBooks)
-        .where(
-          sql`${favoriteBooks.userId} = ${userId} AND ${favoriteBooks.bookId} = ${bookId}`,
-        )
-        .limit(1);
-  
-      if (existingFavorite) {
-        await db.delete(favoriteBooks).where(eq(favoriteBooks, existingFavorite))
+  try {
+    // Check if the book is available for borrowing
 
-        return {
-          success: true,
-          message: 'Book removed from favorites',
-        };
-      }
-  
-     
-      const record = await db.insert(favoriteBooks).values({
-        userId,
-        bookId
-      });
-  
-      revalidatePath('/my-favorites');
-  
+    // Check if the book is already borrowed by the user
+    const [existingFavorite] = await db
+      .select()
+      .from(favoriteBooks)
+      .where(
+        sql`${favoriteBooks.userId} = ${userId} AND ${favoriteBooks.bookId} = ${bookId}`,
+      )
+      .limit(1);
+
+    if (existingFavorite) {
+      await db.delete(favoriteBooks).where(eq(favoriteBooks, existingFavorite));
+
       return {
         success: true,
-        message: 'Book added to favorites successfully',
-        data: JSON.parse(JSON.stringify(record)),
-      };
-    } catch (error) {
-      console.log('Error adding book to favorites:', error);
-      return {
-        success: false,
-        message: 'Error adding book to favorites',
+        message: 'Book removed from favorites',
       };
     }
-}
+
+    const record = await db.insert(favoriteBooks).values({
+      userId,
+      bookId,
+    });
+
+    revalidatePath('/my-favorites');
+
+    return {
+      success: true,
+      message: 'Book added to favorites successfully',
+      data: JSON.parse(JSON.stringify(record)),
+    };
+  } catch (error) {
+    console.log('Error adding book to favorites:', error);
+    return {
+      success: false,
+      message: 'Error adding book to favorites',
+    };
+  }
+};

@@ -14,8 +14,7 @@ import {
 } from '@react-email/components';
 import { Tailwind } from '@react-email/tailwind';
 
-type BookBorrowedConfirmationEmailProps = {
-  studentName: string;
+type BookBorrowedConfirmationEmailProps = EmailProps & {
   borrowDate: string;
   dueDate: string;
   bookTitle: string;
@@ -32,14 +31,7 @@ export default function BookBorrowedConfirmationEmail({
       <Html lang="en">
         <Head>
           <title>Book Borrowed Confirmation</title>
-          <Font
-            fontFamily="IBM Plex Sans"
-            fallbackFontFamily="sans-serif"
-            webFont={{
-              url: 'https://lms-university.vercel.app/fonts/IBMPlexSans-Regular.woff2',
-              format: 'woff2',
-            }}
-          />
+          <Font fontFamily="Trebuchet MS" fallbackFontFamily="sans-serif" />
         </Head>
         <Preview>You&apos;ve Borrowed a Book!</Preview>
 

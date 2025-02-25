@@ -5,9 +5,9 @@ import { cn, getInitials } from '@/lib/utils';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import React from 'react';
 import { Avatar, AvatarFallback } from '../ui/avatar';
 import { Session } from 'next-auth';
+import SignOutButton from '../sign-out-btn';
 
 export default function Sidebar({ session }: Readonly<{ session: Session }>) {
   const pathname = usePathname();
@@ -61,16 +61,21 @@ export default function Sidebar({ session }: Readonly<{ session: Session }>) {
       </div>
 
       <div className="user">
-        <Avatar>
-          <AvatarFallback className="bg-amber-100 text-lg font-semibold">
-            {getInitials(session?.user?.name ?? 'IN')}
-          </AvatarFallback>
-        </Avatar>
+        <div className="relative">
+          <Avatar>
+            <AvatarFallback className="bg-amber-100 text-lg font-semibold">
+              {getInitials(session?.user?.name ?? 'IN')}
+            </AvatarFallback>
+          </Avatar>
+          <div className="absolute bottom-0 right-0 z-50 size-3 rounded-full bg-green-500 border border-white" />
+        </div>
 
         <div className="flex flex-col max-md:hidden">
           <p className="font-semibold text-dark-200">{session?.user?.name}</p>
           <p className="text-xs text-light-500">{session?.user?.email}</p>
         </div>
+
+        <SignOutButton className="rounded-full transition-all duration-200 hover:scale-105 hover:bg-red-300" />
       </div>
     </aside>
   );

@@ -2,8 +2,9 @@ import Image from 'next/image';
 import React from 'react';
 import BookCover from './book-cover';
 import BorrowBook from './borrow-book';
+import { fetchUserById } from '@/lib/data';
 import { db } from '@/db/drizzle';
-import { borrowRecords, users } from '@/db/schema';
+import { borrowRecords } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import FavoriteBook from './favorite-book';
 
@@ -22,11 +23,7 @@ export default async function BookOverview({
   coverColor,
   coverUrl,
 }: Readonly<BookOverviewPropsType>) {
-  const [user] = await db
-    .select()
-    .from(users)
-    .where(eq(users.id, userId))
-    .limit(1);
+  const user = await fetchUserById(userId);
 
   const [book] = await db
     .select()
@@ -35,7 +32,7 @@ export default async function BookOverview({
     .limit(1);
 
   const borrowingEligibility = {
-    isEligible: availableCopies > 0 && user?.status === 'APPROVED',
+    isEligible: availableCopies > 0 && user.status === 'APPROVED',
     message:
       availableCopies <= 0
         ? 'Book is not available for borrowing'
@@ -45,7 +42,7 @@ export default async function BookOverview({
   const favoriteEligibility = {
     isEligible: !book || book.status !== 'BORROWED',
     message:
-     !book || book.status !== 'BORROWED'
+      !book || book.status !== 'BORROWED'
         ? ''
         : 'You cannot add this book to your favorites',
   };
@@ -94,22 +91,18 @@ export default async function BookOverview({
 
         <div className="book-btns">
           {user && (
-            <>
-              <BorrowBook
-                bookId={id}
-                userId={userId}
-                borrowingEligibility={borrowingEligibility}
-              />
-            </>
+            <BorrowBook
+              bookId={id}
+              userId={userId}
+              borrowingEligibility={borrowingEligibility}
+            />
           )}
           {user && (
-            <>
-              <FavoriteBook
-                bookId={id}
-                userId={userId}
-                addFavoriteEligibility={favoriteEligibility}
-              />
-            </>
+            <FavoriteBook
+              bookId={id}
+              userId={userId}
+              addFavoriteEligibility={favoriteEligibility}
+            />
           )}
         </div>
       </div>

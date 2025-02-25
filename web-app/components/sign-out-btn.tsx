@@ -7,10 +7,14 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from './ui/tooltip';
-import { Loader2Icon, LogOutIcon } from 'lucide-react';
+import { Loader2Icon } from 'lucide-react';
 import { signOutComplete } from '@/lib/actions/auth';
+import Image from 'next/image';
+import { cn } from '@/lib/utils';
 
-export default function SignOutButton() {
+export default function SignOutButton({
+  className,
+}: Readonly<{ className?: string }>) {
   const [isPending, startTransition] = useTransition();
 
   const handleAction = () => {
@@ -26,12 +30,20 @@ export default function SignOutButton() {
           <button
             onClick={handleAction}
             disabled={isPending}
-            className="rounded-full p-2 transition-all duration-300 hover:bg-red-600/50 hover:backdrop-blur-md"
+            className={cn(className)}
           >
             {isPending ? (
               <Loader2Icon className="animate-spin" color="red" size={24} />
             ) : (
-              <LogOutIcon size={24} color="red" />
+              <Image
+                src="/icons/logout.svg"
+                alt="Logout"
+                width={24}
+                height={24}
+                onClick={() => {
+                  window.location.href = '/api/auth/signout';
+                }}
+              />
             )}
           </button>
         </TooltipTrigger>

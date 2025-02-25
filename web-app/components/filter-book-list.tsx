@@ -12,16 +12,16 @@ export default async function FilterBookList({
   query: string;
   currentPage: number;
   filter?: Filter;
-  type : Type;
+  type: Type;
 }>) {
   const books = await fetchFilteredBooks(query, currentPage, type, filter);
 
   return (
     <div className="flow-root">
       {books.length === 1 ? (
-        <BookCard {...books[0] as Book} />
+        <BookCard {...books[0]} />
       ) : (
-        <BookList containerClassName="mt-10" books={books as Book[]} />
+        <BookList containerClassName="mt-10" books={books} />
       )}
     </div>
   );

@@ -26,11 +26,11 @@ type User = {
 };
 
 type BorrowedBookInfo = {
-  bookId: string;
   borrowDate: Date;
   dueDate: string;
-  returnDate: string;
-  status: 'BORROWED' | 'RETURNED';
+  returnDate: string | null;
+  status: 'PENDING' | 'REJECTED' | 'BORROWED' | 'RETURNED';
+  book: Book;
 };
 
 type AuthCredentials = {
@@ -65,4 +65,72 @@ type EmailProps = {
   studentName: string;
 };
 
-type Type = 'Library' | 'Favorites' 
+type CachedBorrowedBooksResult = {
+  user: User;
+  userBooks: Book[];
+  borrowedBooksMap: BorrowBooksMap;
+};
+
+type BorrowBooksMap = {
+  [key: string]: {
+    borrowDate: Date;
+    returnDate: string | null;
+    dueDate: string;
+    status: 'BORROWED' | 'RETURNED';
+    book: Book;
+  };
+};
+
+type Type = 'Library' | 'Favorites';
+
+type DashboardStatsProps = {
+  totalBooks: number;
+  totalUsers: number;
+  totalBorrowedBooks: number;
+  totalBooksChange: number;
+  totalUsersChange: number;
+  totalBorrowedBooksChange: number;
+};
+
+type DashboardStatsClientProps = {
+  initialData: DashboardStatsProps;
+};
+
+type UserRow = {
+  id: string;
+  fullName: string;
+  email: string;
+  status?: 'PENDING' | 'APPROVED' | 'REJECTED';
+  dateJoined: Date;
+  role: 'USER' | 'ADMIN';
+  booksBorrowed: number;
+  universityId: number;
+  universityCard: string;
+};
+
+type UserRole = 'USER' | 'ADMIN';
+
+type BorrowRequestsRow = {
+  id: string;
+  bookTitle: string;
+  coverUrl: string;
+  coverColor: string;
+  fullName: string;
+  email: string;
+  borrowedDate: Date;
+  returnDate: Date | null;
+  dueDate: Date;
+  status: 'PENDING' | 'REJECTED' | 'BORROWED' | 'RETURNED';
+};
+
+type BorrowRequestStatus = 'PENDING' | 'REJECTED' | 'BORROWED' | 'RETURNED';
+
+type BookRequest = {
+  id: string;
+  title: string;
+  author: string;
+  genre: string;
+  coverColor: string;
+  coverUrl: string;
+  createdAt: Date;
+};

@@ -6,22 +6,28 @@ import { TriangleAlertIcon } from 'lucide-react';
 import Link from 'next/link';
 
 type BorrowedBookCardProps = {
-  book: Book;
   borrowedBookInfo: BorrowedBookInfo;
 };
 
 export default function BorrowedBookCard({
-  book,
   borrowedBookInfo,
 }: Readonly<BorrowedBookCardProps>) {
+  const { borrowDate, dueDate, returnDate, status, book } = borrowedBookInfo;
   const { id, title, genre, coverColor, coverUrl } = book;
-  const { borrowDate, dueDate, returnDate, status } = borrowedBookInfo;
 
   const today = new Date();
   const due = new Date(dueDate);
   const diffTime = due.getTime() - today.getTime();
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   const isOverdue = diffDays < 0;
+  let dueMessage: string;
+
+  if (diffDays === 0) {
+    dueMessage = 'Book is due before 4PM';
+  } else {
+    const daysLabel = diffDays <= 1 ? 'day' : 'days';
+    dueMessage = `${diffDays.toString().padStart(2, '0')} ${daysLabel} left to return`;
+  }
 
   const backgroundColor = chroma(coverColor).alpha(0.5).css();
 
@@ -68,10 +74,12 @@ export default function BorrowedBookCard({
             height={18}
             alt="book-2 icon"
           />
-          Borrowed on {borrowDate.toLocaleString('en-US', { month: 'short' })}{' '}
-          {borrowDate.toLocaleString('en-US', { day: '2-digit' })}
-          {', '}
-          {borrowDate.toLocaleString('en-US', { year: 'numeric' })}
+          Borrowed on{' '}
+          {borrowDate.toLocaleString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: '2-digit',
+          })}
         </p>
 
         <div className="flex justify-between">
@@ -95,15 +103,13 @@ export default function BorrowedBookCard({
                     height={18}
                     alt={`calendar icon for overdue book ${title}`}
                   />
-                  {diffDays == 0 ? 'Book is due before 4PM' : `
-                  ${diffDays.toString().padStart(2, '0')} 
-                  ${diffDays <= 1 ? 'day' : 'days'} left to return`}
+                  {dueMessage}
                 </>
               )}
             </p>
           )}
 
-          {status === 'RETURNED' && (
+          {status === 'RETURNED' && returnDate && (
             <p className="flex items-center gap-2 text-xs">
               <Image
                 src={'/icons/tick.svg'}
@@ -112,9 +118,8 @@ export default function BorrowedBookCard({
                 alt={`check icon for returned book ${title}`}
               />
               Returned on {getDateWithSuffix(new Date(returnDate).getDate())}{' '}
-              {new Date(returnDate).toLocaleString('en-US', { month: 'short' })}
-              {', '}
               {new Date(returnDate).toLocaleString('en-US', {
+                month: 'short',
                 year: '2-digit',
               })}
             </p>

@@ -1,6 +1,6 @@
 <div align="center">
 
-[![Project Banner](https://github.com/user-attachments/assets/7cff0964-6c02-4af5-aa0c-964b349cc9aa)](https://youtu.be/EZajJGOMWas)
+[![Project Banner](https://github.com/user-attachments/assets/7cff0964-6c02-4af5-aa0c-964b349cc9aa)](https://github.com/AKameni1/LMS/tree/main/web-app)
 
 <div>
 
@@ -17,8 +17,8 @@
 <div align="center">
 
 Build this project step by step with our detailed tutorial on
-[**JavaScript Mastery**](https://www.youtube.com/@javascriptmastery/videos)
-YouTube Join the JSM family!
+[**GitHub**](https://github.com/AKameni1/LMS/tree/main/web-app) Explore our repository
+and contribute to the project!
 
 </div>
 
@@ -150,7 +150,7 @@ cd university-library-jsm
 
 **Installation**
 
-Install the project dependencies using npm:
+Install the project dependencies using pnpm:
 
 ```bash
 pnpm install
@@ -193,7 +193,9 @@ Resend credentials. You can obtain these credentials by signing up on the
 **Running the Project**
 
 ```bash
-npm run dev
+pnpm db:migrate
+pnpm seed
+pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) in your browser to view the

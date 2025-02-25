@@ -69,7 +69,7 @@ export default async function Page(
           )}
         </div>
 
-        <FilterSelect />
+        <FilterSelect initialFilter={filter} />
       </div>
 
       {totalPages === 0 ? (
@@ -80,7 +80,7 @@ export default async function Page(
             query={query.trim()}
             currentPage={currentPage}
             filter={filter as Filter}
-            type='Favorites'
+            type="Favorites"
           />
 
           <Separator className="mt-10 h-1 rounded-full bg-dark-200/40" />

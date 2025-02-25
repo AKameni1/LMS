@@ -1,7 +1,7 @@
 import { auth } from '@/auth';
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 export default async function Layout({
   children,

@@ -49,6 +49,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ],
   pages: {
     signIn: '/sign-in',
+    error: '/error',
   },
   callbacks: {
     async jwt({ token, user }) {
@@ -67,6 +68,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
 
       return session;
+    },
+
+    async signIn({ user }) {
+      if (!user) {
+        throw new Error('Invalid credentials');
+      }
+      return true;
     },
   },
 });

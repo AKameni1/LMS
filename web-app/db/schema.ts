@@ -1,4 +1,3 @@
-import { table } from 'console';
 import {
   integer,
   text,
@@ -22,7 +21,12 @@ const tsVector = customType<{ data: string }>({
 
 export const STATUS = pgEnum('status', ['PENDING', 'APPROVED', 'REJECTED']);
 export const ROLE = pgEnum('role', ['USER', 'ADMIN']);
-export const BORROW_STATUS = pgEnum('borrow_status', ['BORROWED', 'RETURNED']);
+export const BORROW_STATUS = pgEnum('borrow_status', [
+  'BORROWED',
+  'RETURNED',
+  'PENDING',
+  'REJECTED',
+]);
 
 export const users = pgTable('users', {
   id: uuid('id').notNull().primaryKey().defaultRandom().unique(),
@@ -35,7 +39,9 @@ export const users = pgTable('users', {
   role: ROLE('role').notNull().default('USER'),
   lastActivityDate: date('last_activity_date').defaultNow(),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
-  updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true })
+    .defaultNow()
+    .$onUpdate(() => new Date()),
 });
 
 export const books = pgTable(
@@ -54,38 +60,12 @@ export const books = pgTable(
     videoUrl: text('video_url').notNull(),
     summary: varchar('summary').notNull(),
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
-    updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow(),
-
-    // Full text search
+    updatedAt: timestamp('updated_at', { withTimezone: true })
+      .defaultNow()
+      .$onUpdate(() => new Date()),
     searchText: tsVector('search_text'),
-    // .generatedAlwaysAs(
-    //   sql`
-    //     to_tsvector(
-    //       'english',
-    //       coalesce(title, '') || ' ' ||
-    //       coalesce(author, '') || ' ' ||
-    //       coalesce(genre, '') || ' ' ||
-    //       coalesce(description, '') || ' ' ||
-    //       coalesce(summary, '')
-    //     )
-    //   `,
-    // )
-    // .$onUpdateFn(
-    //   () =>
-    //     sql`
-    //     to_tsvector(
-    //       'english',
-    //       coalesce(title, '') || ' ' ||
-    //       coalesce(author, '') || ' ' ||
-    //       coalesce(genre, '') || ' ' ||
-    //       coalesce(description, '') || ' ' ||
-    //       coalesce(summary, '')
-    //     )
-    //   `,
-    // ),
   },
   (book) => [
-    // Index GIN for full text search
     index('idx_books_search')
       .using('gin', book.searchText)
       .with({ fastupdate: true }),
@@ -97,10 +77,10 @@ export const borrowRecords = pgTable(
   {
     id: uuid('id').notNull().primaryKey().defaultRandom().unique(),
     userId: uuid('user_id')
-      .references(() => users.id)
+      .references(() => users.id, { onDelete: 'cascade' })
       .notNull(),
     bookId: uuid('book_id')
-      .references(() => books.id)
+      .references(() => books.id, { onDelete: 'cascade' })
       .notNull(),
     borrowDate: timestamp('borrow_date', { withTimezone: true })
       .defaultNow()
@@ -114,16 +94,16 @@ export const borrowRecords = pgTable(
 );
 
 export const favoriteBooks = pgTable(
-    'favorite_books', 
-    {
+  'favorite_books',
+  {
     id: uuid('id').notNull().primaryKey().defaultRandom().unique(),
     userId: uuid('user_id')
-      .references(() => users.id)
+      .references(() => users.id, { onDelete: 'cascade' })
       .notNull(),
     bookId: uuid('book_id')
-      .references(() => books.id)
+      .references(() => books.id, { onDelete: 'cascade' })
       .notNull(),
-      createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   },
   (table) => [unique('uni').on(table.userId, table.bookId)],
-)
+);

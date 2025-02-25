@@ -13,7 +13,7 @@ export default function NoResults() {
     // Clear the search query
     const params = new URLSearchParams(searchParams);
     params.delete('query');
-    router.replace(`${pathname}?${params.toString()}`);
+    router.push(`${pathname}?${params.toString()}`);
     router.refresh();
   };
   return (

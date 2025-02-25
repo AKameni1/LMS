@@ -92,6 +92,8 @@ export const signUp = async (params: AuthCredentials) => {
       },
     });
 
+    await redis.del('dashboard_stats');
+
     await signInWithCredentials({ email, password });
 
     return {

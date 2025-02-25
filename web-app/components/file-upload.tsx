@@ -186,7 +186,7 @@ export default function FileUpload({
               path={file.filePath}
               width={500}
               height={300}
-              loading={'lazy'}
+              loading={'eager'}
               alt={file.filePath}
               className="rounded-lg"
             />
