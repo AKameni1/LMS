@@ -62,6 +62,16 @@ export async function fetchFilteredBooks(
         .where(eq(favoriteBooks.userId, userId));
     }
 
+    if (type === 'Favorites') {
+      if (!userId) {
+        throw new Error('User must be authenticated to access favorites.');
+      }
+
+      baseQuery = baseQuery
+        .innerJoin(favoriteBooks, eq(books.id, favoriteBooks.bookId))
+        .where(eq(favoriteBooks.userId, userId));
+    }
+
     // Dynamic mode enabled
 
     const conditions = [];
