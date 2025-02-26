@@ -118,20 +118,20 @@
   }
 
   .book-overview_btn {
-    @apply mt-4 min-h-14 w-fit bg-primary text-dark-100 hover:bg-primary/90 max-md:w-full m-2 !important;
+    @apply m-2 mt-4 min-h-14 w-fit bg-primary text-dark-100 hover:bg-primary/90 max-md:w-full !important;
   }
 
   .book-overview_fbtn {
-    @apply mt-4 min-h-14 w-fit text-dark-100 hover:bg-[#db0000]/75 max-md:w-full bg-[#db0000] m-2 !important;
+    @apply m-2 mt-4 min-h-14 w-fit bg-[#db0000] text-dark-100 hover:bg-[#db0000]/75 max-md:w-full !important;
   }
 
   .book-btns {
-    @apply flex-row items-center
+    @apply flex flex-row items-center;
   }
 
   /* File Upload */
   .upload-btn {
-    @apply flex min-h-14 w-full items-center flex-wrap p-1 justify-center gap-1.5 rounded-md;
+    @apply flex min-h-14 w-full flex-wrap items-center justify-center gap-1.5 rounded-md p-1;
   }
 
   .upload-filename {

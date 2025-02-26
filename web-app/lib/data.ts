@@ -126,7 +126,7 @@ export async function fetchBooksPages(
   type: PgTable<TableConfig>,
   filter?: Filter,
 ): Promise<number> {
-  try {
+  try {    
     let baseQuery = db
       .select({ count: sql<number>`cast(count(*) as integer)`.as('count') })
       .from(type)

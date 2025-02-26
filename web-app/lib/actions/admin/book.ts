@@ -82,6 +82,37 @@ export const updateBook = async (params: Partial<BookParams>, id: string) => {
   }
 };
 
+export const deleteBook = async (bookId: string) => {
+  try {
+    const [data] = await db
+      .delete(books)
+      .where(eq(books.id, bookId))
+      .returning({
+        id: books.id,
+      });
+
+    await redis.del('dashboard_stats');
+
+    if (!data) {
+      return {
+        success: false,
+        error: `Book with id ${bookId} not found.`,
+      };
+    }
+    
+    return {
+      success: true,
+      data,
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      success: false,
+      error: `Failed to delete book. ${error}`,
+    };
+  }
+};
+
 export const fetchBooksAdded = async () => {
   try {
     const booksAdded = await db

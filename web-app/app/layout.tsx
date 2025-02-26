@@ -49,10 +49,15 @@ const bebasNeue = localFont({
   variable: '--bebas-neue',
 });
 
+/** @type {import("next").Metadata} */
 export const metadata: Metadata = {
-  title: 'BookWise',
+  title: {
+    default: 'BookWise',
+    template: '%s | BookWise',
+  },
   description:
     'BookWise is a book borrowing university library management platform.',
+  metadataBase: new URL('https://lms-university.vercel.app/'),
 };
 
 export default async function RootLayout({

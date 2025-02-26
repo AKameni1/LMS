@@ -1,8 +1,45 @@
 'use server';
 
 import { db } from '@/db/drizzle';
+import redis from '@/db/redis';
 import { books, borrowRecords, users } from '@/db/schema';
 import { and, eq, lt, not, or } from 'drizzle-orm';
+
+export const updateUser = async (
+  userId: string,
+  params: {
+    role?: UserRole;
+    status?: 'APPROVED' | 'REJECTED';
+  },
+) => {
+  try {
+    const [data] = await db
+      .update(users)
+      .set(params)
+      .where(eq(users.id, userId))
+      .returning({ id: users.id });
+
+    await redis.del('dashboard_stats');
+
+    if (!data) {
+      return {
+        success: false,
+        error: `User with id ${userId} not found.`,
+      };
+    }
+
+    return {
+      success: true,
+      data,
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      error: `Failed to update user. ${error}`,
+    };
+  }
+};
 
 export const getDashboardStats = async () => {
   try {

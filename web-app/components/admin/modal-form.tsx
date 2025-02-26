@@ -1,32 +1,40 @@
 'use client';
 
-import { useEffect, useRef, type ReactNode } from 'react';
+import { type ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
+import { Button } from '../ui/button';
+import Image from 'next/image';
 
 export default function ModalForm({
   children,
-}: Readonly<{ children: ReactNode }>) {
+  className = '',
+}: Readonly<{ children: ReactNode; className?: string }>) {
   const router = useRouter();
-  const dialogRef = useRef<HTMLDialogElement>(null);
 
-  useEffect(() => {
-    dialogRef.current?.showModal();
-  }, []);
-
+  function handleOpenChange() {
+    router.back();
+  }
   return (
-    <dialog
-      ref={dialogRef}
-      onClose={() => router.back()}
-      className="rounded border p-4 backdrop:bg-slate-300/50"
-    >
-      <button
-        className="absolute right-4 top-2 border-none"
-        onClick={() => dialogRef.current?.close()}
-      >
-        &times;
-      </button>
-
-      {children}
-    </dialog>
+    <Dialog defaultOpen={true} open={true} onOpenChange={handleOpenChange}>
+      <DialogHeader>
+        <Button
+          variant="ghost"
+          className="absolute right-4 top-4 h-4 w-4 p-0 hover:bg-transparent"
+          onClick={() => handleOpenChange()}
+          aria-label="Close dialog"
+        >
+          <Image
+            src="/icons/admin/close.svg"
+            alt="Close"
+            width={24}
+            height={24}
+            className="size-6"
+          />
+        </Button>
+        <DialogTitle className="text-dark-400">Create a new book</DialogTitle>
+      </DialogHeader>
+      <DialogContent className={className}>{children}</DialogContent>
+    </Dialog>
   );
 }
