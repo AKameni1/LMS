@@ -11,6 +11,13 @@ export default async function Page({
   const id = (await params).id;
   const session = await auth();
 
+  const userId = session?.user?.id
+
+  // check if user is logged in
+  if (!session || !userId) {
+    redirect('/sign-in');
+  }
+
   // Fetch data based on the id
   const bookDetails = await fetchBookById(id);
 
@@ -20,7 +27,7 @@ export default async function Page({
 
   return (
     <>
-      <BookOverview {...bookDetails} userId={session?.user?.id as string} />
+      <BookOverview {...bookDetails} userId={userId} />
 
       <div className="book-details">
         <div className="flex-[1.5]">
