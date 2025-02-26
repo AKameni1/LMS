@@ -22,7 +22,7 @@ export default async function Layout({
               priority
               width={37}
               height={37}
-              alt="Logo"
+              alt="Logo BookWise"
               className="size-auto"
             />
             <h1 className="text-2xl font-semibold text-white">BookWise</h1>
