@@ -19,7 +19,8 @@ export default function AccountRequestsTableClient({
         accountRequest.fullName
           .toLowerCase()
           .includes(searchTerm.toLowerCase()) ||
-        accountRequest.email.toLowerCase().includes(searchTerm.toLowerCase()),
+        accountRequest.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        accountRequest.universityId.toString().includes(searchTerm),
     );
 
     if (nameSort !== null) {

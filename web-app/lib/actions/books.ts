@@ -2,8 +2,7 @@
 
 import { db } from '@/db/drizzle';
 import { books, borrowRecords, favoriteBooks } from '@/db/schema';
-import { eq, sql } from 'drizzle-orm';
-import dayjs from 'dayjs';
+import { and, eq, isNull, sql } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 
 export const borrowBook = async (params: ButtonBookParams) => {
@@ -29,23 +28,22 @@ export const borrowBook = async (params: ButtonBookParams) => {
       .select()
       .from(borrowRecords)
       .where(
-        sql`${borrowRecords.userId} = ${userId} AND ${borrowRecords.bookId} = ${bookId} AND ${borrowRecords.status} = 'BORROWED'`,
-      )
-      .limit(1);
+        and(
+          eq(borrowRecords.userId, userId),
+          eq(borrowRecords.bookId, bookId),
+          isNull(borrowRecords.returnDate),
+        ),
+      );
+
+    console.log('existingBorrow:', existingBorrow);
 
     if (existingBorrow.length > 0) {
-      return {
-        success: false,
-        message: 'You have already borrowed this book.',
-      };
+      throw new Error('You must return the book before borrowing it again.');
     }
-
-    const dueDate = dayjs().add(7, 'days').toDate().toISOString();
 
     const record = await db.insert(borrowRecords).values({
       userId,
       bookId,
-      dueDate,
       status: 'PENDING',
     });
 

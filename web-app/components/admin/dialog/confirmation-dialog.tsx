@@ -1,6 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Dialog,
   DialogContent,
@@ -10,7 +11,7 @@ import {
 } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
-import type { JSX } from 'react';
+import { useState, type JSX } from 'react';
 
 //#region Data Types
 // Define the types used in the `ConfirmationDialog` component
@@ -37,7 +38,7 @@ const BORROW_STATUS_STYLES: Record<
     innerBgColor: 'bg-[#026AA2]',
     buttonColor: 'bg-[#026AA2] hover:bg-[#026AA2]/90',
   },
-  REJECTED: {
+  CANCELLED: {
     bgColor: 'bg-red-50',
     innerBgColor: 'bg-[#C01048]',
     buttonColor: 'bg-[#C01048] hover:bg-[#C01048]/90',
@@ -135,14 +136,14 @@ const BORROW_TEXT_CONFIG: Record<
   RETURNED: {
     title: 'Confirm Book Return',
     description:
-      'Verify that the student has returned the borrowed book in good condition.',
+      'Confirm that the book has been returned. Admins should verify its condition before approval.',
     buttonText: 'Confirm Return',
   },
-  REJECTED: {
-    title: 'Reject Borrow Request',
+  CANCELLED: {
+    title: 'Cancel Borrow Request',
     description:
-      "Deny the student's borrow request and notify them of the rejection.",
-    buttonText: 'Reject Request',
+      'This borrow request has been cancelled. The user will no longer be able to read this book.',
+    buttonText: 'OK',
   },
 };
 
@@ -196,6 +197,7 @@ export default function ConfirmationDialog({
   link,
   initialStatus,
 }: Readonly<ConfirmationDialogProps>): JSX.Element {
+  const [termsAccepted, setTermsAccepted] = useState(false);
   // 📌 Recover the action text based on `link` and `type`
   const { title, description, buttonText } =
     link === 'BORROW'
@@ -253,15 +255,33 @@ export default function ConfirmationDialog({
             {description}
           </DialogDescription>
         </DialogHeader>
+        {/* Add the checkbox for terms acceptance */}
+        <div className="flex items-center space-x-2 py-4">
+          <Checkbox
+            id="terms"
+            checked={termsAccepted}
+            onCheckedChange={(checked) => setTermsAccepted(checked as boolean)}
+            className="h-5 w-5 rounded border-gray-300"
+          />
+          <label
+            htmlFor="terms"
+            className="cursor-pointer text-xs text-dark-200"
+          >
+            I confirm that I have read and agree to the terms and conditions
+          </label>
+        </div>
+
         <Button
           className={cn(
             'h-fit w-full px-8 py-4 text-base font-bold text-light-800 transition-all duration-300',
             actionStyle.buttonColor,
+            !termsAccepted && 'cursor-not-allowed opacity-50',
           )}
           onClick={() => {
             onConfirm?.();
             onOpenChange?.(false);
           }}
+          disabled={!termsAccepted}
         >
           {buttonText}
         </Button>

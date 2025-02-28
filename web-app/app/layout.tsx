@@ -36,6 +36,8 @@ const ibmPlexSans = localFont({
       style: 'normal',
     },
   ],
+  display: 'swap',
+  preload: true,
 });
 
 const bebasNeue = localFont({
@@ -47,6 +49,8 @@ const bebasNeue = localFont({
     },
   ],
   variable: '--bebas-neue',
+  display: 'swap',
+  preload: true,
 });
 
 /** @type {import("next").Metadata} */

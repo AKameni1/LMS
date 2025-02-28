@@ -126,7 +126,7 @@ export async function fetchBooksPages(
   type: PgTable<TableConfig>,
   filter?: Filter,
 ): Promise<number> {
-  try {    
+  try {
     let baseQuery = db
       .select({ count: sql<number>`cast(count(*) as integer)`.as('count') })
       .from(type)
@@ -224,7 +224,9 @@ export async function fetchUserBorrowedBooks(userId: string) {
   // Fetch borrowed books with their details in a single query
   const borrowedBooks = await db
     .select({
+      userId: borrowRecords.userId,
       bookId: borrowRecords.bookId,
+      requestId: borrowRecords.id,
       borrowDate: borrowRecords.borrowDate,
       returnDate: borrowRecords.returnDate,
       dueDate: borrowRecords.dueDate,
@@ -233,20 +235,17 @@ export async function fetchUserBorrowedBooks(userId: string) {
     })
     .from(borrowRecords)
     .innerJoin(books, eq(borrowRecords.bookId, books.id))
-    .where(eq(borrowRecords.userId, userId));
+    .where(
+      and(eq(borrowRecords.userId, userId), eq(borrowRecords.bookId, books.id)),
+    )
+    .orderBy(desc(borrowRecords.borrowDate));
 
-  // Extract books with loan status
-  const userBooks = borrowedBooks.map(({ book }) => ({
-    ...book,
-    isLoanedBook: true,
+  const borrowItems = borrowedBooks.map(({ book, ...borrowInfo }) => ({
+    book: { ...book, isLoanedBook: true },
+    borrowInfo,
   }));
 
-  // Create a Map for quick lookup of borrowed book info
-  const borrowedBooksMap = new Map(
-    borrowedBooks.map(({ bookId, ...info }) => [bookId, info]),
-  );
-
-  return { user, userBooks, borrowedBooksMap };
+  return { user, borrowItems };
 }
 
 /**

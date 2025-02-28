@@ -3,6 +3,7 @@
 import { db } from '@/db/drizzle';
 import redis from '@/db/redis';
 import { books, borrowRecords, users } from '@/db/schema';
+import { getErrorMessage } from '@/lib/utils';
 import { and, eq, lt, not, or } from 'drizzle-orm';
 
 export const updateUser = async (
@@ -13,13 +14,19 @@ export const updateUser = async (
   },
 ) => {
   try {
+    // Check if params contains at least one valid key
+    if (!Object.keys(params).length) {
+      return {
+        success: false,
+        error: 'No valid fields to update.',
+      };
+    }
+
     const [data] = await db
       .update(users)
       .set(params)
       .where(eq(users.id, userId))
       .returning({ id: users.id });
-
-    await redis.del('dashboard_stats');
 
     if (!data) {
       return {
@@ -27,6 +34,8 @@ export const updateUser = async (
         error: `User with id ${userId} not found.`,
       };
     }
+
+    await redis.del('dashboard_stats');
 
     return {
       success: true,
@@ -36,7 +45,7 @@ export const updateUser = async (
     console.error(error);
     return {
       success: false,
-      error: `Failed to update user. ${error}`,
+      error: `Failed to update user. ${getErrorMessage(error)}`,
     };
   }
 };
@@ -48,8 +57,6 @@ export const getDashboardStats = async () => {
       db.$count(users),
       db.$count(borrowRecords, eq(borrowRecords.status, 'BORROWED')),
     ]);
-
-    console.log(totalBooks, totalUsers, totalBorrowedBooks);
 
     return {
       success: true,

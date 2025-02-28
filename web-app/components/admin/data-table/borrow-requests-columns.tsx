@@ -13,7 +13,7 @@ import {
 import { cn, getInitials, truncateText } from '@/lib/utils';
 import { ColumnDef } from '@tanstack/react-table';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useTransition } from 'react';
 import ConfirmationDialog from '../dialog/confirmation-dialog';
 import BookCover from '@/components/book-cover';
 import {
@@ -22,6 +22,10 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { updateBorrowRequest } from '@/lib/actions/admin/borrow-requests';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
+import { Loader2Icon } from 'lucide-react';
 
 /**
  * Defines the columns for the data table in the admin panel.
@@ -66,7 +70,7 @@ export const columns: ColumnDef<BorrowRequestsRow>[] = [
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <span className="font-medium text-dark-400">
+                  <span className="line-clamp-1 font-medium text-dark-400">
                     {truncateText(bookTitle, 30)}
                   </span>
                 </TooltipTrigger>
@@ -103,7 +107,7 @@ export const columns: ColumnDef<BorrowRequestsRow>[] = [
             </AvatarFallback>
           </Avatar>
           <div className="flex flex-col">
-            <span className="truncate font-medium text-dark-400">
+            <span className="line-clamp-1 font-medium text-dark-400">
               {fullName}
             </span>
             {/* <span className="line-clamp-2 text-sm text-light-500">{email}</span> */}
@@ -188,12 +192,41 @@ export const columns: ColumnDef<BorrowRequestsRow>[] = [
       );
     },
     cell: ({ row }) => {
-      const date = new Date(row.original.dueDate).toLocaleDateString('en-US', {
+      const { dueDate } = row.original;
+      if (!dueDate)
+        return <span className="text-sm font-medium text-dark-200">---</span>;
+      const date = new Date(dueDate).toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'short',
         day: 'numeric',
       });
       return <span className="text-sm font-medium text-dark-200">{date}</span>;
+    },
+  },
+  // Add a new column for overdue date here
+  {
+    accessorKey: 'overdueDate',
+    header: () => {
+      return <span className="text-sm font-medium text-dark-200">Overdue</span>;
+    },
+    cell: ({ row }) => {
+      const { dueDate, returnDate } = row.original;
+      if (!dueDate)
+        return <span className="text-sm font-medium text-dark-200">---</span>;
+      const due = new Date(dueDate);
+      const returned = returnDate ? new Date(returnDate) : new Date();
+      const overdue = returned > due;
+      const days = Math.floor((returned.getTime() - due.getTime()) / 86400000);
+      return (
+        <span
+          className={cn(
+            'text-sm font-medium',
+            overdue ? 'text-red-500' : 'text-dark-200',
+          )}
+        >
+          {overdue ? `${days} days` : '---'}
+        </span>
+      );
     },
   },
   {
@@ -210,9 +243,19 @@ export const columns: ColumnDef<BorrowRequestsRow>[] = [
       );
     },
     cell: ({ row }) => {
-      const { status } = row.original;
+      const { status, requestId, dueDate } = row.original;
 
-      return <BorrowedStatusCell initialStatus={status} />;
+      const isOverdue = dueDate
+        ? new Date(dueDate) < new Date() && status === 'BORROWED'
+        : false;
+
+      return (
+        <BorrowedStatusCell
+          initialStatus={status}
+          requestId={requestId}
+          isOverdue={isOverdue}
+        />
+      );
     },
   },
   {
@@ -225,19 +268,19 @@ export const columns: ColumnDef<BorrowRequestsRow>[] = [
       return (
         <a
           href={
-            status === 'PENDING' || status === 'REJECTED'
+            status === 'PENDING' || status === 'CANCELLED'
               ? undefined
               : '/Receipt.pdf'
           }
-          download={!(status === 'PENDING' || status === 'REJECTED')}
+          download={!(status === 'PENDING' || status === 'CANCELLED')}
           aria-label={`Download book receipt for ${bookTitle}`}
           className={cn(
             'inline-flex h-9 items-center justify-center gap-2 whitespace-nowrap rounded-md bg-light-300 px-3 py-2 text-sm font-medium text-primary-admin shadow transition-all duration-300 hover:bg-light-300/20 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
             {
               'hover:bg-light-300/20':
-                status !== 'PENDING' && status !== 'REJECTED',
+                status !== 'PENDING' && status !== 'CANCELLED',
               'cursor-not-allowed opacity-50':
-                status === 'PENDING' || status === 'REJECTED',
+                status === 'PENDING' || status === 'CANCELLED',
             },
           )}
         >
@@ -248,7 +291,7 @@ export const columns: ColumnDef<BorrowRequestsRow>[] = [
             height={16}
             className="size-4"
           />
-          Generate
+          {/* Generate */}
         </a>
       );
     },
@@ -276,22 +319,65 @@ export const BORROWED_STATUS = [
   },
   {
     id: 4,
-    status: 'REJECTED',
-    value: 'Rejected',
+    status: 'CANCELLED',
+    value: 'Cancelled',
     color: 'bg-red-50 text-[#C01048]',
   },
 ] as const;
 
+const getAllowedStatuses = (currentStatus: BorrowRequestStatus) => {
+  const rules: Record<BorrowRequestStatus, BorrowRequestStatus[]> = {
+    PENDING: ['BORROWED', 'CANCELLED'],
+    BORROWED: ['RETURNED'],
+    RETURNED: [],
+    CANCELLED: [],
+  };
+  return BORROWED_STATUS.filter(({ status }) =>
+    rules[currentStatus]?.includes(status),
+  );
+};
+
+const statusActions: Record<
+  BorrowRequestStatus,
+  (requestId: string, isOverdue?: boolean) => Promise<void>
+  > = {
+  PENDING: async () => {},
+  BORROWED: async (requestId) => {
+    console.log(`Approving request ${requestId}`);
+    await updateBorrowRequest({ requestId, status: 'BORROWED' });
+  },
+  RETURNED: async (requestId, isOverdue) => {
+    console.log(`Returning book for request ${requestId}`);
+    await updateBorrowRequest({ requestId, status: 'RETURNED', isOverdue });
+  },
+  CANCELLED: async (requestId) => {
+    console.log(`Rejecting request ${requestId}`);
+    await updateBorrowRequest({ requestId, status: 'CANCELLED' });
+  },
+};
+
 export function BorrowedStatusCell({
   initialStatus,
-}: Readonly<{ initialStatus: BorrowRequestStatus }>) {
+  requestId,
+  isOverdue,
+}: Readonly<{
+  initialStatus: BorrowRequestStatus;
+  requestId: string;
+  isOverdue: boolean;
+}>) {
+  const router = useRouter();
+
   const [open, setOpen] = useState(false);
   const [selectedStatus, setSelectedStatus] =
     useState<BorrowRequestStatus | null>(null);
 
+  const [isPending, startTransition] = useTransition();
+
   const currentStatus =
     BORROWED_STATUS.find((s) => s.status === initialStatus) ??
     BORROWED_STATUS[0];
+
+  const allowedStatuses = getAllowedStatuses(initialStatus);
 
   return (
     <>
@@ -303,8 +389,13 @@ export function BorrowedStatusCell({
               'rounded-md px-2.5 text-sm font-medium !no-underline hover:no-underline',
               currentStatus.color,
             )}
+            disabled={allowedStatuses.length === 0}
           >
-            {initialStatus[0] + initialStatus.slice(1).toLowerCase()}
+            {isPending ? (
+              <Loader2Icon size={10} className="animate-spin" />
+            ) : (
+              initialStatus[0] + initialStatus.slice(1).toLowerCase()
+            )}
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="flex flex-col gap-2 p-3">
@@ -312,7 +403,7 @@ export function BorrowedStatusCell({
             <DropdownMenuLabel>Change Status</DropdownMenuLabel>
             <DropdownMenuSeparator />
           </div>
-          {BORROWED_STATUS.map(({ id, status, value, color }) => (
+          {allowedStatuses.map(({ id, status, value, color }) => (
             <DropdownMenuItem
               key={id}
               onClick={() => {
@@ -321,6 +412,7 @@ export function BorrowedStatusCell({
                 setOpen(true);
               }}
               className="flex flex-row items-center justify-between"
+              disabled={isPending}
             >
               <span
                 className={cn(
@@ -352,7 +444,23 @@ export function BorrowedStatusCell({
           }}
           onConfirm={() => {
             // Logic to change the status of a borrow request
-            console.log(`Changing status to ${selectedStatus}`);
+            if (selectedStatus === null) return;
+            startTransition(async () => {
+              try {
+                await statusActions[selectedStatus](requestId, isOverdue);
+                router.refresh();
+                toast.success('Status updated successfully', {
+                  description: `The borrow request has been marked as ${selectedStatus}.`,
+                });
+              } catch (error) {
+                toast.error('Error updating status', {
+                  description:
+                    error instanceof Error
+                      ? error.message
+                      : 'Failed to update borrow request. Please try again.',
+                });
+              }
+            });
           }}
           link="BORROW"
           initialStatus={selectedStatus}
