@@ -89,7 +89,9 @@
   "pnpm": {
     "onlyBuiltDependencies": [
       "@vercel/speed-insights",
-      "esbuild"
+      "aws-sdk",
+      "esbuild",
+      "sharp"
     ]
   }
 }
