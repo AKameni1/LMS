@@ -1,6 +1,5 @@
 'use client';
 
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {
   Select,
   SelectContent,
@@ -9,48 +8,28 @@ import {
   SelectValue,
 } from './ui/select';
 import { filterOptions } from '@/constants';
-import { useEffect, useState, useTransition } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function FilterSelect({
   initialFilter,
 }: Readonly<{ initialFilter: string }>) {
   const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
+  let filter = initialFilter ?? 'all';
+  if (!filterOptions.some((option) => option.value === filter)) {
+    filter = 'all';
+  }
 
-  const [filter, setFilter] = useState(initialFilter);
-  const [isPending, startTransition] = useTransition();
-
-  useEffect(() => {
-    const currentFilter = searchParams.get('filter') ?? 'all';
-    if (currentFilter !== filter) {
-      setFilter(currentFilter);
-    }
-  }, [filter, searchParams]);
-
-  const handleFilterChange = (value: string) => {
-    setFilter(value);
-    startTransition(() => {
-      const params = new URLSearchParams(searchParams);
-      params.set('page', '1');
-
-      if (value !== 'all') {
-        params.set('filter', value);
-      } else {
-        params.delete('filter'); // Remove the filter query param if 'all' is selected
-      }
-      router.push(`${pathname}?${params.toString()}`, { scroll: false });
-    });
+  const handleValueChange = (value: string) => {
+    router.push(`?filter=${value}`, { scroll: false });
   };
 
   return (
-    <Select
-      value={filter}
-      onValueChange={handleFilterChange}
-      disabled={isPending}
-    >
+    <Select defaultValue={filter} onValueChange={handleValueChange}>
       <SelectTrigger className="select-trigger">
-        <SelectValue placeholder="Sort By" />
+        <SelectValue>
+          {filterOptions.find((opt) => opt.value === filter)?.label ??
+            'Sort By'}
+        </SelectValue>
       </SelectTrigger>
       <SelectContent className="select-content">
         {filterOptions.map(({ value, label }) => (

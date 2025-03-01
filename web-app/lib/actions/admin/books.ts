@@ -3,9 +3,17 @@
 import { db } from '@/db/drizzle';
 import redis from '@/db/redis';
 import { books } from '@/db/schema';
+import { verifySession } from '@/lib/dal';
 import { desc, eq } from 'drizzle-orm';
 
 export const createBook = async (params: BookParams) => {
+  const { isAdmin } = await verifySession();
+  if (!isAdmin) {
+    return {
+      success: false,
+      error: 'Unauthorized',
+    };
+  }
   try {
     const [newId] = await db
       .insert(books)
@@ -32,6 +40,13 @@ export const createBook = async (params: BookParams) => {
 };
 
 export const updateBook = async (params: Partial<BookParams>, id: string) => {
+  const { isAdmin } = await verifySession();
+  if (!isAdmin) {
+    return {
+      success: false,
+      error: 'Unauthorized',
+    };
+  }
   try {
     if (!id) {
       return {

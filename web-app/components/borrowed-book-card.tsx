@@ -28,7 +28,7 @@ export default function BorrowedBookCard({
   if (due) {
     const diffTime = due.getTime() - today.getTime();
     diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    isOverdue = diffDays < 0;
+    isOverdue = diffDays < 0 && status === 'BORROWED';
   }
 
   if (diffDays === 0) {

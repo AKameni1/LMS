@@ -1,3 +1,4 @@
+import { CountdownTimer } from '@/components/counterdown-timer';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import React from 'react';
@@ -23,6 +24,8 @@ export default async function Page() {
         temporary pause on your excitement. 🚦 Chill for a bit, and try again
         shortly.
       </p>
+
+      <CountdownTimer lockedUntil={Number.parseInt(lockedUntil)} />
     </main>
   );
 }

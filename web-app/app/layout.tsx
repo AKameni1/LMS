@@ -62,6 +62,12 @@ export const metadata: Metadata = {
   description:
     'BookWise is a book borrowing university library management platform.',
   metadataBase: new URL('https://lms-university.vercel.app/'),
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    siteName: 'BookWise',
+    url: 'https://lms-university.vercel.app/',
+  },
 };
 
 export default async function RootLayout({

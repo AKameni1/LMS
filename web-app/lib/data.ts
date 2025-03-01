@@ -6,7 +6,7 @@ import { books, borrowRecords, users, favoriteBooks } from '@/db/schema';
 import { and, asc, count, desc, eq, not, sql } from 'drizzle-orm';
 import { PgTable, TableConfig } from 'drizzle-orm/pg-core';
 
-const ITEMS_PER_PAGE = 10;
+const ITEMS_PER_PAGE = 12;
 /**
  * Fetches a list of books based on the provided query and filter, with pagination support.
  * The results are cached for 1 hour to improve performance.
@@ -30,6 +30,10 @@ export async function fetchFilteredBooks(
   query = query.trim();
 
   try {
+    if (!userId) {
+      throw new Error('User must be authenticated to access favorites.');
+    }
+
     let baseQuery = db
       .select({
         id: books.id,
@@ -106,10 +110,45 @@ export async function fetchFilteredBooks(
     // Apply pagination
     const allBooks = await baseQuery.limit(ITEMS_PER_PAGE).offset(offset);
 
-    return allBooks as Book[];
+    // add isLoanedBook and dueDate properties to each book if the user has borrowed it by mapping over the allBooks array and check if the book has been borrowed by the user
+    const allBooksBorrowed = await Promise.all(
+      allBooks.map(async (book) => {
+        const isLoanedBook = await checkUserBorrowStatus(userId, book.id);
+        // obtain the due date of the borrowed book
+        const [dueDate] = await db
+          .select({
+            dueDate: borrowRecords.dueDate,
+          })
+          .from(borrowRecords)
+          .where(
+            and(
+              eq(borrowRecords.userId, userId),
+              eq(borrowRecords.bookId, book.id),
+              eq(borrowRecords.status, 'BORROWED'),
+            ),
+          )
+          .limit(1);
+        return { ...book, isLoanedBook, dueDate: dueDate?.dueDate };
+      }),
+    );
+    // order by state loaned book
+    // order by due date if the book is borrowed
+    allBooksBorrowed.sort((a, b) => {
+      if (a.isLoanedBook && b.isLoanedBook) {
+        return a.dueDate! > b.dueDate! ? 1 : -1;
+      }
+      if (a.isLoanedBook) {
+        return -1;
+      }
+      if (b.isLoanedBook) {
+        return 1;
+      }
+      return 0;
+    });
+    return allBooksBorrowed;
   } catch (error) {
     console.log(error);
-    throw new Error('Failed to fetch books');
+    throw new Error(`Failed to fetch books. ${error}`);
   }
 }
 
@@ -255,7 +294,7 @@ export async function fetchUserBorrowedBooks(userId: string) {
  * @returns A promise that resolves to an array of popular books.
  * @throws An error if the popular books could not be fetched.
  */
-export async function fetchPopularBooks(): Promise<Book[]> {
+export async function fetchPopularBooks(userId: string): Promise<Book[]> {
   const popularBooks = await db
     .select({
       id: books.id,
@@ -271,12 +310,13 @@ export async function fetchPopularBooks(): Promise<Book[]> {
       videoUrl: books.videoUrl,
       summary: books.summary,
       createdAt: books.createdAt,
+      dueDate: borrowRecords.dueDate,
       borrowCount: count(borrowRecords.id),
     })
     .from(borrowRecords)
     .innerJoin(books, eq(books.id, borrowRecords.bookId))
     .where(eq(borrowRecords.status, 'BORROWED'))
-    .groupBy(books.id)
+    .groupBy(books.id, borrowRecords.dueDate)
     .orderBy(desc(count(borrowRecords.id)))
     .limit(7);
 
@@ -289,7 +329,15 @@ export async function fetchPopularBooks(): Promise<Book[]> {
       .limit(7);
   }
 
-  return popularBooks;
+  // add isLoanedBook property to each book if the user has borrowed it by mapping over the popularBooks array and check if the book has been borrowed by the user
+  const popularBooksBorrowed = await Promise.all(
+    popularBooks.map(async (book) => {
+      const isLoanedBook = await checkUserBorrowStatus(userId, book.id);
+      return { ...book, isLoanedBook };
+    }),
+  );
+
+  return popularBooksBorrowed;
 }
 
 /**
@@ -367,4 +415,31 @@ export async function checkIsAdmin(userId: string): Promise<boolean> {
     .then((res) => res[0]?.isAdmin === 'ADMIN');
 
   return isAdmin;
+}
+
+/**
+ * Check if a user has already borrowed a book.
+ *
+ * @param userId - The ID of the user to check.
+ * @param bookId - The ID of the book to check.
+ * @returns A promise that resolves to a boolean indicating whether the user has already borrowed the book.
+ * @throws An error if the user's borrow status could not be checked.
+ */
+export async function checkUserBorrowStatus(
+  userId: string,
+  bookId: string,
+): Promise<boolean> {
+  const hasBorrowed = await db
+    .select()
+    .from(borrowRecords)
+    .where(
+      and(
+        eq(borrowRecords.userId, userId),
+        eq(borrowRecords.bookId, bookId),
+        eq(borrowRecords.status, 'BORROWED'),
+      ),
+    )
+    .then((res) => res.length > 0);
+
+  return hasBorrowed;
 }

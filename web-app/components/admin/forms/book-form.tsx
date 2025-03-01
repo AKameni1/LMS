@@ -22,7 +22,7 @@ import ColorPicker from '../color-picker';
 import { toast } from 'sonner';
 import { useTransition } from 'react';
 import { Loader2Icon } from 'lucide-react';
-import { createBook, updateBook } from '@/lib/actions/admin/book';
+import { createBook, updateBook } from '@/lib/actions/admin/books';
 
 interface AuthFormPropsType extends Partial<Book> {
   type: 'create' | 'update';

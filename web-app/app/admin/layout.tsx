@@ -10,6 +10,11 @@ import { after } from 'next/server';
 import { db } from '@/db/drizzle';
 import { users } from '@/db/schema';
 import { eq } from 'drizzle-orm';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Admin',
+};
 
 export default async function AdminLayout({
   children,

@@ -5,6 +5,7 @@ import { users } from './db/schema';
 import { eq } from 'drizzle-orm';
 import { compare } from 'bcryptjs';
 import { z } from 'zod';
+import { checkIsAdmin } from './lib/data';
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   session: {
@@ -50,6 +51,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   pages: {
     signIn: '/sign-in',
     error: '/error',
+    // signOut: '/sign-out',
   },
   callbacks: {
     async jwt({ token, user }) {
@@ -68,6 +70,28 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
 
       return session;
+    },
+
+    async authorized({ request, auth }) {
+      const { pathname } = request.nextUrl;
+      if (pathname === '/admin' || pathname.startsWith('/admin/')) {
+        if (!auth?.user?.id) {
+          return false;
+        }
+        console.log('Checking if user is admin ---- AUTH.TS');
+        return await checkIsAdmin(auth?.user?.id);
+      }
+
+      if (pathname.includes('sign-in') && pathname !== '/sign-in') {
+        console.log('Redirecting to sign-in ---- AUTH.TS');
+        return false;
+      }
+
+      return true;
+    },
+
+    async redirect({ url, baseUrl }) {
+      return url.startsWith(baseUrl) ? url : baseUrl;
     },
 
     async signIn({ user }) {

@@ -139,7 +139,7 @@ export default function OptionsDropdown({
                 { 'cursor-not-allowed opacity-50': isPending },
               )}
             >
-              Return Book
+              🔙 Return Book
             </DropdownMenuItem>
           )}
           {canRenew && bookId && userId && (
@@ -157,7 +157,7 @@ export default function OptionsDropdown({
                 { 'cursor-not-allowed opacity-50': isPending },
               )}
             >
-              Renew Borrow Request
+              ➰ Renew Borrow Request
             </DropdownMenuItem>
           )}
         </DropdownMenuContent>

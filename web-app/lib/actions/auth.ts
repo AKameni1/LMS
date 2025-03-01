@@ -28,6 +28,7 @@ export const signInWithCredentials = async (
       email,
       password,
       redirect: false,
+      redirectTo: '/admin/books',
     });
 
     if (result?.error) {
@@ -111,7 +112,9 @@ export const signUp = async (params: AuthCredentials) => {
 };
 
 export const signOutComplete = async () => {
-  await signOut();
+  await signOut({
+    redirectTo: '/sign-in',
+  });
 };
 
 const checkLimitation = async (ip: string, email: string): Promise<boolean> => {

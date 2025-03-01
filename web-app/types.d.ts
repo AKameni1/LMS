@@ -14,6 +14,7 @@ type Book = {
   createdAt: Date | null;
   isLoanedBook?: boolean;
   borrowCount?: number;
+  dueDate?: string | Date | null;
 };
 
 type User = {

@@ -2,7 +2,7 @@ import Image from 'next/image';
 import React from 'react';
 import BookCover from './book-cover';
 import BorrowBook from './borrow-book';
-import { fetchUserById } from '@/lib/data';
+import { checkUserBorrowStatus, fetchUserById } from '@/lib/data';
 import { db } from '@/db/drizzle';
 import { borrowRecords } from '@/db/schema';
 import { eq } from 'drizzle-orm';
@@ -24,6 +24,7 @@ export default async function BookOverview({
   coverUrl,
 }: Readonly<BookOverviewPropsType>) {
   const user = await fetchUserById(userId);
+  const isBorrowed = await checkUserBorrowStatus(userId, id);
 
   const [book] = await db
     .select()
@@ -92,6 +93,7 @@ export default async function BookOverview({
         <div className="book-btns">
           {user && (
             <BorrowBook
+              isBorrowed={isBorrowed}
               bookId={id}
               userId={userId}
               borrowingEligibility={borrowingEligibility}

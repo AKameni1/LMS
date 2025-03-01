@@ -14,7 +14,7 @@ export default async function Home() {
     redirect('/sign-in');
   }
 
-  const latestBooks = await fetchPopularBooks();
+  const latestBooks = await fetchPopularBooks(userId);
 
   if (latestBooks.length === 0) {
     return (

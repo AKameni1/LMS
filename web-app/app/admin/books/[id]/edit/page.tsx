@@ -6,6 +6,7 @@ import React from 'react';
 export default async function Page({
   params,
 }: Readonly<{ params: Promise<{ id: string }> }>) {
+  // check if the user is authenticated and an admin
   const id = (await params).id;
 
   // In a real application, you would fetch the book data here

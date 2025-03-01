@@ -1,7 +1,12 @@
 import { auth } from '@/auth';
+import type { Metadata } from 'next';
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
 import type { ReactNode } from 'react';
+
+export const metadata: Metadata = {
+  title: 'Authentication',
+};
 
 export default async function Layout({
   children,

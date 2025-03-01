@@ -10,6 +10,7 @@ import { borrowBook } from '@/lib/actions/books';
 type BorrowBookProps = {
   userId: string;
   bookId: string;
+  isBorrowed: boolean;
   borrowingEligibility: {
     isEligible: boolean;
     message: string;
@@ -19,16 +20,23 @@ type BorrowBookProps = {
 export default function BorrowBook({
   userId,
   bookId,
+  isBorrowed,
   borrowingEligibility: { isEligible, message },
 }: Readonly<BorrowBookProps>) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+  const text = isBorrowed ? 'View Book' : 'Borrow Book Request';
 
-  const handleBorrowBook = async () => {
+  const handleBorrowBook = () => {
     if (!isEligible) {
-      toast.error('Error', {
+      toast.error('Error while borrowing', {
         description: message,
-      });      
+      });
+      return;
+    }
+
+    if (isBorrowed) {
+      router.push(`/books/${bookId}`);
       return;
     }
 
@@ -63,7 +71,7 @@ export default function BorrowBook({
     >
       <Image src={'/icons/book.svg'} width={20} height={20} alt="book-icon" />
       <p className="font-bebas-neue text-xl text-dark-100">
-        {isPending ? 'Borrowing...' : 'Borrow Book Request'}
+        {isPending ? 'Borrowing...' : text}
       </p>
     </Button>
   );

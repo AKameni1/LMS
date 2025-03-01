@@ -1,17 +1,14 @@
-import { NextResponse, type NextRequest } from 'next/server';
-export { auth } from '@/auth';
+import { auth } from '@/auth';
+import { verifySession } from './lib/dal';
+import { NextResponse } from 'next/server';
 
-export async function middleware(request: NextRequest) {
-  const pathname = request.nextUrl.pathname;
+export default auth(async () => {
+  const { isAuth } = await verifySession();
 
-  // Check if path contains "sign-in" but is not exactly "sign-in"
-  if (pathname.includes('sign-in') && pathname !== '/sign-in') {
-    return NextResponse.redirect(new URL('/sign-in', request.nextUrl));
+  if (!isAuth) {
+    return NextResponse.redirect('/sign-in');
   }
-
-  // Continue with the auth middleware
-  return NextResponse.next();
-}
+});
 
 export const config = {
   matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],

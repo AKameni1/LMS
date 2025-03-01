@@ -1,7 +1,7 @@
-import React from 'react';
 import BookCover from '../book-cover';
 import Image from 'next/image';
-import { fetchBooksAdded } from '@/lib/actions/admin/book';
+import { fetchBooksAdded } from '@/lib/actions/admin/books';
+import Link from 'next/link';
 
 export default async function BookListAdded() {
   const { success, data } = await fetchBooksAdded();
@@ -19,7 +19,7 @@ export default async function BookListAdded() {
       ) : (
         data.map(
           ({ id, coverUrl, coverColor, title, author, genre, createdAt }) => (
-            <div className="book-stripe" key={id}>
+            <Link className="book-stripe" href={`/admin/books/${id}`} key={id}>
               <BookCover
                 variant="small"
                 coverImage={coverUrl}
@@ -51,7 +51,7 @@ export default async function BookListAdded() {
                   </div>
                 </div>
               </div>
-            </div>
+            </Link>
           ),
         )
       )}
