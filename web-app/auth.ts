@@ -1,4 +1,4 @@
-import NextAuth, { User } from 'next-auth';
+import NextAuth, { type User } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import { db } from './db/drizzle';
 import { users } from './db/schema';
@@ -67,6 +67,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (session.user) {
         session.user.id = token.id as string;
         session.user.name = token.name as string;
+        session.user.isAdmin = await checkIsAdmin(token.id as string);
       }
 
       return session;
@@ -74,12 +75,29 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
     async authorized({ request, auth }) {
       const { pathname } = request.nextUrl;
+      const protectedRoutes = [
+        '/books',
+        '/library',
+        '/profile',
+        '/my-favorites',
+      ];
+      // Check if the user is trying to access a protected route
+      if (protectedRoutes.some((route) => pathname.startsWith(route))) {
+        if (!auth?.user?.id) {
+          return false;
+        }
+        // an admin doesn't access to these routes so check if the user is an admin and redirect to admin page
+        if (auth.user.isAdmin) {
+          return false;
+        }
+      }
+
       if (pathname === '/admin' || pathname.startsWith('/admin/')) {
         if (!auth?.user?.id) {
           return false;
         }
         console.log('Checking if user is admin ---- AUTH.TS');
-        return await checkIsAdmin(auth?.user?.id);
+        return auth.user.isAdmin;
       }
 
       if (pathname.includes('sign-in') && pathname !== '/sign-in') {
@@ -91,6 +109,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
 
     async redirect({ url, baseUrl }) {
+      const callbackUrl = new URL(url).searchParams.get('callbackUrl');
+
+      if (callbackUrl) {
+        return new URL(callbackUrl, baseUrl).toString();
+      }
+
       return url.startsWith(baseUrl) ? url : baseUrl;
     },
 

@@ -2,20 +2,13 @@
 
 import Image from 'next/image';
 import { Button } from './ui/button';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useSearchContext } from '@/context/search-books-context';
 
 export default function NoResults() {
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-
-  const handleClearSearch = () => {
-    // Clear the search query
-    const params = new URLSearchParams(searchParams);
-    params.delete('query');
-    router.push(`${pathname}?${params.toString()}`);
-    router.refresh();
-  };
+  const { clearSearch } = useSearchContext();
+  function handleClearSearch() {
+    clearSearch();
+  }
   return (
     <div className="mt-10 flow-root">
       <div id="not-found" className="mt-10">

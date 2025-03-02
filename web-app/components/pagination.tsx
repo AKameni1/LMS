@@ -27,6 +27,7 @@ export default function Pagination({
         className="pagination-btn_dark"
         disabled={currentPage <= 1}
         asChild={currentPage > 1}
+        aria-label="Previous Page"
       >
         {currentPage <= 1 ? (
           <div>
@@ -65,6 +66,7 @@ export default function Pagination({
             <Link
               key={page}
               href={createPageURL(page)}
+              aria-label={`Page ${page}`}
               className="pagination-btn_dark inline-flex items-center rounded-md px-4 py-1.5 text-center text-sm font-semibold"
             >
               {page}
@@ -77,6 +79,7 @@ export default function Pagination({
         className="pagination-btn_dark"
         disabled={currentPage >= totalPages}
         asChild={currentPage < totalPages}
+        aria-label="Next Page"
       >
         {currentPage >= totalPages ? (
           <div>

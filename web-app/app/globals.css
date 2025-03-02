@@ -122,7 +122,7 @@
   }
 
   .book-overview_fbtn {
-    @apply m-2 mt-4 min-h-14 w-fit bg-[#db0000] text-dark-100 hover:bg-[#db0000]/75 max-md:w-full !important;
+    @apply m-2 mt-4 min-h-14 w-fit bg-red-400 text-dark-100 hover:bg-red-400/75 max-md:w-full !important;
   }
 
   .book-btns {
@@ -221,7 +221,7 @@
 
   /* Sort */
   .select-trigger {
-    @apply h-10 w-40 border-dark-100 bg-dark-300 px-4 text-light-100 !important;
+    @apply h-10 w-fit border-dark-100 bg-dark-300 px-4 text-light-100 !important;
   }
 
   .select-content {
@@ -350,8 +350,6 @@
     --chart-5: 340 75% 55%;
   }
 }
-
-
 
 @layer base {
   * {

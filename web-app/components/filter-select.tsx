@@ -8,27 +8,44 @@ import {
   SelectValue,
 } from './ui/select';
 import { filterOptions } from '@/constants';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { startTransition } from 'react';
 
 export default function FilterSelect({
   initialFilter,
 }: Readonly<{ initialFilter: string }>) {
   const router = useRouter();
-  let filter = initialFilter ?? 'all';
-  if (!filterOptions.some((option) => option.value === filter)) {
-    filter = 'all';
-  }
+  const searchParams = useSearchParams();
 
+  const urlFilter = searchParams.get('filter');
+
+  const filter =
+    (filterOptions.some((option) => option.value === urlFilter)
+      ? urlFilter
+      : initialFilter) ?? 'all';
   const handleValueChange = (value: string) => {
-    router.push(`?filter=${value}`, { scroll: false });
+    startTransition(() => {
+      const params = new URLSearchParams(searchParams);
+
+      if (value === 'all') {
+        params.delete('filter');
+      } else {
+        params.set('filter', value);
+      }
+
+      router.push(`?${params.toString()}`, { scroll: false });
+    });
   };
 
   return (
-    <Select defaultValue={filter} onValueChange={handleValueChange}>
+    <Select value={filter} onValueChange={handleValueChange}>
       <SelectTrigger className="select-trigger">
         <SelectValue>
-          {filterOptions.find((opt) => opt.value === filter)?.label ??
-            'Sort By'}
+          Filter by:{' '}
+          <span className="text-base font-semibold text-light-200">
+            {filterOptions.find((opt) => opt.value === filter)?.label ??
+              'Sort By'}
+          </span>
         </SelectValue>
       </SelectTrigger>
       <SelectContent className="select-content">

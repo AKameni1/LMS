@@ -5,6 +5,7 @@ import { db } from '@/db/drizzle';
 import { books, borrowRecords, users, favoriteBooks } from '@/db/schema';
 import { and, asc, count, desc, eq, not, sql } from 'drizzle-orm';
 import { PgTable, TableConfig } from 'drizzle-orm/pg-core';
+import { cache } from 'react';
 
 const ITEMS_PER_PAGE = 12;
 /**
@@ -17,140 +18,142 @@ const ITEMS_PER_PAGE = 12;
  * @returns A promise that resolves to an array of books matching the search criteria and filter.
  * @throws An error if the books could not be fetched.
  */
-export async function fetchFilteredBooks(
-  query: string,
-  currentPage: number,
-  type: Type,
-  filter?: Filter,
-): Promise<Book[]> {
-  const session = await auth();
-  const userId = session?.user?.id;
+export const fetchFilteredBooks = cache(
+  async (
+    query: string,
+    currentPage: number,
+    type: Type,
+    filter?: Filter,
+  ): Promise<Book[]> => {
+    const session = await auth();
+    const userId = session?.user?.id;
 
-  const offset = (currentPage - 1) * ITEMS_PER_PAGE;
-  query = query.trim();
+    const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+    query = query.trim();
 
-  try {
-    if (!userId) {
-      throw new Error('User must be authenticated to access favorites.');
-    }
-
-    let baseQuery = db
-      .select({
-        id: books.id,
-        title: books.title,
-        author: books.author,
-        genre: books.genre,
-        rating: books.rating,
-        totalCopies: books.totalCopies,
-        availableCopies: books.availableCopies,
-        description: books.description,
-        coverColor: books.coverColor,
-        coverUrl: books.coverUrl,
-        videoUrl: books.videoUrl,
-        summary: books.summary,
-        createdAt: books.createdAt,
-        updatedAt: books.updatedAt,
-        searchText: books.searchText,
-      })
-      .from(books)
-      .$dynamic(); // Dynamic mode enabled
-
-    // base query
-    if (type === 'Favorites') {
+    try {
       if (!userId) {
         throw new Error('User must be authenticated to access favorites.');
       }
 
-      baseQuery = baseQuery
-        .innerJoin(favoriteBooks, eq(books.id, favoriteBooks.bookId))
-        .where(eq(favoriteBooks.userId, userId));
-    }
+      let baseQuery = db
+        .select({
+          id: books.id,
+          title: books.title,
+          author: books.author,
+          genre: books.genre,
+          rating: books.rating,
+          totalCopies: books.totalCopies,
+          availableCopies: books.availableCopies,
+          description: books.description,
+          coverColor: books.coverColor,
+          coverUrl: books.coverUrl,
+          videoUrl: books.videoUrl,
+          summary: books.summary,
+          createdAt: books.createdAt,
+          updatedAt: books.updatedAt,
+          searchText: books.searchText,
+        })
+        .from(books)
+        .$dynamic(); // Dynamic mode enabled
 
-    // Dynamic mode enabled
+      // base query
+      if (type === 'Favorites') {
+        if (!userId) {
+          throw new Error('User must be authenticated to access favorites.');
+        }
 
-    const conditions = [];
+        baseQuery = baseQuery
+          .innerJoin(favoriteBooks, eq(books.id, favoriteBooks.bookId))
+          .where(eq(favoriteBooks.userId, userId));
+      }
 
-    // Apply search if necessary
-    if (query.length > 0) {
-      conditions.push(
-        sql`${books.title} ILIKE ${'%' + query + '%'} OR
+      // Dynamic mode enabled
+
+      const conditions = [];
+
+      // Apply search if necessary
+      if (query.length > 0) {
+        conditions.push(
+          sql`${books.title} ILIKE ${'%' + query + '%'} OR
              ${books.author} ILIKE ${'%' + query + '%'} OR
              ${books.description} ILIKE ${'%' + query + '%'} OR
              ${books.summary} ILIKE ${'%' + query + '%'}`,
+        );
+
+        conditions.push(
+          sql`${books.searchText} @@ plainto_tsquery('english', ${query})`,
+        );
+      }
+
+      if (conditions.length > 0) {
+        baseQuery = baseQuery.where(sql.join(conditions, sql` OR `));
+      }
+
+      // Apply the filter here
+      switch (filter) {
+        case 'oldest':
+          baseQuery = baseQuery.orderBy(asc(books.createdAt));
+          break;
+        case 'newest':
+          baseQuery = baseQuery.orderBy(desc(books.createdAt));
+          break;
+        case 'highest_rated':
+          baseQuery = baseQuery.orderBy(desc(books.rating));
+          break;
+        // case 'available':
+        //   baseQuery = baseQuery.where(sql`${books.availableCopies} > 0`);
+        //   break;
+        default:
+          baseQuery = baseQuery.orderBy(desc(books.createdAt)); // Default to newest
+          break;
+      }
+
+      // Apply pagination
+      const allBooks = await baseQuery.limit(ITEMS_PER_PAGE).offset(offset);
+
+      // add isLoanedBook and dueDate properties to each book if the user has borrowed it by mapping over the allBooks array and check if the book has been borrowed by the user
+      const allBooksBorrowed = await Promise.all(
+        allBooks.map(async (book) => {
+          const isLoanedBook = await checkUserBorrowStatus(userId, book.id);
+          // obtain the due date of the borrowed book
+          const [dueDate] = await db
+            .select({
+              dueDate: borrowRecords.dueDate,
+            })
+            .from(borrowRecords)
+            .where(
+              and(
+                eq(borrowRecords.userId, userId),
+                eq(borrowRecords.bookId, book.id),
+                eq(borrowRecords.status, 'BORROWED'),
+              ),
+            )
+            .limit(1);
+          return { ...book, isLoanedBook, dueDate: dueDate?.dueDate };
+        }),
       );
-
-      conditions.push(
-        sql`${books.searchText} @@ plainto_tsquery('english', ${query})`,
-      );
+      // order by state loaned book
+      // order by due date if the book is borrowed
+      allBooksBorrowed.sort((a, b) => {
+        if (a.isLoanedBook && b.isLoanedBook) {
+          return a.dueDate! > b.dueDate! ? 1 : -1;
+        }
+        if (a.isLoanedBook) {
+          return -1;
+        }
+        if (b.isLoanedBook) {
+          return 1;
+        }
+        return 0;
+      });
+      return allBooksBorrowed;
+    } catch (error) {
+      console.log(error);
+      throw new Error(`Failed to fetch books. ${error}`);
     }
-
-    if (conditions.length > 0) {
-      baseQuery = baseQuery.where(sql.join(conditions, sql` OR `));
-    }
-
-    // Apply the filter here
-    switch (filter) {
-      case 'oldest':
-        baseQuery = baseQuery.orderBy(asc(books.createdAt));
-        break;
-      case 'newest':
-        baseQuery = baseQuery.orderBy(desc(books.createdAt));
-        break;
-      case 'highest_rated':
-        baseQuery = baseQuery.orderBy(desc(books.rating));
-        break;
-      // case 'available':
-      //   baseQuery = baseQuery.where(sql`${books.availableCopies} > 0`);
-      //   break;
-      default:
-        baseQuery = baseQuery.orderBy(desc(books.createdAt)); // Default to newest
-        break;
-    }
-
-    // Apply pagination
-    const allBooks = await baseQuery.limit(ITEMS_PER_PAGE).offset(offset);
-
-    // add isLoanedBook and dueDate properties to each book if the user has borrowed it by mapping over the allBooks array and check if the book has been borrowed by the user
-    const allBooksBorrowed = await Promise.all(
-      allBooks.map(async (book) => {
-        const isLoanedBook = await checkUserBorrowStatus(userId, book.id);
-        // obtain the due date of the borrowed book
-        const [dueDate] = await db
-          .select({
-            dueDate: borrowRecords.dueDate,
-          })
-          .from(borrowRecords)
-          .where(
-            and(
-              eq(borrowRecords.userId, userId),
-              eq(borrowRecords.bookId, book.id),
-              eq(borrowRecords.status, 'BORROWED'),
-            ),
-          )
-          .limit(1);
-        return { ...book, isLoanedBook, dueDate: dueDate?.dueDate };
-      }),
-    );
-    // order by state loaned book
-    // order by due date if the book is borrowed
-    allBooksBorrowed.sort((a, b) => {
-      if (a.isLoanedBook && b.isLoanedBook) {
-        return a.dueDate! > b.dueDate! ? 1 : -1;
-      }
-      if (a.isLoanedBook) {
-        return -1;
-      }
-      if (b.isLoanedBook) {
-        return 1;
-      }
-      return 0;
-    });
-    return allBooksBorrowed;
-  } catch (error) {
-    console.log(error);
-    throw new Error(`Failed to fetch books. ${error}`);
-  }
-}
+  },
+);
 
 /**
  * Fetches the total number of pages based on the provided query and filter.

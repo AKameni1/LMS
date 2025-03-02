@@ -4,7 +4,6 @@ import type { ReactNode } from 'react';
 import '@/styles/admin.css';
 import Sidebar from '@/components/admin/sidebar';
 import Header from '@/components/admin/header';
-import { checkIsAdmin } from '@/lib/data';
 import { SearchProvider } from '@/context/search-context';
 import { after } from 'next/server';
 import { db } from '@/db/drizzle';
@@ -28,7 +27,7 @@ export default async function AdminLayout({
     redirect('sign-in');
   }
 
-  const isAdmin = await checkIsAdmin(userId);
+  const isAdmin = session?.user.isAdmin;
 
   if (!isAdmin) {
     redirect('/');

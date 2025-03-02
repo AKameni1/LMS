@@ -28,7 +28,6 @@ export const signInWithCredentials = async (
       email,
       password,
       redirect: false,
-      redirectTo: '/admin/books',
     });
 
     if (result?.error) {
