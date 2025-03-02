@@ -6,7 +6,6 @@ import Image from 'next/image';
 import { useMemo, useState } from 'react';
 import { columns } from './data-table/books-columns';
 import { useSearch } from '@/context/search-context';
-import Link from 'next/link';
 
 export default function BooksTableClient({
   books,
@@ -61,12 +60,13 @@ export default function BooksTableClient({
             />
           </Button>
           <Button
-            className="bg-primary-admin transition-all duration-300 hover:bg-primary-admin/90"
-            asChild
+            className="bg-primary-admin text-white transition-all duration-300 hover:bg-primary-admin/90"
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.href = '/admin/books/new';
+            }}
           >
-            <Link href="/admin/books/new" className="text-white">
-              + Create a New Book
-            </Link>
+            + Create a New Book
           </Button>
         </div>
       </div>

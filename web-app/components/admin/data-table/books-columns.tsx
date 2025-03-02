@@ -12,6 +12,8 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import Link from 'next/link';
+import { useState } from 'react';
+import SuperAdminDialog from '../dialog/super-admin-dialog';
 
 /**
  * Defines the columns for the data table in the admin panel.
@@ -182,20 +184,7 @@ export const columns: ColumnDef<BookRequest>[] = [
       const { id } = row.original;
       return (
         <div className="flex flex-row items-center justify-around">
-          <button
-            onClick={() => {
-              // logic to delete the book
-              console.log(`Delete book ${id}`);
-            }}
-            className="transition-all duration-300 hover:brightness-150 hover:filter"
-          >
-            <Image
-              src={'/icons/admin/trash.svg'}
-              width={20}
-              height={20}
-              alt={`delete book ${id}`}
-            />
-          </button>
+          <DeleteCell id={id} />
 
           <Link
             className="transition-all duration-300 hover:brightness-125 hover:filter"
@@ -213,3 +202,30 @@ export const columns: ColumnDef<BookRequest>[] = [
     },
   },
 ];
+
+export function DeleteCell({ id }: Readonly<{ id: string }>) {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <button
+        onClick={() => setOpen(true)}
+        className="transition-all duration-300 hover:brightness-150 hover:filter"
+      >
+        <Image
+          src={'/icons/admin/trash.svg'}
+          width={20}
+          height={20}
+          alt={`delete book ${id}`}
+        />
+      </button>
+
+      <SuperAdminDialog
+        open={open}
+        onOpenChange={setOpen}
+        onConfirm={() => {
+          console.log(`Deleting book ${id}`);
+        }}
+      />
+    </>
+  );
+}

@@ -35,6 +35,13 @@ export const updateUser = async (
       };
     }
 
+    if (params.status === 'REJECTED') {
+      await db
+        .update(borrowRecords)
+        .set({ status: 'CANCELLED' })
+        .where(eq(borrowRecords.userId, userId));
+    }
+
     await redis.del('dashboard_stats');
 
     return {

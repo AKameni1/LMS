@@ -29,6 +29,7 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { updateUser } from '@/lib/actions/admin/users';
 import { Loader2Icon } from 'lucide-react';
+import SuperAdminDialog from '../dialog/super-admin-dialog';
 
 /**
  * Defines the columns for the data table in the admin panel.
@@ -216,25 +217,40 @@ export const columns: ColumnDef<UserRow>[] = [
     },
   },
   {
-    accessorKey: 'actions',
+    accessorKey: 'action',
     header: () => {
-      return <span className="text-sm font-medium text-dark-200">Actions</span>;
+      return <span className="text-sm font-medium text-dark-200">Action</span>;
     },
     cell: ({ row }) => {
       const { fullName } = row.original;
-      return (
-        <button>
-          <Image
-            src={'/icons/admin/trash.svg'}
-            width={20}
-            height={20}
-            alt={`delete user ${fullName}`}
-          />
-        </button>
-      );
+      return <ActionCell fullName={fullName} />;
     },
   },
 ];
+
+export function ActionCell({ fullName }: Readonly<{ fullName: string }>) {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <button onClick={() => setOpen(true)}>
+        <Image
+          src={'/icons/admin/trash.svg'}
+          width={20}
+          height={20}
+          alt={`delete user ${fullName}`}
+        />
+      </button>
+
+      <SuperAdminDialog
+        open={open}
+        onOpenChange={setOpen}
+        onConfirm={() => {
+          console.log(`Deleting user ${fullName}`);
+        }}
+      />
+    </>
+  );
+}
 
 export const ROLES = [
   {
