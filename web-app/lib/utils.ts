@@ -84,4 +84,3 @@ export const getErrorMessage = (error: unknown): Readonly<string> => {
 
   return message;
 };
-

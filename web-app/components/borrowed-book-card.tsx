@@ -196,7 +196,7 @@ function canCancelRequest(borrowDate: string | Date): boolean {
   return hoursSinceBorrowed <= 24;
 }
 
-function canRenewRequest(
+export function canRenewRequest(
   dueDate: string | Date | null,
   status: BorrowRequestStatus,
 ): boolean {

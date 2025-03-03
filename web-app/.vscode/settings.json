@@ -3,4 +3,8 @@
   "editor.codeActionsOnSave": {
       "source.fixAll.eslint": "always"
   },
+  "cSpell.words": [
+    "bookwise",
+    "sonner"
+  ],
 }

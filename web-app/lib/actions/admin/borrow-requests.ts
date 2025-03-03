@@ -5,6 +5,8 @@ import { books, borrowRecords, users } from '@/db/schema';
 import dayjs from 'dayjs';
 import { and, desc, eq } from 'drizzle-orm';
 import { sendEmailReturnConfirmation } from '../send-emails';
+import { workflowClient } from '@/lib/workflow';
+import config from '@/lib/config';
 
 export const updateBorrowRequest = async ({
   requestId,
@@ -35,10 +37,15 @@ export const updateBorrowRequest = async ({
       updateData.returnDate = new Date().toISOString();
     }
 
-    await db
+    const [{ borrowDate, dueDate, bookId }] = await db
       .update(borrowRecords)
       .set(updateData)
-      .where(eq(borrowRecords.id, requestId));
+      .where(eq(borrowRecords.id, requestId))
+      .returning({
+        borrowDate: borrowRecords.borrowDate,
+        dueDate: borrowRecords.dueDate,
+        bookId: borrowRecords.bookId,
+      });
 
     // Send email if status is RETURNED
     if (status === 'RETURNED') {
@@ -48,7 +55,21 @@ export const updateBorrowRequest = async ({
         studentEmail,
         isOverdue: isOverdue ?? false,
       });
+      return;
     }
+
+    await workflowClient.trigger({
+      url: `${config.env.prodApiEndpoint}/api/workflows/borrowing`,
+      body: {
+        requestId,
+        email: studentEmail,
+        studentName,
+        bookTitle,
+        borrowDate,
+        dueDate,
+        bookId,
+      },
+    });
   } catch (error) {
     console.error('Error updating borrow request:', error);
     return { success: false, error: 'Failed to update borrow request' };
@@ -66,7 +87,11 @@ export const renewBorrowRequest = async ({
         status: 'PENDING',
       })
       .where(
-        and(eq(borrowRecords.bookId, bookId), eq(borrowRecords.userId, userId)),
+        and(
+          eq(borrowRecords.bookId, bookId),
+          eq(borrowRecords.userId, userId),
+          eq(borrowRecords.status, 'BORROWED'),
+        ),
       );
     return { success: true };
   } catch (error) {

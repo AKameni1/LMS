@@ -7,6 +7,8 @@ import { db } from '@/db/drizzle';
 import { borrowRecords } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import FavoriteBook from './favorite-book';
+import RenewBook from './renew-book';
+import { canRenewRequest } from './borrowed-book-card';
 
 type BookOverviewPropsType = Book & { userId: string };
 
@@ -31,6 +33,9 @@ export default async function BookOverview({
     .from(borrowRecords)
     .where(eq(borrowRecords.bookId, id))
     .limit(1);
+
+  // check if dueDate is there and check if the remaining time is less than 3 days
+  const isDueSoon = canRenewRequest(book.dueDate, book.status);
 
   const borrowingEligibility = {
     isEligible: availableCopies > 0 && user.status === 'APPROVED',
@@ -105,6 +110,9 @@ export default async function BookOverview({
               userId={userId}
               addFavoriteEligibility={favoriteEligibility}
             />
+          )}
+          {isBorrowed && isDueSoon && (
+            <RenewBook bookId={book.bookId} userId={book.userId} />
           )}
         </div>
       </div>
