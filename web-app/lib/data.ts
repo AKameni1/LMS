@@ -163,55 +163,57 @@ export const fetchFilteredBooks = cache(
  * @returns A promise that resolves to the total number of pages required to display all books.
  * @throws An error if the total number of pages could not be fetched.
  */
-export async function fetchBooksPages(
-  query: string,
-  type: PgTable<TableConfig>,
-  filter?: Filter,
-): Promise<number> {
-  try {
-    let baseQuery = db
-      .select({ count: sql<number>`cast(count(*) as integer)`.as('count') })
-      .from(type)
-      .$dynamic(); // Dynamic mode enabled
+export const fetchBooksPages = cache(
+  async (
+    query: string,
+    type: PgTable<TableConfig>,
+    filter?: Filter,
+  ): Promise<number> => {
+    try {
+      let baseQuery = db
+        .select({ count: sql<number>`cast(count(*) as integer)`.as('count') })
+        .from(type)
+        .$dynamic(); // Dynamic mode enabled
 
-    const conditions = [];
+      const conditions = [];
 
-    // Apply search if necessary
-    if (query.length > 0) {
-      conditions.push(
-        sql`${books.title} ILIKE ${'%' + query + '%'} OR
+      // Apply search if necessary
+      if (query.length > 0) {
+        conditions.push(
+          sql`${books.title} ILIKE ${'%' + query + '%'} OR
              ${books.author} ILIKE ${'%' + query + '%'} OR
              ${books.description} ILIKE ${'%' + query + '%'} OR
              ${books.genre} ILIKE ${'%' + query + '%'} OR
              ${books.summary} ILIKE ${'%' + query + '%'}`,
-      );
+        );
+      }
+
+      // Apply search if necessary
+      if (query.length > 0) {
+        conditions.push(
+          sql`${books.searchText} @@ to_tsquery('english', ${query.replace(/\s+/g, ' & ')})`,
+        );
+      }
+
+      // Apply the filter here
+      if (filter === 'available') {
+        conditions.push(sql`${books.availableCopies} > 0`);
+      }
+
+      if (conditions.length > 0) {
+        baseQuery = baseQuery.where(sql.join(conditions, sql` AND `));
+      }
+
+      const res = await baseQuery;
+
+      const totalPages = Math.ceil(Number(res[0].count) / ITEMS_PER_PAGE);
+      return totalPages;
+    } catch (error) {
+      console.log('Failed to fetch total number of books.', error);
+      throw new Error('Failed to fetch total number of books.');
     }
-
-    // Apply search if necessary
-    if (query.length > 0) {
-      conditions.push(
-        sql`${books.searchText} @@ to_tsquery('english', ${query.replace(/\s+/g, ' & ')})`,
-      );
-    }
-
-    // Apply the filter here
-    if (filter === 'available') {
-      conditions.push(sql`${books.availableCopies} > 0`);
-    }
-
-    if (conditions.length > 0) {
-      baseQuery = baseQuery.where(sql.join(conditions, sql` AND `));
-    }
-
-    const res = await baseQuery;
-
-    const totalPages = Math.ceil(Number(res[0].count) / ITEMS_PER_PAGE);
-    return totalPages;
-  } catch (error) {
-    console.log('Failed to fetch total number of books.', error);
-    throw new Error('Failed to fetch total number of books.');
-  }
-}
+  },
+);
 
 /**
  * Fetches a single book record by its ID.

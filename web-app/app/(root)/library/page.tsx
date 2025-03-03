@@ -29,7 +29,7 @@ export default async function Page(
   const searchParams = await props.searchParams;
   const query = searchParams?.query ?? '';
   const filter = searchParams?.filter ?? 'all';
-  const currentPage = Math.min(Number(searchParams?.page) || 1, 1);
+  const currentPage = Number(searchParams?.page) || 1;
   const totalPages = await fetchBooksPages(
     query.trim(),
     books,

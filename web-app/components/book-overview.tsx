@@ -35,7 +35,7 @@ export default async function BookOverview({
     .limit(1);
 
   // check if dueDate is there and check if the remaining time is less than 3 days
-  const isDueSoon = canRenewRequest(book.dueDate, book.status);
+  const isDueSoon = canRenewRequest(book?.dueDate, book?.status);
 
   const borrowingEligibility = {
     isEligible: availableCopies > 0 && user.status === 'APPROVED',
