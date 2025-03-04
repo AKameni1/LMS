@@ -1,18 +1,21 @@
 'use client';
 
 import { renewBorrowRequest } from '@/lib/actions/admin/borrow-requests';
-import React, { useTransition } from 'react';
+import { useState, useTransition } from 'react';
 import { Button } from './ui/button';
 import Image from 'next/image';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
+import BookRequestModal from './book-request-modal';
 
 export default function RenewBook({
   bookId,
   userId,
 }: Readonly<{ bookId: string; userId: string }>) {
   const [isPending, startTransition] = useTransition();
+  const [open, setOpen] = useState(false);
   const router = useRouter();
+
   const handleRenewBook = () => {
     startTransition(async () => {
       try {
@@ -38,20 +41,33 @@ export default function RenewBook({
     });
   };
   return (
-    <Button
-      className="book-overview_btn"
-      onClick={handleRenewBook}
-      disabled={isPending}
-    >
-      <Image
-        src={'/icons/book.svg'}
-        width={20}
-        height={20}
-        alt="book-renew-icon"
+    <>
+      <Button
+        className="book-overview_btn"
+        onClick={handleRenewBook}
+        disabled={isPending}
+      >
+        <Image
+          src={'/icons/book.svg'}
+          width={20}
+          height={20}
+          alt="book-renew-icon"
+        />
+        <p className="font-bebas-neue text-xl text-dark-100">
+          {isPending ? 'Renewing...' : 'Renew Book'}
+        </p>
+      </Button>
+
+      <BookRequestModal
+        open={open}
+        onOpenChange={(state) => {
+          setOpen(state);
+        }}
+        onConfirm={() => {
+          handleRenewBook();
+        }}
+        link="RENEW"
       />
-      <p className="font-bebas-neue text-xl text-dark-100">
-        {isPending ? 'Renewing...' : 'Renew Book'}
-      </p>
-    </Button>
+    </>
   );
 }

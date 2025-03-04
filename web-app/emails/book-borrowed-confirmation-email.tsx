@@ -18,6 +18,7 @@ type BookBorrowedConfirmationEmailProps = EmailProps & {
   borrowDate: string;
   dueDate: string;
   bookTitle: string;
+  bookId: string;
 };
 
 export default function BookBorrowedConfirmationEmail({
@@ -25,6 +26,7 @@ export default function BookBorrowedConfirmationEmail({
   borrowDate = '[Borrowed Date]',
   dueDate = '[Due Date]',
   bookTitle = '[Book Title]',
+  bookId,
 }: Readonly<BookBorrowedConfirmationEmailProps>) {
   return (
     <Tailwind>
@@ -89,10 +91,10 @@ export default function BookBorrowedConfirmationEmail({
             </Text>
 
             <Button
-              href="https://lms-university.vercel.app/my-profile"
+              href={`https://lms-university.vercel.app/${bookId}/preview`}
               className="mt-[10px] rounded-md bg-[#EED1AC] px-[32px] py-[16px] text-center text-base font-bold text-[#111624]"
             >
-              View Borrowed Books
+              View Borrowed Book
             </Button>
 
             <Text className="mt-[32px] text-lg">

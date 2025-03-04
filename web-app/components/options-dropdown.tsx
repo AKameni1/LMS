@@ -14,12 +14,12 @@ import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { MoreHorizontalIcon } from 'lucide-react';
 import { Button } from './ui/button';
-import ConfirmationDialogBook from './confirmation-dialog-book';
 import {
   renewBorrowRequest,
   updateBorrowRequest,
 } from '@/lib/actions/admin/borrow-requests';
 import { cn } from '@/lib/utils';
+import BookRequestModal from './book-request-modal';
 
 type BorrowActionProps =
   | { type: 'CANCELLED' | 'RETURNED'; requestId: string }
@@ -27,15 +27,15 @@ type BorrowActionProps =
 
 const actions = {
   CANCELLED: async (requestId: string) => {
-    console.log(`Annulation de l'emprunt ${requestId}`);
+    console.log(`Cancelling ${requestId}`);
     updateBorrowRequest({ requestId, status: 'CANCELLED' });
   },
   RETURNED: async (requestId: string, isOverdue: boolean) => {
-    console.log(`Retour du livre pour ${requestId}, retardé : ${isOverdue}`);
+    console.log(`Return ${requestId}, overdue : ${isOverdue}`);
     updateBorrowRequest({ requestId, status: 'RETURNED', isOverdue });
   },
   RENEW: async (bookId: string, userId: string) => {
-    console.log(`Renouvellement de l'emprunt ${bookId} pour ${userId}`);
+    console.log(`renew ${bookId} for ${userId}`);
     renewBorrowRequest({ bookId, userId });
   },
 };
@@ -200,7 +200,7 @@ export default function OptionsDropdown({
         )}
 
       {selectedAction && selectedAction.type === 'RENEW' && (
-        <ConfirmationDialogBook
+        <BookRequestModal
           open={open}
           onOpenChange={(state) => {
             if (!state) setSelectedAction(null);
@@ -227,7 +227,7 @@ export default function OptionsDropdown({
               }
             });
           }}
-          type={selectedAction.type}
+          link={selectedAction.type}
         />
       )}
     </>

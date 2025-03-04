@@ -17,8 +17,8 @@
 <div align="center">
 
 Build this project step by step with our detailed tutorial on
-[**GitHub**](https://github.com/AKameni1/LMS/tree/main/web-app) Explore our repository
-and contribute to the project!
+[**GitHub**](https://github.com/AKameni1/LMS/tree/main/web-app) Explore our
+repository and contribute to the project!
 
 </div>
 
@@ -144,8 +144,8 @@ Make sure you have the following installed on your machine:
 **Cloning the Repository**
 
 ```bash
-git clone https://github.com/adrianhajdin/university-library-jsm.git
-cd university-library-jsm
+git clone https://github.com/AKameni1/LMS.git
+cd LMS/web-app
 ```
 
 **Installation**

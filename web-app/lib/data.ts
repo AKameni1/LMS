@@ -448,3 +448,24 @@ export async function checkUserBorrowStatus(
 
   return hasBorrowed;
 }
+
+export async function isBookBorrowed(
+  bookId: string,
+  userId: string,
+): Promise<boolean> {
+  const record = await db
+    .select({
+      requestId: borrowRecords.id,
+    })
+    .from(borrowRecords)
+    .where(
+      and(
+        eq(borrowRecords.bookId, bookId),
+        eq(borrowRecords.userId, userId),
+        eq(borrowRecords.status, 'BORROWED'),
+      ),
+    )
+    .then((result) => result[0]);
+
+  return !!record;
+}

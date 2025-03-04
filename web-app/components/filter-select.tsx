@@ -39,7 +39,7 @@ export default function FilterSelect({
 
   return (
     <Select value={filter} onValueChange={handleValueChange}>
-      <SelectTrigger className="select-trigger">
+      <SelectTrigger className="select-trigger space-x-1">
         <SelectValue>
           Filter by:{' '}
           <span className="text-base font-semibold text-light-200">

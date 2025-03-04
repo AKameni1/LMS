@@ -86,6 +86,7 @@ export const { POST } = serve<InitialData>(async (context) => {
             day: 'numeric',
           }),
           bookTitle,
+          bookId,
         }),
       ),
     );

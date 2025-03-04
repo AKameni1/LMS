@@ -256,7 +256,7 @@ export default function ConfirmationDialog({
           </DialogDescription>
         </DialogHeader>
         {/* Add the checkbox for terms acceptance */}
-        <div className="flex items-center space-x-2 py-4">
+        <div className="flex items-center justify-center space-x-2 py-4">
           <Checkbox
             id="terms"
             checked={termsAccepted}

@@ -5,6 +5,7 @@ import redis from '@/db/redis';
 import { books, borrowRecords, users } from '@/db/schema';
 import { getErrorMessage } from '@/lib/utils';
 import { and, eq, lt, not, or } from 'drizzle-orm';
+import { sendEmailApprovalAccount } from '../send-emails';
 
 export const updateUser = async (
   userId: string,
@@ -26,7 +27,11 @@ export const updateUser = async (
       .update(users)
       .set(params)
       .where(eq(users.id, userId))
-      .returning({ id: users.id });
+      .returning({
+        id: users.id,
+        fullName: users.fullName,
+        email: users.email,
+      });
 
     if (!data) {
       return {
@@ -40,6 +45,13 @@ export const updateUser = async (
         .update(borrowRecords)
         .set({ status: 'CANCELLED' })
         .where(eq(borrowRecords.userId, userId));
+    }
+
+    if (params.status === 'APPROVED') {
+      await sendEmailApprovalAccount({
+        studentName: data.fullName,
+        studentEmail: data.email,
+      });
     }
 
     await redis.del('dashboard_stats');

@@ -48,7 +48,7 @@ export default async function Page(
           <Search placeholder="Search for books" />
         </div>
 
-        <div className="mb-4 mt-12 flex items-center justify-between">
+        <div className="mb-4 mt-12 flex w-screen max-w-7xl items-center justify-between">
           <div className={'mr-4'}>
             {!query ? (
               <h2 className="font-bebas-neue text-4xl text-light-100">
@@ -84,7 +84,7 @@ export default async function Page(
           <>
             <Suspense
               fallback={
-                <Loader2Icon className="mx-auto h-1/2 w-1/2 animate-spin text-light-300" />
+                <Loader2Icon className="m-auto h-1/3 w-1/3 animate-spin text-light-300" />
               }
             >
               <FilterBookList

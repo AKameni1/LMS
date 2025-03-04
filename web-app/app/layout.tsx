@@ -1,5 +1,6 @@
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Analytics } from '@vercel/analytics/next';
+import Script from 'next/script';
 
 import type { Metadata } from 'next';
 import './globals.css';
@@ -80,6 +81,12 @@ export default async function RootLayout({
 
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <Script
+          src="/nutrient-viewer/nutrient-viewer.js"
+          strategy="beforeInteractive"
+        />
+      </head>
       <SessionProviderWrapper session={session}>
         <body
           className={`${ibmPlexSans.className} ${bebasNeue.variable} antialiased`}

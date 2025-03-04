@@ -58,7 +58,11 @@ export default function BookCard({
             <p className="text-light-100">{dueMessage}</p>
           </div>
 
-          <Button className="book-btn">Download receipt</Button>
+          <Button className="book-btn" asChild>
+            <a href="/Receipt.pdf" download>
+              Download receipt
+            </a>
+          </Button>
         </div>
       )}
     </li>

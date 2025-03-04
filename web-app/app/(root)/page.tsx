@@ -7,7 +7,7 @@ import React from 'react';
 
 export default async function Home() {
   const session = await auth();
-  const userId = session?.user?.id
+  const userId = session?.user?.id;
 
   // check if user is logged in
   if (!session || !userId) {

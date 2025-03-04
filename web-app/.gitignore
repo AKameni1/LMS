@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# pspdfkit
+public/nutrient-viewer
+public/pspdfkit-lib

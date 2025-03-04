@@ -11,6 +11,7 @@ import { redirect } from 'next/navigation';
 import { workflowClient } from '../workflow';
 import config from '../config';
 import redis from '@/db/redis';
+import { AuthError } from 'next-auth';
 
 export const signInWithCredentials = async (
   credentials: Pick<AuthCredentials, 'email' | 'password'>,
@@ -42,6 +43,9 @@ export const signInWithCredentials = async (
       message: 'Signed in successfully',
     };
   } catch (error) {
+    if (error instanceof AuthError && error.name === 'AccessDenied') {
+      redirect(`/error?error=${error.name}`);
+    }
     return {
       success: false,
       message: `Error signing in. ${error}`,
@@ -111,9 +115,7 @@ export const signUp = async (params: AuthCredentials) => {
 };
 
 export const signOutComplete = async () => {
-  await signOut({
-    redirectTo: '/sign-in',
-  });
+  await signOut({ redirect: false });
 };
 
 const checkLimitation = async (ip: string, email: string): Promise<boolean> => {

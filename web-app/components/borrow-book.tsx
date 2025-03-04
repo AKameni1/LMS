@@ -3,9 +3,10 @@
 import { useRouter } from 'next/navigation';
 import { Button } from './ui/button';
 import Image from 'next/image';
-import { useTransition } from 'react';
+import { useState, useTransition } from 'react';
 import { toast } from 'sonner';
 import { borrowBook } from '@/lib/actions/books';
+import BookRequestModal from './book-request-modal';
 
 type BorrowBookProps = {
   userId: string;
@@ -25,6 +26,7 @@ export default function BorrowBook({
 }: Readonly<BorrowBookProps>) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+  const [open, setOpen] = useState(false);
   const text = isBorrowed ? 'View Book' : 'Borrow Book Request';
 
   const handleBorrowBook = () => {
@@ -32,11 +34,6 @@ export default function BorrowBook({
       toast.error('Error while borrowing', {
         description: message,
       });
-      return;
-    }
-
-    if (isBorrowed) {
-      router.push(`/books/${bookId}`);
       return;
     }
 
@@ -64,15 +61,33 @@ export default function BorrowBook({
   };
 
   return (
-    <Button
-      className="book-overview_btn"
-      onClick={handleBorrowBook}
-      disabled={isPending}
-    >
-      <Image src={'/icons/book.svg'} width={20} height={20} alt="book-icon" />
-      <p className="font-bebas-neue text-xl text-dark-100">
-        {isPending ? 'Borrowing...' : text}
-      </p>
-    </Button>
+    <>
+      <Button
+        className="book-overview_btn"
+        onClick={() => {
+          if (isBorrowed) {
+            router.push(`/books/${bookId}/preview`);
+            return;
+          }
+          setOpen(true);
+        }}
+        disabled={isPending}
+      >
+        <Image src={'/icons/book.svg'} width={20} height={20} alt="book-icon" />
+        <p className="font-bebas-neue text-xl text-dark-100">
+          {isPending ? 'Borrowing...' : text}
+        </p>
+      </Button>
+
+      <BookRequestModal
+        open={open}
+        onOpenChange={(state) => {
+          setOpen(state);
+        }}
+        onConfirm={() => {
+          handleBorrowBook();
+        }}
+      />
+    </>
   );
 }

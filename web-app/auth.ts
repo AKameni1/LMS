@@ -1,11 +1,12 @@
-import NextAuth, { type User } from 'next-auth';
+import NextAuth, { type Session, type User } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import { db } from './db/drizzle';
 import { users } from './db/schema';
 import { eq } from 'drizzle-orm';
 import { compare } from 'bcryptjs';
 import { z } from 'zod';
-import { checkIsAdmin } from './lib/data';
+import { checkIsAdmin, isBookBorrowed } from './lib/data';
+import { NextRequest } from 'next/server';
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   session: {
@@ -75,33 +76,24 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
     async authorized({ request, auth }) {
       const { pathname } = request.nextUrl;
-      const protectedRoutes = [
-        '/books',
-        '/library',
-        '/profile',
-        '/my-favorites',
-      ];
-      // Check if the user is trying to access a protected route
-      if (protectedRoutes.some((route) => pathname.startsWith(route))) {
-        if (!auth?.user?.id) {
-          return false;
-        }
-        // an admin doesn't access to these routes so check if the user is an admin and redirect to admin page
-        if (auth.user.isAdmin) {
-          return false;
-        }
+      const baseUrl = request.nextUrl.origin;
+      if (isProtectedRoute(pathname) && !isAuthorizedUser(auth)) {
+        return false;
       }
 
-      if (pathname === '/admin' || pathname.startsWith('/admin/')) {
-        if (!auth?.user?.id) {
-          return false;
-        }
-        console.log('Checking if user is admin ---- AUTH.TS');
-        return auth.user.isAdmin;
+      if (isAdminRoute(pathname) && !isAdminUser(auth)) {
+        return false;
       }
 
-      if (pathname.includes('sign-in') && pathname !== '/sign-in') {
-        console.log('Redirecting to sign-in ---- AUTH.TS');
+      if (isSignInPage(pathname)) {
+        return false;
+      }
+
+      if (await isBookPreviewPage(pathname, auth)) {
+        return false;
+      }
+
+      if (isErrorPage(pathname, request, baseUrl)) {
         return false;
       }
 
@@ -122,7 +114,66 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (!user) {
         throw new Error('Invalid credentials');
       }
+      if (!user.id) {
+        throw new Error('Invalid credentials');
+      }
+      await db
+        .select({ status: users.status })
+        .from(users)
+        .where(eq(users.id, user.id))
+        .then((result) => {
+          if (result[0].status === 'REJECTED') {
+            throw new Error('AccessDenied');
+          }
+        });
+
       return true;
     },
   },
 });
+
+// Helper functions
+const protectedRoutes = ['/books', '/library', '/profile', '/my-favorites'];
+
+function isProtectedRoute(pathname: string): boolean {
+  return protectedRoutes.some((route) => pathname.startsWith(route));
+}
+
+function isAuthorizedUser(auth: Session | null): boolean {
+  return !!(auth?.user?.id && !auth.user.isAdmin);
+}
+
+function isAdminRoute(pathname: string): boolean {
+  return pathname === '/admin' || pathname.startsWith('/admin/');
+}
+
+function isAdminUser(auth: Session | null): boolean {
+  return !!(auth?.user?.id && auth.user.isAdmin);
+}
+
+function isSignInPage(pathname: string): boolean {
+  return pathname.includes('sign-in') && pathname !== '/sign-in';
+}
+
+async function isBookPreviewPage(
+  pathname: string,
+  auth: Session | null,
+): Promise<boolean> {
+  if (pathname.startsWith('/books/') && pathname.endsWith('/preview')) {
+    const bookId = pathname.split('/')[2];
+    return !auth?.user?.id || !(await isBookBorrowed(bookId, auth.user.id));
+  }
+  return false;
+}
+
+function isErrorPage(
+  pathname: string,
+  request: NextRequest,
+  baseUrl: string,
+): boolean {
+  if (pathname === '/error') {
+    const referrer = request.headers.get('referer');  
+    return !referrer?.startsWith(baseUrl);
+  }
+  return false;
+}
