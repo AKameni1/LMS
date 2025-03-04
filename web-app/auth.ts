@@ -172,7 +172,7 @@ function isErrorPage(
   baseUrl: string,
 ): boolean {
   if (pathname === '/error') {
-    const referrer = request.headers.get('referer');  
+    const referrer = request.headers.get('referer');
     return !referrer?.startsWith(baseUrl);
   }
   return false;
