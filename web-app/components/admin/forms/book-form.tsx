@@ -365,7 +365,7 @@ export default function BookForm({
                 variant="outline"
                 type="button"
                 className="min-h-14 w-full"
-                onClick={() => router.push('/admin/books')}
+                onClick={() => router.back()}
               >
                 Cancel
               </Button>

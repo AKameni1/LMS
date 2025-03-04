@@ -7,6 +7,7 @@ import { and, desc, eq, sql } from 'drizzle-orm';
 import { sendEmailReturnConfirmation } from '../send-emails';
 import { workflowClient } from '@/lib/workflow';
 import config from '@/lib/config';
+import redis from '@/db/redis';
 
 export const updateBorrowRequest = async ({
   requestId,
@@ -49,6 +50,7 @@ export const updateBorrowRequest = async ({
 
     // Send email if status is RETURNED
     if (status === 'RETURNED') {
+      await redis.del('dashboard_stats');
       await sendEmailReturnConfirmation({
         studentName,
         bookTitle,

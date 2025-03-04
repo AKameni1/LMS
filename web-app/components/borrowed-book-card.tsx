@@ -15,8 +15,15 @@ export default function BorrowedBookCard({
   borrowedBookInfo,
   book,
 }: Readonly<BorrowedBookCardProps>) {
-  const { borrowDate, dueDate, returnDate, status, requestId, userId } =
-    borrowedBookInfo;
+  const {
+    borrowDate,
+    dueDate,
+    returnDate,
+    status,
+    requestId,
+    userId,
+    updatedAt,
+  } = borrowedBookInfo;
   const { id, title, genre, coverColor, coverUrl } = book;
 
   const today = new Date();
@@ -39,7 +46,7 @@ export default function BorrowedBookCard({
   }
 
   const canCancel = canCancelRequest(borrowDate);
-  const canReturn = status === 'BORROWED';
+  const canReturn = canBorrowRequest(updatedAt, status);
   const canRenew = canRenewRequest(dueDate, status);
 
   const hasValidOptions = canCancel || canReturn || canRenew;
@@ -194,6 +201,18 @@ function canCancelRequest(borrowDate: string | Date): boolean {
   const hoursSinceBorrowed = (currentTime - borrowTime) / (1000 * 60 * 60);
 
   return hoursSinceBorrowed <= 24;
+}
+
+function canBorrowRequest(
+  updatedAt: string | Date | null,
+  status: BorrowRequestStatus,
+): boolean {
+  if (!updatedAt) return false;
+  const approvalTime = new Date(updatedAt).getTime();
+  const currentTime = new Date().getTime();
+  const hoursSinceApproval = (currentTime - approvalTime) / (1000 * 60 * 60);
+
+  return status === 'BORROWED' && hoursSinceApproval >= 24;
 }
 
 export function canRenewRequest(

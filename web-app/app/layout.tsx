@@ -58,7 +58,7 @@ const bebasNeue = localFont({
 /** @type {import("next").Metadata} */
 export const metadata: Metadata = {
   title: {
-    default: 'BookWise',
+    default: 'BookWise Library',
     template: '%s | BookWise',
   },
   description:
@@ -67,7 +67,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    siteName: 'BookWise',
+    siteName: 'BookWise Library',
     url: 'https://lms-university.vercel.app/',
   },
 };

@@ -33,6 +33,7 @@ type BorrowedBookInfo = {
   dueDate: string | null;
   returnDate: string | null;
   status: BorrowRequestStatus;
+  updatedAt: Date | null;
 };
 
 type AuthCredentials = {

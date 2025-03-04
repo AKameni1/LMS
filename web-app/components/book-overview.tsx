@@ -5,7 +5,7 @@ import BorrowBook from './borrow-book';
 import { checkUserBorrowStatus, fetchUserById } from '@/lib/data';
 import { db } from '@/db/drizzle';
 import { borrowRecords } from '@/db/schema';
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import FavoriteBook from './favorite-book';
 import RenewBook from './renew-book';
 import { canRenewRequest } from './borrowed-book-card';
@@ -29,13 +29,26 @@ export default async function BookOverview({
   const isBorrowed = await checkUserBorrowStatus(userId, id);
 
   const [book] = await db
-    .select()
+    .select({
+      dueDate: borrowRecords.dueDate,
+      status: borrowRecords.status,
+    })
     .from(borrowRecords)
-    .where(eq(borrowRecords.bookId, id))
+    .where(
+      and(
+        eq(borrowRecords.userId, userId),
+        eq(borrowRecords.bookId, id),
+        eq(borrowRecords.status, 'BORROWED'),
+      ),
+    )
     .limit(1);
+
+  console.log(book);
 
   // check if dueDate is there and check if the remaining time is less than 3 days
   const isDueSoon = canRenewRequest(book?.dueDate, book?.status);
+  console.log(isDueSoon);
+  console.log(isBorrowed);
 
   const borrowingEligibility = {
     isEligible: availableCopies > 0 && user.status === 'APPROVED',
@@ -111,9 +124,7 @@ export default async function BookOverview({
               addFavoriteEligibility={favoriteEligibility}
             />
           )}
-          {isBorrowed && isDueSoon && (
-            <RenewBook bookId={book.bookId} userId={book.userId} />
-          )}
+          {isDueSoon && <RenewBook bookId={id} userId={userId} />}
         </div>
       </div>
 

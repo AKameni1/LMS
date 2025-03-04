@@ -3,7 +3,7 @@
 import { auth } from '@/auth';
 import { db } from '@/db/drizzle';
 import { books, borrowRecords, users, favoriteBooks } from '@/db/schema';
-import { and, asc, count, desc, eq, not, sql } from 'drizzle-orm';
+import { and, asc, desc, eq, not, sql } from 'drizzle-orm';
 import { PgTable, TableConfig } from 'drizzle-orm/pg-core';
 import { cache } from 'react';
 
@@ -275,6 +275,7 @@ export async function fetchUserBorrowedBooks(userId: string) {
       returnDate: borrowRecords.returnDate,
       dueDate: borrowRecords.dueDate,
       status: borrowRecords.status,
+      updatedAt: borrowRecords.updatedAt,
       book: books, // Retrieve all book details
     })
     .from(borrowRecords)
@@ -300,49 +301,7 @@ export async function fetchUserBorrowedBooks(userId: string) {
  * @throws An error if the popular books could not be fetched.
  */
 export async function fetchPopularBooks(userId: string): Promise<Book[]> {
-  const popularBooks = await db
-    .select({
-      id: books.id,
-      title: books.title,
-      author: books.author,
-      genre: books.genre,
-      rating: books.rating,
-      totalCopies: books.totalCopies,
-      availableCopies: books.availableCopies,
-      description: books.description,
-      coverColor: books.coverColor,
-      coverUrl: books.coverUrl,
-      videoUrl: books.videoUrl,
-      summary: books.summary,
-      createdAt: books.createdAt,
-      dueDate: borrowRecords.dueDate,
-      borrowCount: count(borrowRecords.id),
-    })
-    .from(borrowRecords)
-    .innerJoin(books, eq(books.id, borrowRecords.bookId))
-    .where(eq(borrowRecords.status, 'BORROWED'))
-    .groupBy(books.id, borrowRecords.dueDate)
-    .orderBy(desc(count(borrowRecords.id)))
-    .limit(7);
-
-  // Si aucun livre emprunté, récupérer les livres les plus récents
-  if (popularBooks.length <= 2) {
-    return await db
-      .select()
-      .from(books)
-      .orderBy(desc(books.createdAt))
-      .limit(7);
-  }
-
-  // add isLoanedBook property to each book if the user has borrowed it by mapping over the popularBooks array and check if the book has been borrowed by the user
-  const popularBooksBorrowed = await Promise.all(
-    popularBooks.map(async (book) => {
-      const isLoanedBook = await checkUserBorrowStatus(userId, book.id);
-      return { ...book, isLoanedBook };
-    }),
-  );
-
-  return popularBooksBorrowed;
+  return await db.select().from(books).orderBy(desc(books.updatedAt)).limit(7);
 }
 
 /**
