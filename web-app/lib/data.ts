@@ -300,7 +300,7 @@ export async function fetchUserBorrowedBooks(userId: string) {
  * @returns A promise that resolves to an array of popular books.
  * @throws An error if the popular books could not be fetched.
  */
-export async function fetchPopularBooks(userId: string): Promise<Book[]> {
+export async function fetchPopularBooks(): Promise<Book[]> {
   return await db.select().from(books).orderBy(desc(books.updatedAt)).limit(7);
 }
 
