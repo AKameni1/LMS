@@ -47,12 +47,6 @@ export const borrowBook = async (params: ButtonBookParams) => {
       status: 'PENDING',
     });
 
-    await db
-      .update(books)
-      .set({ availableCopies: sql`${book.availableCopies} - 1` })
-      .where(eq(books.id, bookId))
-      .returning({ id: books.id });
-
     revalidatePath('/my-profile');
 
     return {

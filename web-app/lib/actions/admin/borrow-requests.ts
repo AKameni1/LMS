@@ -3,7 +3,7 @@
 import { db } from '@/db/drizzle';
 import { books, borrowRecords, users } from '@/db/schema';
 import dayjs from 'dayjs';
-import { and, desc, eq } from 'drizzle-orm';
+import { and, desc, eq, sql } from 'drizzle-orm';
 import { sendEmailReturnConfirmation } from '../send-emails';
 import { workflowClient } from '@/lib/workflow';
 import config from '@/lib/config';
@@ -56,6 +56,14 @@ export const updateBorrowRequest = async ({
         isOverdue: isOverdue ?? false,
       });
       return;
+    }
+
+    if (status === 'BORROWED') {
+      await db
+        .update(books)
+        .set({ availableCopies: sql`${books.availableCopies} - 1` })
+        .where(eq(books.id, bookId))
+        .returning({ id: books.id });
     }
 
     await workflowClient.trigger({
