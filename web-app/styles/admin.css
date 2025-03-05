@@ -85,7 +85,7 @@
 
   /* Book Stripe */
   .book-stripe {
-    @apply flex flex-row gap-4 rounded-lg bg-light-300 p-4;
+    @apply flex flex-row gap-4 rounded-lg bg-light-300 p-4 transition-all duration-200;
   }
 
   .book-stripe .title {

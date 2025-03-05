@@ -1,5 +1,5 @@
 import BorrowRequestsTableClient from '@/components/admin/borrow-requests-table-client';
-import { fetchBorrowRequests } from '@/lib/actions/admin/book';
+import { fetchBorrowRequests } from '@/lib/actions/admin/borrow-requests';
 
 export default async function Page() {
   const { success, error, data } = await fetchBorrowRequests();
@@ -15,7 +15,7 @@ export default async function Page() {
   const borrowRequests = data.map((row) => ({
     ...row,
     borrowedDate: new Date(row.borrowedDate!),
-    dueDate: new Date(row.dueDate),
+    dueDate: row.dueDate ? new Date(row.dueDate) : null,
     returnDate: row.returnDate ? new Date(row.returnDate) : null,
   }));
 

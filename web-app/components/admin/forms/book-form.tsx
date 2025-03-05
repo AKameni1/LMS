@@ -22,7 +22,7 @@ import ColorPicker from '../color-picker';
 import { toast } from 'sonner';
 import { useTransition } from 'react';
 import { Loader2Icon } from 'lucide-react';
-import { createBook, updateBook } from '@/lib/actions/admin/book';
+import { createBook, updateBook } from '@/lib/actions/admin/books';
 
 interface AuthFormPropsType extends Partial<Book> {
   type: 'create' | 'update';
@@ -365,7 +365,7 @@ export default function BookForm({
                 variant="outline"
                 type="button"
                 className="min-h-14 w-full"
-                onClick={() => router.push('/admin/books')}
+                onClick={() => router.back()}
               >
                 Cancel
               </Button>

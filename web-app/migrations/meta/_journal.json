@@ -92,6 +92,34 @@
       "when": 1740163319206,
       "tag": "0012_lazy_loners",
       "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1740628729437,
+      "tag": "0013_ancient_plazm",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1740640168026,
+      "tag": "0014_handy_lethal_legion",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "7",
+      "when": 1740677165603,
+      "tag": "0015_amazing_moon_knight",
+      "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1740727401857,
+      "tag": "0016_remarkable_captain_marvel",
+      "breakpoints": true
     }
   ]
 }

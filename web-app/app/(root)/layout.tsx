@@ -2,7 +2,6 @@ import { auth } from '@/auth';
 import Header from '@/components/header';
 import { db } from '@/db/drizzle';
 import { users } from '@/db/schema';
-import { checkIsAdmin } from '@/lib/data';
 import { eq } from 'drizzle-orm';
 import { redirect } from 'next/navigation';
 import { after } from 'next/server';
@@ -20,7 +19,7 @@ export default async function UserLayout({
 
   // check if the current user is an admin
 
-  const isAdmin = await checkIsAdmin(userId);
+  const isAdmin = session?.user.isAdmin;
 
   if (isAdmin) {
     redirect('/admin');

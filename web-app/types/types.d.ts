@@ -15,6 +15,7 @@ type Book = {
   isLoanedBook?: boolean;
   isFavoriteBook? : boolean;
   borrowCount?: number;
+  dueDate?: string | Date | null;
 };
 
 type User = {
@@ -27,11 +28,13 @@ type User = {
 };
 
 type BorrowedBookInfo = {
+  userId: string;
+  requestId: string;
   borrowDate: Date;
-  dueDate: string;
+  dueDate: string | null;
   returnDate: string | null;
-  status: 'PENDING' | 'REJECTED' | 'BORROWED' | 'RETURNED';
-  book: Book;
+  status: BorrowRequestStatus;
+  updatedAt: Date | null;
 };
 
 type AuthCredentials = {
@@ -76,7 +79,7 @@ type BorrowBooksMap = {
   [key: string]: {
     borrowDate: Date;
     returnDate: string | null;
-    dueDate: string;
+    dueDate: string | null;
     status: 'BORROWED' | 'RETURNED';
     book: Book;
   };
@@ -112,7 +115,7 @@ type UserRow = {
 type UserRole = 'USER' | 'ADMIN';
 
 type BorrowRequestsRow = {
-  id: string;
+  requestId: string;
   bookTitle: string;
   coverUrl: string;
   coverColor: string;
@@ -120,11 +123,11 @@ type BorrowRequestsRow = {
   email: string;
   borrowedDate: Date;
   returnDate: Date | null;
-  dueDate: Date;
-  status: 'PENDING' | 'REJECTED' | 'BORROWED' | 'RETURNED';
+  dueDate: Date | null;
+  status: BorrowRequestStatus;
 };
 
-type BorrowRequestStatus = 'PENDING' | 'REJECTED' | 'BORROWED' | 'RETURNED';
+type BorrowRequestStatus = 'PENDING' | 'CANCELLED' | 'BORROWED' | 'RETURNED';
 
 type BookRequest = {
   id: string;

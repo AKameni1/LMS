@@ -16,11 +16,13 @@ import { Tailwind } from '@react-email/tailwind';
 
 type BookReturnConfirmationEmailProps = EmailProps & {
   bookTitle: string;
+  isOverdue?: boolean;
 };
 
 export default function BookReturnConfirmationEmail({
   studentName = '[Student Name]',
   bookTitle = '[Book Title]',
+  isOverdue = false,
 }: Readonly<BookReturnConfirmationEmailProps>) {
   return (
     <Tailwind>
@@ -29,7 +31,11 @@ export default function BookReturnConfirmationEmail({
           <title>Book Return Confirmation</title>
           <Font fontFamily="Trebuchet MS" fallbackFontFamily="sans-serif" />
         </Head>
-        <Preview>Book Return Confirmation</Preview>
+        <Preview>
+          {isOverdue
+            ? `Late Return Notice for ${bookTitle}`
+            : `Book Return Confirmation`}
+        </Preview>
 
         <Container className="mx-auto my-[40px] h-[640px] w-[649px] rounded-[12px] bg-[#111624] px-[40px] py-[20px] font-sans text-[#d6e0ff]">
           {/* Logo Section */}
@@ -54,25 +60,49 @@ export default function BookReturnConfirmationEmail({
           {/* Main Content */}
           <Section className="mt-[32px]">
             <Heading className="m-[0px] text-2xl font-bold leading-tight text-white">
-              Thank You for Returning {bookTitle}!
+              {isOverdue
+                ? `Late Return Notice for ${bookTitle}`
+                : `Thank You for Returning ${bookTitle}!`}
             </Heading>
 
             <Text className="mt-[24px] text-xl leading-relaxed">
               Hi {studentName},
             </Text>
 
-            <Text className="mt-[16px] text-lg leading-relaxed">
-              We&apos;ve successfully received your return of{' '}
-              <CodeInline className="text-lg font-semibold text-[#EED1AC]">
-                {bookTitle}
-              </CodeInline>
-              . Thank you for returning it on time.
-            </Text>
-
-            <Text className="mt-[24px] text-lg leading-relaxed">
-              Looking for your next read? Browse our collection and borrow your
-              next favorite book!
-            </Text>
+            {isOverdue ? (
+              <>
+                <Text className="mt-[16px] text-lg leading-relaxed text-[#f46f70]">
+                  We&apos;ve received your return of{' '}
+                  <CodeInline className="text-lg font-semibold text-[#EED1AC]">
+                    {bookTitle}
+                  </CodeInline>
+                  , but it was returned <strong>late</strong>.
+                </Text>
+                <Text className="mt-[16px] text-lg leading-relaxed">
+                  Please be aware that late returns may incur{' '}
+                  <strong>penalties</strong> or{' '}
+                  <strong>impact your borrowing privileges</strong>.
+                </Text>
+                <Text className="mt-[16px] text-lg leading-relaxed">
+                  To avoid future late fees, be sure to return books on time.
+                  You can always check due dates in your library account.
+                </Text>
+              </>
+            ) : (
+              <>
+                <Text className="mt-[16px] text-lg leading-relaxed">
+                  We&apos;ve successfully received your return of{' '}
+                  <CodeInline className="text-lg font-semibold text-[#EED1AC]">
+                    {bookTitle}
+                  </CodeInline>
+                  . Thank you for returning it on time!
+                </Text>
+                <Text className="mt-[24px] text-lg leading-relaxed">
+                  Looking for your next read? Browse our collection and borrow
+                  your next favorite book!
+                </Text>
+              </>
+            )}
 
             <Button
               href={`https://lms-university.vercel.app/library?filter=newest`}

@@ -25,7 +25,7 @@ import Link from 'next/link';
 import { FIELD_NAMES, FIELD_TYPES } from '@/constants';
 import FileUpload from './file-upload';
 import { toast } from 'sonner';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useTransition } from 'react';
 import { Loader2Icon } from 'lucide-react';
 
@@ -43,6 +43,8 @@ export default function AuthForm<T extends FieldValues>({
   onSubmit,
 }: Readonly<AuthFormPropsType<T>>) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get('callbackUrl') ?? '/';
   const [isPending, startTransition] = useTransition();
   const isSignIn = type === 'SIGN_IN';
   const message = isSignIn ? 'Sign in' : 'Sign up';
@@ -61,7 +63,7 @@ export default function AuthForm<T extends FieldValues>({
           description: `You have successfully ${isSignIn ? 'Signed in' : 'Signed up'} to BookWise.`,
         });
 
-        router.push('/');
+        router.replace(callbackUrl);
       } else {
         toast.error(`Error ${isSignIn ? 'Signing in' : 'Signing up'}`, {
           description: result.error ?? 'An error occurred. Please try again.',

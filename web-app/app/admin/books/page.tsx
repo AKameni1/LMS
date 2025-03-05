@@ -1,5 +1,5 @@
 import BooksTableClient from '@/components/admin/books-table-client';
-import { fetchAllBooks } from '@/lib/actions/admin/book';
+import { fetchAllBooks } from '@/lib/actions/admin/books';
 
 export default async function Page() {
   const { success, error, data } = await fetchAllBooks();

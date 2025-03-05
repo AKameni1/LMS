@@ -23,8 +23,13 @@ import { cn, getInitials } from '@/lib/utils';
 import { ColumnDef } from '@tanstack/react-table';
 import { IKImage } from 'imagekitio-next';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useTransition } from 'react';
 import ConfirmationDialog from '../dialog/confirmation-dialog';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+import { updateUser } from '@/lib/actions/admin/users';
+import { Loader2Icon } from 'lucide-react';
+import SuperAdminDialog from '../dialog/super-admin-dialog';
 
 /**
  * Defines the columns for the data table in the admin panel.
@@ -113,9 +118,9 @@ export const columns: ColumnDef<UserRow>[] = [
       );
     },
     cell: ({ row }) => {
-      const { role: initialRole } = row.original;
+      const { role: initialRole, id } = row.original;
 
-      return <RoleCell initialRole={initialRole} />;
+      return <RoleCell initialRole={initialRole} userId={id} />;
     },
   },
   {
@@ -212,25 +217,40 @@ export const columns: ColumnDef<UserRow>[] = [
     },
   },
   {
-    accessorKey: 'actions',
+    accessorKey: 'action',
     header: () => {
-      return <span className="text-sm font-medium text-dark-200">Actions</span>;
+      return <span className="text-sm font-medium text-dark-200">Action</span>;
     },
     cell: ({ row }) => {
       const { fullName } = row.original;
-      return (
-        <button>
-          <Image
-            src={'/icons/admin/trash.svg'}
-            width={20}
-            height={20}
-            alt={`delete user ${fullName}`}
-          />
-        </button>
-      );
+      return <ActionCell fullName={fullName} />;
     },
   },
 ];
+
+export function ActionCell({ fullName }: Readonly<{ fullName: string }>) {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <button onClick={() => setOpen(true)}>
+        <Image
+          src={'/icons/admin/trash.svg'}
+          width={20}
+          height={20}
+          alt={`delete user ${fullName}`}
+        />
+      </button>
+
+      <SuperAdminDialog
+        open={open}
+        onOpenChange={setOpen}
+        onConfirm={() => {
+          console.log(`Deleting user ${fullName}`);
+        }}
+      />
+    </>
+  );
+}
 
 export const ROLES = [
   {
@@ -247,9 +267,14 @@ export const ROLES = [
   },
 ] as const;
 
-export function RoleCell({ initialRole }: Readonly<{ initialRole: UserRole }>) {
+export function RoleCell({
+  initialRole,
+  userId,
+}: Readonly<{ initialRole: UserRole; userId: string }>) {
   const [open, setOpen] = useState(false);
   const [selectedRole, setSelectedRole] = useState<UserRole | null>(null);
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   const currentRole =
     ROLES.find((role) => role.role === initialRole) ?? ROLES[0];
@@ -259,13 +284,18 @@ export function RoleCell({ initialRole }: Readonly<{ initialRole: UserRole }>) {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
+            disabled={isPending}
             variant={'link'}
             className={cn(
               'rounded-md px-2.5 text-sm font-medium !no-underline hover:no-underline',
               currentRole.color,
             )}
           >
-            {initialRole[0] + initialRole.slice(1).toLowerCase()}
+            {isPending ? (
+              <Loader2Icon size={18} className="animate-spin" />
+            ) : (
+              initialRole[0] + initialRole.slice(1).toLowerCase()
+            )}
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="flex flex-col gap-2 p-3">
@@ -315,6 +345,26 @@ export function RoleCell({ initialRole }: Readonly<{ initialRole: UserRole }>) {
           }}
           onConfirm={() => {
             // Logic to change the role of a user
+            startTransition(async () => {
+              try {
+                // Update the user role
+                console.log(`Changing role to ${selectedRole}`);
+                await updateUser(userId, {
+                  role: selectedRole,
+                });
+                router.refresh();
+                toast.success('Role updated successfully', {
+                  description: `The user role has been marked as ${selectedRole}.`,
+                });
+              } catch (error) {
+                toast.error('Error updating user role', {
+                  description:
+                    error instanceof Error
+                      ? error.message
+                      : 'Failed to update user role. Please try again.',
+                });
+              }
+            });
             console.log(`Changing role to ${selectedRole}`);
           }}
         />

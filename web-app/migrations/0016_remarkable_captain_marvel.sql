@@ -1,0 +1,1 @@
+ALTER TABLE "borrow_records" DROP CONSTRAINT "unq";

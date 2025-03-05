@@ -1,4 +1,6 @@
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import { Analytics } from '@vercel/analytics/next';
+import Script from 'next/script';
 
 import type { Metadata } from 'next';
 import './globals.css';
@@ -36,6 +38,8 @@ const ibmPlexSans = localFont({
       style: 'normal',
     },
   ],
+  display: 'swap',
+  preload: true,
 });
 
 const bebasNeue = localFont({
@@ -47,12 +51,25 @@ const bebasNeue = localFont({
     },
   ],
   variable: '--bebas-neue',
+  display: 'swap',
+  preload: true,
 });
 
+/** @type {import("next").Metadata} */
 export const metadata: Metadata = {
-  title: 'BookWise',
+  title: {
+    default: 'BookWise Library',
+    template: '%s | BookWise',
+  },
   description:
     'BookWise is a book borrowing university library management platform.',
+  metadataBase: new URL('https://lms-university.vercel.app/'),
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    siteName: 'BookWise Library',
+    url: 'https://lms-university.vercel.app/',
+  },
 };
 
 export default async function RootLayout({
@@ -64,6 +81,12 @@ export default async function RootLayout({
 
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <Script
+          src="/nutrient-viewer/nutrient-viewer.js"
+          strategy="beforeInteractive"
+        />
+      </head>
       <SessionProviderWrapper session={session}>
         <body
           className={`${ibmPlexSans.className} ${bebasNeue.variable} antialiased`}
@@ -71,6 +94,7 @@ export default async function RootLayout({
           <QueryProvider>{children}</QueryProvider>
           <Toaster closeButton richColors position="top-center" />
           <SpeedInsights />
+          <Analytics />
         </body>
       </SessionProviderWrapper>
     </html>

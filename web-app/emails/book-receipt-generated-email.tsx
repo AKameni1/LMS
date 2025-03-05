@@ -91,7 +91,7 @@ export default function BookReceiptGeneratedEmail({
               href="https://lms-university.vercel.app/my-profile"
               className="mt-[10px] rounded-md bg-[#EED1AC] px-[32px] py-[16px] text-center text-base font-bold text-[#111624]"
             >
-              Dowload Receipt
+              Download Receipt
             </Button>
 
             <Text className="mt-[32px] text-lg">

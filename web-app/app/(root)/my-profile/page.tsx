@@ -15,15 +15,14 @@ export default async function Page() {
   }
 
   // Fetch user data and borrowed books
-  const { user, userBooks, borrowedBooksMap } =
-    await fetchUserBorrowedBooks(userId);
+  const { user, borrowItems } = await fetchUserBorrowedBooks(userId);
 
   return (
     <>
       {/* 3. Render the BookList component with the title "Borrowed Books" and the list of books fetched in step 2. */}
 
       <div
-        className={`grid w-full max-w-7xl gap-14 ${userBooks.length <= 2 ? 'lg:grid-cols-[auto_auto]' : 'lg:grid-cols-[35%_auto]'}`}
+        className={`grid w-full max-w-7xl gap-14 ${borrowItems.length <= 2 ? 'lg:grid-cols-[auto_auto]' : 'lg:grid-cols-[35%_auto]'}`}
       >
         <div className="max-h-screen lg:sticky lg:top-6 lg:self-start">
           <ProfileCard {...user} />
@@ -34,14 +33,12 @@ export default async function Page() {
             Borrowed Books
           </h2>
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-            {userBooks.map((book) => {
-              const borrowedBookInfo = borrowedBooksMap.get(book.id);
-              if (!borrowedBookInfo) return null;
-
+            {borrowItems.map(({ book, borrowInfo }) => {
               return (
                 <BorrowedBookCard
-                  key={book.id}
-                  borrowedBookInfo={borrowedBookInfo}
+                  key={borrowInfo.requestId}
+                  borrowedBookInfo={borrowInfo}
+                  book={book}
                 />
               );
             })}

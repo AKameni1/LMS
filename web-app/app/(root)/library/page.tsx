@@ -10,9 +10,11 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { SearchProvider } from '@/context/search-books-context';
 import { books } from '@/db/schema';
 import { fetchBooksPages } from '@/lib/data';
 import { truncateText } from '@/lib/utils';
+import { Loader2Icon } from 'lucide-react';
 import { Suspense } from 'react';
 
 export default async function Page(
@@ -35,61 +37,70 @@ export default async function Page(
   );
 
   return (
-    <main className="library">
-      <p className="library-subtitle">DISCOVER YOUR NEXT GREAT READ:</p>
-      <h1 className="library-title">
-        Explore and Search for <span className="text-light-200">Any Book</span>{' '}
-        In Our Library
-      </h1>
-
-      <Search placeholder="Search for books" />
-
-      <div className="mb-4 mt-12 flex items-center justify-between">
-        <div className={'mr-4'}>
-          {!query ? (
-            <h2 className="font-bebas-neue text-4xl text-light-100">
-              All Library Books
-            </h2>
-          ) : (
-            <h2 className="text-3xl font-semibold text-light-100">
-              Search Result for:{' '}
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <span className="max-w-2 text-light-200">
-                      {truncateText(query, 20)}
-                    </span>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p className="text-sm font-medium text-dark-200">{query}</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </h2>
-          )}
+    <SearchProvider>
+      <main className="library">
+        <div className="mx-auto max-w-xl max-sm:w-full">
+          <p className="library-subtitle">DISCOVER YOUR NEXT GREAT READ:</p>
+          <h1 className="library-title">
+            Explore and Search for{' '}
+            <span className="text-light-200">Any Book</span> In Our Library
+          </h1>
+          <Search placeholder="Search for books" />
         </div>
 
-        <FilterSelect initialFilter={filter} />
-      </div>
+        <div className="mb-4 mt-12 flex w-screen max-w-7xl items-center justify-between">
+          <div className={'mr-4'}>
+            {!query ? (
+              <h2 className="font-bebas-neue text-4xl text-light-100">
+                All Library Books
+              </h2>
+            ) : (
+              <h2 className="text-3xl font-semibold text-light-100">
+                Search Result for:{' '}
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <span className="max-w-2 text-light-200" role="tooltip">
+                        {truncateText(query, 20)}
+                      </span>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p className="text-sm font-medium text-dark-200">
+                        {query}
+                      </p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </h2>
+            )}
+          </div>
 
-      {totalPages === 0 ? (
-        <NoResults />
-      ) : (
-        <>
-          <Suspense fallback={<p className="text-light-300">Loading...</p>}>
-            <FilterBookList
-              query={query.trim()}
-              currentPage={currentPage}
-              filter={filter as Filter}
-              type="Library"
-            />
-          </Suspense>
+          <FilterSelect initialFilter={filter} />
+        </div>
 
-          <Separator className="mt-10 h-1 rounded-full bg-dark-200/40" />
+        {totalPages === 0 ? (
+          <NoResults />
+        ) : (
+          <>
+            <Suspense
+              fallback={
+                <Loader2Icon className="m-auto h-1/3 w-1/3 animate-spin text-light-300" />
+              }
+            >
+              <FilterBookList
+                query={query.trim()}
+                currentPage={currentPage}
+                filter={filter as Filter}
+                type="Library"
+              />
+            </Suspense>
 
-          <Pagination totalPages={totalPages} />
-        </>
-      )}
-    </main>
+            <Separator className="mt-10 h-1 rounded-full bg-dark-200/40" />
+
+            <Pagination totalPages={totalPages} />
+          </>
+        )}
+      </main>
+    </SearchProvider>
   );
 }

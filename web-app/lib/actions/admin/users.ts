@@ -1,8 +1,73 @@
 'use server';
 
 import { db } from '@/db/drizzle';
+import redis from '@/db/redis';
 import { books, borrowRecords, users } from '@/db/schema';
+import { getErrorMessage } from '@/lib/utils';
 import { and, eq, lt, not, or } from 'drizzle-orm';
+import { sendEmailApprovalAccount } from '../send-emails';
+
+export const updateUser = async (
+  userId: string,
+  params: {
+    role?: UserRole;
+    status?: 'APPROVED' | 'REJECTED';
+  },
+) => {
+  try {
+    // Check if params contains at least one valid key
+    if (!Object.keys(params).length) {
+      return {
+        success: false,
+        error: 'No valid fields to update.',
+      };
+    }
+
+    const [data] = await db
+      .update(users)
+      .set(params)
+      .where(eq(users.id, userId))
+      .returning({
+        id: users.id,
+        fullName: users.fullName,
+        email: users.email,
+      });
+
+    if (!data) {
+      return {
+        success: false,
+        error: `User with id ${userId} not found.`,
+      };
+    }
+
+    if (params.status === 'REJECTED') {
+      await db
+        .update(borrowRecords)
+        .set({ status: 'CANCELLED' })
+        .where(eq(borrowRecords.userId, userId));
+    }
+
+    if (params.status === 'APPROVED') {
+      await sendEmailApprovalAccount({
+        studentName: data.fullName,
+        studentEmail: data.email,
+      });
+    }
+
+    await redis.del('dashboard_stats');
+
+    return {
+      success: true,
+      data,
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      error: `Failed to update user. ${getErrorMessage(error)}`,
+    };
+  }
+};
 
 export const getDashboardStats = async () => {
   try {
@@ -11,8 +76,6 @@ export const getDashboardStats = async () => {
       db.$count(users),
       db.$count(borrowRecords, eq(borrowRecords.status, 'BORROWED')),
     ]);
-
-    console.log(totalBooks, totalUsers, totalBorrowedBooks);
 
     return {
       success: true,

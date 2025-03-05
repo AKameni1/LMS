@@ -16,7 +16,11 @@ import { ColumnDef } from '@tanstack/react-table';
 import { IKImage } from 'imagekitio-next';
 import Image from 'next/image';
 import ConfirmationDialog from '../dialog/confirmation-dialog';
-import { useState } from 'react';
+import { useState, useTransition } from 'react';
+import { toast } from 'sonner';
+import { updateUser } from '@/lib/actions/admin/users';
+import { useRouter } from 'next/navigation';
+import { Loader2Icon } from 'lucide-react';
 
 /**
  * Defines the columns for the data table in the admin panel.
@@ -189,25 +193,32 @@ export const columns: ColumnDef<UserRow>[] = [
       return <span className="text-sm font-medium text-dark-200">Actions</span>;
     },
     cell: ({ row }) => {
-      const { status } = row.original;
+      const { status, id } = row.original;
       if (!status) return null;
-      return <ActionCell status={status} />;
+      return <ActionCell status={status} userId={id} />;
     },
   },
 ];
 
 export function ActionCell({
   status,
+  userId,
 }: Readonly<{
   status: 'PENDING' | 'APPROVED' | 'REJECTED';
+  userId: string;
 }>) {
   const [open, setOpen] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState<typeof status | null>(
     null,
   );
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+
+  const text = status === 'APPROVED' ? 'Revoke Account' : 'Approve Account';
   return (
     <>
       <Button
+        disabled={isPending}
         variant="link"
         className={cn(
           'rounded-md px-2.5 text-sm font-medium !no-underline hover:no-underline',
@@ -222,7 +233,7 @@ export function ActionCell({
           setOpen(true);
         }}
       >
-        {status !== 'APPROVED' ? 'Approve Account' : 'Revoke Account'}
+        {!isPending ? text : <Loader2Icon size={18} className="animate-spin" />}
       </Button>
 
       {selectedStatus && (
@@ -236,6 +247,25 @@ export function ActionCell({
           }}
           onConfirm={() => {
             // Logic to change the status of a user
+            startTransition(async () => {
+              try {
+                await updateUser(userId, {
+                  status:
+                    selectedStatus === 'APPROVED' ? 'APPROVED' : 'REJECTED',
+                });
+                router.refresh();
+                toast.success('Status updated successfully', {
+                  description: `The user status has been marked as ${selectedStatus}.`,
+                });
+              } catch (error) {
+                toast.error('Error updating user status', {
+                  description:
+                    error instanceof Error
+                      ? error.message
+                      : 'Failed to update user status. Please try again.',
+                });
+              }
+            });
             console.log(`Changing status to ${selectedStatus}`);
           }}
         />

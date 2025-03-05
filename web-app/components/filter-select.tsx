@@ -1,6 +1,5 @@
 'use client';
 
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {
   Select,
   SelectContent,
@@ -9,48 +8,45 @@ import {
   SelectValue,
 } from './ui/select';
 import { filterOptions } from '@/constants';
-import { useEffect, useState, useTransition } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { startTransition } from 'react';
 
 export default function FilterSelect({
   initialFilter,
 }: Readonly<{ initialFilter: string }>) {
   const router = useRouter();
-  const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const [filter, setFilter] = useState(initialFilter);
-  const [isPending, startTransition] = useTransition();
+  const urlFilter = searchParams.get('filter');
 
-  useEffect(() => {
-    const currentFilter = searchParams.get('filter') ?? 'all';
-    if (currentFilter !== filter) {
-      setFilter(currentFilter);
-    }
-  }, [filter, searchParams]);
-
-  const handleFilterChange = (value: string) => {
-    setFilter(value);
+  const filter =
+    (filterOptions.some((option) => option.value === urlFilter)
+      ? urlFilter
+      : initialFilter) ?? 'all';
+  const handleValueChange = (value: string) => {
     startTransition(() => {
       const params = new URLSearchParams(searchParams);
-      params.set('page', '1');
 
-      if (value !== 'all') {
-        params.set('filter', value);
+      if (value === 'all') {
+        params.delete('filter');
       } else {
-        params.delete('filter'); // Remove the filter query param if 'all' is selected
+        params.set('filter', value);
       }
-      router.push(`${pathname}?${params.toString()}`, { scroll: false });
+
+      router.push(`?${params.toString()}`, { scroll: false });
     });
   };
 
   return (
-    <Select
-      value={filter}
-      onValueChange={handleFilterChange}
-      disabled={isPending}
-    >
-      <SelectTrigger className="select-trigger">
-        <SelectValue placeholder="Sort By" />
+    <Select value={filter} onValueChange={handleValueChange}>
+      <SelectTrigger className="select-trigger space-x-1">
+        <SelectValue>
+          Filter by:{' '}
+          <span className="text-base font-semibold text-light-200">
+            {filterOptions.find((opt) => opt.value === filter)?.label ??
+              'Sort By'}
+          </span>
+        </SelectValue>
       </SelectTrigger>
       <SelectContent className="select-content">
         {filterOptions.map(({ value, label }) => (

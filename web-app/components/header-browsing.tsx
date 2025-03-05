@@ -15,24 +15,21 @@ export default function HeaderBrowsing() {
   const pathname = usePathname();
   return (
     <>
-      {navigationLinks.map(({ href, label, icon: Icon }) => (
+      {navigationLinks.map(({ href, label }) => (
         <TooltipProvider key={href}>
           <Tooltip>
             <TooltipTrigger>
               <Link
                 href={href}
                 className={cn(
-                  'cursor-pointer text-base capitalize',
+                  'cursor-pointer text-base capitalize transition-all duration-200 hover:scale-110',
                   pathname === href
                     ? 'text-light-200'
                     : 'text-light-100 hover:text-light-400',
                 )}
               >
-                <Icon
-                  size={24}
-                  className="transition-all duration-200 hover:scale-110"
-                />
-                {/* Home */}
+                {/* <Icon size={24} /> */}
+                {label}
               </Link>
             </TooltipTrigger>
             <TooltipContent>

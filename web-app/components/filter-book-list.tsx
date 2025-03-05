@@ -18,7 +18,7 @@ export default async function FilterBookList({
   const books = await fetchFilteredBooks(query, currentPage, type, filter);
 
   return (
-    <div className="flow-root">
+    <div className="flow-root w-screen max-w-7xl">
       {books.length === 1 ? (
         <BookCard {...books[0]} />
       ) : (

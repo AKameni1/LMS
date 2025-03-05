@@ -1,0 +1,1 @@
+ALTER TABLE "borrow_records" ALTER COLUMN "due_date" DROP NOT NULL;

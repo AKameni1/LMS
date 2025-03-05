@@ -2,11 +2,13 @@ import Image from 'next/image';
 import React from 'react';
 import BookCover from './book-cover';
 import BorrowBook from './borrow-book';
-import { fetchUserById } from '@/lib/data';
+import { checkUserBorrowStatus, fetchUserById } from '@/lib/data';
 import { db } from '@/db/drizzle';
 import { borrowRecords, favoriteBooks } from '@/db/schema';
-import { eq, exists, sql } from 'drizzle-orm';
+import { and, eq, exists, sql } from 'drizzle-orm';
 import FavoriteBook from './favorite-book';
+import RenewBook from './renew-book';
+import { canRenewRequest } from './borrowed-book-card';
 
 type BookOverviewPropsType = Book & { userId: string };
 
@@ -24,12 +26,29 @@ export default async function BookOverview({
   coverUrl,
 }: Readonly<BookOverviewPropsType>) {
   const user = await fetchUserById(userId);
+  const isBorrowed = await checkUserBorrowStatus(userId, id);
 
   const [book] = await db
-    .select()
+    .select({
+      dueDate: borrowRecords.dueDate,
+      status: borrowRecords.status,
+    })
     .from(borrowRecords)
-    .where(eq(borrowRecords.bookId, id))
+    .where(
+      and(
+        eq(borrowRecords.userId, userId),
+        eq(borrowRecords.bookId, id),
+        eq(borrowRecords.status, 'BORROWED'),
+      ),
+    )
     .limit(1);
+
+  console.log(book);
+
+  // check if dueDate is there and check if the remaining time is less than 3 days
+  const isDueSoon = canRenewRequest(book?.dueDate, book?.status);
+  console.log(isDueSoon);
+  console.log(isBorrowed);
 
     const [favoriteBook] = await db
         .select()
@@ -97,6 +116,7 @@ export default async function BookOverview({
         <div className="book-btns">
           {user && (
             <BorrowBook
+              isBorrowed={isBorrowed}
               bookId={id}
               userId={userId}
               borrowingEligibility={borrowingEligibility}
@@ -109,6 +129,7 @@ export default async function BookOverview({
               addFavoriteEligibility={favoriteEligibility}
             />
           )}
+          {isDueSoon && <RenewBook bookId={id} userId={userId} />}
         </div>
       </div>
 

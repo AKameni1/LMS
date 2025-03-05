@@ -3,7 +3,7 @@ import BookCover from '../book-cover';
 import { Avatar, AvatarFallback } from '../ui/avatar';
 import { getInitials } from '@/lib/utils';
 import Image from 'next/image';
-import { fetchBookRequests } from '@/lib/actions/admin/book';
+import { fetchBookRequests } from '@/lib/actions/admin/borrow-requests';
 
 export default async function RequestList() {
   const { success, error, ...requests } = await fetchBookRequests();

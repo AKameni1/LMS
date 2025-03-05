@@ -1,6 +1,6 @@
 'use client';
 
-import { usePathname, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { generatePagination } from '@/lib/utils';
 import Link from 'next/link';
 import { Button } from './ui/button';
@@ -9,15 +9,8 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 export default function Pagination({
   totalPages,
 }: Readonly<{ totalPages: number }>) {
-  const pathname = usePathname();
   const searchParams = useSearchParams();
   const currentPage = Number(searchParams.get('page')) || 1;
-
-  const createPageURL = (pageNumber: number | string) => {
-    const params = new URLSearchParams(searchParams);
-    params.set('page', pageNumber.toString());
-    return `${pathname}?${params.toString()}`;
-  };
 
   const allPages = generatePagination(currentPage, totalPages);
 
@@ -27,6 +20,7 @@ export default function Pagination({
         className="pagination-btn_dark"
         disabled={currentPage <= 1}
         asChild={currentPage > 1}
+        aria-label="Previous Page"
       >
         {currentPage <= 1 ? (
           <div>
@@ -36,7 +30,15 @@ export default function Pagination({
             />
           </div>
         ) : (
-          <Link href={createPageURL(currentPage - 1)}>
+          <Link
+            href={{
+              query: {
+                ...Object.fromEntries(searchParams.entries()),
+                page: currentPage - 1,
+              },
+            }}
+            scroll={false}
+          >
             <ChevronLeft
               strokeWidth={2}
               className="h-6 w-6 font-semibold text-light-100"
@@ -64,7 +66,11 @@ export default function Pagination({
           ) : (
             <Link
               key={page}
-              href={createPageURL(page)}
+              href={{
+                query: { ...Object.fromEntries(searchParams.entries()), page },
+              }}
+              scroll={false}
+              aria-label={`Page ${page}`}
               className="pagination-btn_dark inline-flex items-center rounded-md px-4 py-1.5 text-center text-sm font-semibold"
             >
               {page}
@@ -77,6 +83,7 @@ export default function Pagination({
         className="pagination-btn_dark"
         disabled={currentPage >= totalPages}
         asChild={currentPage < totalPages}
+        aria-label="Next Page"
       >
         {currentPage >= totalPages ? (
           <div>
@@ -86,7 +93,15 @@ export default function Pagination({
             />
           </div>
         ) : (
-          <Link href={createPageURL(currentPage + 1)}>
+          <Link
+            href={{
+              query: {
+                ...Object.fromEntries(searchParams.entries()),
+                page: currentPage + 1,
+              },
+            }}
+            scroll={false}
+          >
             <ChevronRight
               strokeWidth={2}
               className="h-6 w-6 font-semibold text-light-100"

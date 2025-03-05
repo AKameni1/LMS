@@ -1,7 +1,12 @@
 import { auth } from '@/auth';
+import type { Metadata } from 'next';
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
 import type { ReactNode } from 'react';
+
+export const metadata: Metadata = {
+  title: 'Authentication',
+};
 
 export default async function Layout({
   children,
@@ -22,7 +27,7 @@ export default async function Layout({
               priority
               width={37}
               height={37}
-              alt="Logo"
+              alt="Logo BookWise"
               className="size-auto"
             />
             <h1 className="text-2xl font-semibold text-white">BookWise</h1>

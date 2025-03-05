@@ -54,10 +54,15 @@ export default function ProfileCard({
                 : 'Not Verified Account'}
             </p>
           </div>
-          <h1 className="text-xl font-semibold text-white lg:text-2xl">
+          <h1
+            title={fullName}
+            className="truncate text-xl font-semibold text-white lg:text-2xl"
+          >
             {fullName}
           </h1>
-          <p className="truncate text-base text-light-100">{email}</p>
+          <p title={email} className="truncate text-base text-light-100">
+            {email}
+          </p>
         </div>
       </div>
 
