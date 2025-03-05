@@ -4,6 +4,7 @@ import BookCover from './book-cover';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { Button } from './ui/button';
+import FavoriteBook from './favorite-book';
 
 export default function BookCard({
   id,
@@ -11,7 +12,7 @@ export default function BookCard({
   genre,
   coverColor,
   coverUrl,
-  isLoanedBook = false,
+  isLoanedBook = false
 }: Readonly<Book>) {
   return (
     <li className={cn('w-max list-none', isLoanedBook && 'w-full xs:w-52')}>
@@ -29,6 +30,8 @@ export default function BookCard({
           <p className="book-title">{title}</p>
           <p className="book-genre">{genre}</p>
         </div>
+
+        
 
         {isLoanedBook && (
           <div className="mt-3 w-full">

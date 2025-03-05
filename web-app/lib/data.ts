@@ -6,7 +6,7 @@ import { books, borrowRecords, users, favoriteBooks } from '@/db/schema';
 import { and, asc, count, desc, eq, not, sql } from 'drizzle-orm';
 import { PgTable, TableConfig } from 'drizzle-orm/pg-core';
 
-const ITEMS_PER_PAGE = 10;
+const ITEMS_PER_PAGE = 12;
 /**
  * Fetches a list of books based on the provided query and filter, with pagination support.
  * The results are cached for 1 hour to improve performance.
@@ -62,16 +62,6 @@ export async function fetchFilteredBooks(
         .where(eq(favoriteBooks.userId, userId));
     }
 
-    if (type === 'Favorites') {
-      if (!userId) {
-        throw new Error('User must be authenticated to access favorites.');
-      }
-
-      baseQuery = baseQuery
-        .innerJoin(favoriteBooks, eq(books.id, favoriteBooks.bookId))
-        .where(eq(favoriteBooks.userId, userId));
-    }
-
     // Dynamic mode enabled
 
     const conditions = [];
@@ -105,9 +95,9 @@ export async function fetchFilteredBooks(
       case 'highest_rated':
         baseQuery = baseQuery.orderBy(desc(books.rating));
         break;
-      // case 'available':
-      //   baseQuery = baseQuery.where(sql`${books.availableCopies} > 0`);
-      //   break;
+    //   case 'available':
+    //     baseQuery = baseQuery.where(sql`${books.availableCopies} > 0`);
+    //     break;
       default:
         baseQuery = baseQuery.orderBy(desc(books.createdAt)); // Default to newest
         break;
