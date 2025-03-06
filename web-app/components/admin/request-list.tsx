@@ -1,9 +1,9 @@
-import React from 'react';
 import BookCover from '../book-cover';
 import { Avatar, AvatarFallback } from '../ui/avatar';
 import { getInitials } from '@/lib/utils';
 import Image from 'next/image';
 import { fetchBookRequests } from '@/lib/actions/admin/borrow-requests';
+import ViewButton from './view-button';
 
 export default async function RequestList() {
   const { success, error, ...requests } = await fetchBookRequests();
@@ -79,12 +79,7 @@ export default async function RequestList() {
                   <p>
                     {date?.toLocaleString('en-US', {
                       month: 'short',
-                    })}{' '}
-                    {date?.toLocaleString('en-US', {
                       day: '2-digit',
-                    })}
-                    {', '}
-                    {date?.toLocaleString('en-US', {
                       year: 'numeric',
                     })}
                   </p>
@@ -92,14 +87,7 @@ export default async function RequestList() {
               </div>
             </div>
 
-            <div className="flex h-8 w-8 items-center justify-center rounded-md bg-white p-1 text-dark-400 drop-shadow-sm transition-colors duration-300 group-hover:bg-dark-200/10">
-              <Image
-                src="/icons/admin/eye.svg"
-                width={16}
-                height={16}
-                alt="View Request"
-              />
-            </div>
+            <ViewButton />
           </div>
         ),
       )}

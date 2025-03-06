@@ -2,6 +2,7 @@ import { fetchFilteredBooks } from '@/lib/data';
 import React from 'react';
 import BookList from './book-list';
 import BookCard from './book-card';
+import { auth } from '@/auth';
 
 export default async function FilterBookList({
   query,
@@ -14,7 +15,12 @@ export default async function FilterBookList({
   filter?: Filter;
   type: Type;
 }>) {
-  const books = await fetchFilteredBooks(query, currentPage, type, filter);
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) {
+    throw new Error('User not found.');
+  }
+  const books = await fetchFilteredBooks(query, currentPage, type, filter, userId);
 
   return (
     <div className="flow-root w-screen max-w-7xl">

@@ -43,10 +43,11 @@ export default async function BookListAdded() {
                       alt="Calendar"
                     />
                     <p>
-                      {createdAt?.toLocaleString('en-US', { month: 'short' })}{' '}
-                      {createdAt?.toLocaleString('en-US', { day: '2-digit' })}
-                      {', '}
-                      {createdAt?.toLocaleString('en-US', { year: 'numeric' })}
+                      {createdAt?.toLocaleString('en-US', {
+                        month: 'short',
+                        day: '2-digit',
+                        year: 'numeric',
+                      })}
                     </p>
                   </div>
                 </div>

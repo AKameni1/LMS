@@ -1,6 +1,5 @@
 'use server';
 
-import { auth } from '@/auth';
 import { db } from '@/db/drizzle';
 import { books, borrowRecords, users, favoriteBooks } from '@/db/schema';
 import { and, asc, desc, eq, not, sql } from 'drizzle-orm';
@@ -24,10 +23,8 @@ export const fetchFilteredBooks = cache(
     currentPage: number,
     type: Type,
     filter?: Filter,
+    userId?: string,
   ): Promise<Book[]> => {
-    const session = await auth();
-    const userId = session?.user?.id;
-
     const offset = (currentPage - 1) * ITEMS_PER_PAGE;
     query = query.trim();
 
