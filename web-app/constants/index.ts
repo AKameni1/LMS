@@ -26,7 +26,7 @@ export const navigationLinks: readonly NavigationLink[] = [
 
   {
     href: '/my-favorites',
-    label: 'My Favorites',
+    label: 'Favorites',
     icon: BookHeartIcon,
   },
 ] as const;

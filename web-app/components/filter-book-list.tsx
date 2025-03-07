@@ -20,12 +20,20 @@ export default async function FilterBookList({
   if (!userId) {
     throw new Error('User not found.');
   }
-  const books = await fetchFilteredBooks(query, currentPage, type, filter, userId);
+  const books = await fetchFilteredBooks(
+    query,
+    currentPage,
+    type,
+    filter,
+    userId,
+  );
 
   return (
-    <div className="flow-root w-screen max-w-7xl">
+    <div className="flow-root w-11/12 max-w-7xl">
       {books.length === 1 ? (
-        <BookCard {...books[0]} />
+        <ul className="book-list">
+          <BookCard {...books[0]} />
+        </ul>
       ) : (
         <BookList containerClassName="mt-10" books={books} />
       )}

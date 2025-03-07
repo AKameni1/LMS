@@ -49,12 +49,12 @@ export default function BookCover({
           path={coverImage}
           urlEndpoint={config.env.imageKit.urlEndpoint}
           fill
-          className={cn('rounded-br-sm rounded-tr-sm', {
-            'border-b-2 border-black': variant === 'small',
+          className={cn('rounded-br-sm rounded-tr-sm aspect-auto', {
+            'border-b-1 border-black': variant === 'small',
           })}
           alt={bookTitle}
           loading={'eager'}
-          // lqip={{ active: true }}
+        // lqip={{ active: true }}
         />
       </div>
     </div>

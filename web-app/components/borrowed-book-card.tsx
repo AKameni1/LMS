@@ -166,6 +166,7 @@ export default function BorrowedBookCard({
               className="cursor-pointer rounded-sm p-1 transition-all duration-100 hover:scale-105 hover:opacity-90"
               style={{ backgroundColor }}
               href="Receipt.pdf"
+              aria-label={`Download receipt for borrowed book ${title}`}
               download
             >
               <Image src={'/icons/receipt.svg'} width={18} height={18} alt="" />
@@ -176,7 +177,7 @@ export default function BorrowedBookCard({
             className={cn(
               'text-xs font-medium tracking-tight text-orange-400',
               status === 'CANCELLED' &&
-                'mt-4 flex items-center justify-between text-xs font-semibold tracking-normal text-red-400',
+              'mt-4 flex items-center justify-between text-xs font-semibold tracking-normal text-red-400',
             )}
           >
             {status === 'CANCELLED' && (

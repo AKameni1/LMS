@@ -75,6 +75,7 @@ export default function OptionsDropdown({
       <DropdownMenu>
         <DropdownMenuTrigger disabled={isPending} asChild>
           <Button
+            aria-label='More options'
             variant="ghost"
             // size="icon"
             disabled={isPending}
@@ -85,7 +86,7 @@ export default function OptionsDropdown({
               'text-light-300 hover:text-slate-200',
               { 'cursor-not-allowed opacity-50': isPending },
             )}
-            // className="-mt-3 mb-2 bg-slate-800 text-light-300"
+          // className="-mt-3 mb-2 bg-slate-800 text-light-300"
           >
             <MoreHorizontalIcon
               size={18}

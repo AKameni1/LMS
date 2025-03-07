@@ -10,5 +10,6 @@ export default function robots(): MetadataRoute.Robots {
       },
     ],
     sitemap: 'https://lms-university.vercel.app/sitemap.xml',
+    host: 'https://lms-university.vercel.app',
   };
 }

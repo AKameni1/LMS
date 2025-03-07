@@ -22,7 +22,7 @@ export default function HeaderBrowsing() {
               <Link
                 href={href}
                 className={cn(
-                  'cursor-pointer text-base capitalize transition-all duration-200 hover:scale-110',
+                  'cursor-pointer text-lg px-2 capitalize transition-all duration-200 hover:scale-110',
                   pathname === href
                     ? 'text-light-200'
                     : 'text-light-100 hover:text-light-400',
@@ -33,7 +33,7 @@ export default function HeaderBrowsing() {
               </Link>
             </TooltipTrigger>
             <TooltipContent>
-              <p className="font-semibold">{label}</p>
+              <p className="font-medium tracking-wide">{label}</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>

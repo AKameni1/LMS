@@ -48,7 +48,7 @@ export default async function Page(
           <Search placeholder="Search for books" />
         </div>
 
-        <div className="mb-4 mt-12 flex w-screen max-w-7xl items-center justify-between">
+        <div className="mb-4 mt-12 flex w-full max-w-7xl items-center justify-between">
           <div className={'mr-4'}>
             {!query ? (
               <h2 className="font-bebas-neue text-4xl text-light-100">

@@ -273,7 +273,7 @@
     @apply mb-20 mt-16 flex flex-col gap-16 lg:mt-36 lg:flex-row;
   }
 
-  .book-details h3 {
+  .book-details h2 {
     @apply text-xl font-semibold text-primary;
   }
 
