@@ -29,7 +29,7 @@ export default async function FilterBookList({
   );
 
   return (
-    <div className="flow-root w-11/12 max-w-7xl">
+    <div className="max-w-7xl">
       {books.length === 1 ? (
         <ul className="book-list">
           <BookCard {...books[0]} />
@@ -37,7 +37,6 @@ export default async function FilterBookList({
       ) : (
         <BookList containerClassName="mt-10" books={books} />
       )}
-      
     </div>
   );
 }

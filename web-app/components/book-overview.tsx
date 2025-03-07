@@ -5,7 +5,7 @@ import BorrowBook from './borrow-book';
 import { checkUserBorrowStatus, fetchUserById } from '@/lib/data';
 import { db } from '@/db/drizzle';
 import { borrowRecords, favoriteBooks } from '@/db/schema';
-import { and, eq, exists, sql } from 'drizzle-orm';
+import { and, eq, sql } from 'drizzle-orm';
 import FavoriteBook from './favorite-book';
 import RenewBook from './renew-book';
 import { canRenewRequest } from './borrowed-book-card';
@@ -64,7 +64,7 @@ export default async function BookOverview({
   };
 
   const favoriteEligibility = {
-    isEligible: !book && !favoriteBook ? true : false,
+    isEligible: !!(!book && !favoriteBook),
     message:
       !book || book.status !== 'BORROWED'
         ? ''

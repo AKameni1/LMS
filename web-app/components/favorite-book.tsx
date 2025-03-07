@@ -6,9 +6,6 @@ import Image from 'next/image';
 import { useTransition } from 'react';
 import { toast } from 'sonner';
 import { favoriteBook } from '@/lib/actions/books';
-import { db } from '@/db/drizzle';
-import { favoriteBooks } from '@/db/schema';
-import { sql } from 'drizzle-orm';
 
 type FavoriteBookProps = {
   userId: string;
@@ -22,19 +19,12 @@ type FavoriteBookProps = {
 export default function FavoriteBook({
   userId,
   bookId,
-  addFavoriteEligibility: { isEligible, message },
+  addFavoriteEligibility: { isEligible },
 }: Readonly<FavoriteBookProps>) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
   const handleFavoriteBook = async () => {
-
-    // if (!isEligible) {
-    //     toast.error('Error', {
-    //       description: message,
-    //     });    
-    // }
-
     startTransition(async () => {
       try {
         const result = await favoriteBook({ bookId, userId });

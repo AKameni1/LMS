@@ -188,7 +188,7 @@ export const fetchBooksPages = cache(
       // Apply search if necessary
       if (query.length > 0) {
         conditions.push(
-          sql`${books.searchText} @@ to_tsquery('english', ${query.replace(/\s+/g, ' & ')})`,
+          sql`${books.searchText} @@ plainto_tsquery('english', ${query.replace(/\s+/g, ' & ')})`,
         );
       }
 

@@ -4,7 +4,6 @@ import BookCover from './book-cover';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { Button } from './ui/button';
-import FavoriteBook from './favorite-book';
 
 export default function BookCard({
   id,

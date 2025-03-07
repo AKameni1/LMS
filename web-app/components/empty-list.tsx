@@ -2,15 +2,14 @@
 
 import Image from 'next/image';
 import { Button } from './ui/button';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { Link } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 export default function EmptyList() {
   const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  
-  const path = () => {router.push('/library')}
+
+  const path = () => {
+    router.push('/library');
+  };
 
   return (
     <div className="mt-10 flow-root">
@@ -24,12 +23,12 @@ export default function EmptyList() {
 
         <h4>No Results Found</h4>
         <p>
-          You don't have any books in your favorites. <br/> Go and find your next gread read.
+          You don&apos;t have any books in your favorites. <br /> Go and find your
+          next great read.
         </p>
         <Button className="not-found-btn" onClick={path}>
-             Search Library
+          Search Library
         </Button>
-        
       </div>
     </div>
   );

@@ -1,8 +1,6 @@
-import { auth } from '@/auth';
 import EmptyList from '@/components/empty-list';
 import FilterBookList from '@/components/filter-book-list';
 import FilterSelect from '@/components/filter-select';
-import NoResults from '@/components/no-results';
 import Pagination from '@/components/pagination';
 import Search from '@/components/search';
 import { Separator } from '@/components/ui/separator';
@@ -26,7 +24,6 @@ export default async function Page(
     }>;
   }>,
 ) {
-    const session = await auth()
   const searchParams = await props.searchParams;
   const query = searchParams?.query ?? '';
   const filter = searchParams?.filter ?? 'all';
@@ -35,7 +32,6 @@ export default async function Page(
     query.trim(),
     favoriteBooks,
     filter.trim() as Filter,
-    session?.user?.id
   );
 
   return (
@@ -81,16 +77,16 @@ export default async function Page(
           <FilterSelect initialFilter={filter} />
         </div>
 
-      {totalPages === 0 ? (
-        <EmptyList/>
-      ) : (
-        <>
-          <FilterBookList
-            query={query.trim()}
-            currentPage={currentPage}
-            filter={filter as Filter}
-            type="Favorites"
-          />
+        {totalPages === 0 ? (
+          <EmptyList />
+        ) : (
+          <>
+            <FilterBookList
+              query={query.trim()}
+              currentPage={currentPage}
+              filter={filter as Filter}
+              type="Favorites"
+            />
 
             <Separator className="mt-10 h-1 rounded-full bg-dark-200/40" />
 
