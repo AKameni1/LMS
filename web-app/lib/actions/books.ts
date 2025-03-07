@@ -74,12 +74,12 @@ export const favoriteBook = async (params: ButtonBookParams) => {
       .select()
       .from(favoriteBooks)
       .where(
-        sql`${favoriteBooks.userId} = ${userId} AND ${favoriteBooks.bookId} = ${bookId}`,
+        sql`${favoriteBooks.userId} = ${userId} AND ${favoriteBooks.bookId} = ${bookId}`
       )
       .limit(1);
 
     if (existingFavorite) {
-      await db.delete(favoriteBooks).where(eq(favoriteBooks, existingFavorite));
+      await db.delete(favoriteBooks).where(eq(favoriteBooks.id, existingFavorite.id));
 
       return {
         success: true,

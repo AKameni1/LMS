@@ -4,8 +4,11 @@ import { useRouter } from 'next/navigation';
 import { Button } from './ui/button';
 import Image from 'next/image';
 import { useTransition } from 'react';
-import { toast } from '@/hooks/use-toast';
+import { toast } from 'sonner';
 import { favoriteBook } from '@/lib/actions/books';
+import { db } from '@/db/drizzle';
+import { favoriteBooks } from '@/db/schema';
+import { sql } from 'drizzle-orm';
 
 type FavoriteBookProps = {
   userId: string;
@@ -25,40 +28,32 @@ export default function FavoriteBook({
   const [isPending, startTransition] = useTransition();
 
   const handleFavoriteBook = async () => {
-    if (!isEligible) {
-      toast({
-        title: 'Error',
-        description: message,
-        variant: 'destructive',
-      });
-      return;
-    }
+
+    // if (!isEligible) {
+    //     toast.error('Error', {
+    //       description: message,
+    //     });    
+    // }
 
     startTransition(async () => {
       try {
         const result = await favoriteBook({ bookId, userId });
 
         if (result.success) {
-          toast({
-            title: 'Success',
-            description: 'Book added to favorites successfully',
-            variant: 'success',
-          });
+            toast.success('Success', {
+                description: result.message,
+              });
 
           router.push('/my-favorites');
         } else {
-          toast({
-            title: 'Error',
-            description: result.message,
-            variant: 'destructive',
-          });
+            toast.info('Info', {
+                description: result.message,
+              });
         }
       } catch (error) {
-        toast({
-          title: 'Error',
-          description: `An error occurred while adding the book to favorites. ${error}`,
-          variant: 'destructive',
-        });
+        toast.error('Error', {
+            description: `An error occurred while adding the book to favorites. ${error}`,
+          });
       }
     });
   };
@@ -70,9 +65,16 @@ export default function FavoriteBook({
       disabled={isPending}
     >
       <Image src={'/icons/heart.svg'} width={30} height={30} alt="heart-icon" />
+      {isEligible ? 
       <p className="font-bebas-neue text-xl text-dark-100">
-        {isPending ? 'Adding...' : 'Add to favorites'}
-      </p>
+      {isPending ? 'Adding...' : 'Add to favorites'}
+    </p>
+       :
+    <p className="font-bebas-neue text-xl text-dark-100">
+    {isPending ? 'Removing...' : 'Remove from favorites'}
+  </p>
+      }
+      
     </Button>
   );
 }
