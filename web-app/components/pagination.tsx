@@ -1,43 +1,50 @@
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation';
+import Form from 'next/form';
+import { useSearchParams } from 'next/navigation';
 import { generatePagination } from '@/lib/utils';
 import { Button } from './ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { formUrlQuery } from '@/lib/url';
 
 export default function Pagination({
   totalPages,
-}: Readonly<{ totalPages: number }>) {
+  route,
+}: Readonly<{ totalPages: number; route: string }>) {
   const searchParams = useSearchParams();
-  const router = useRouter();
   const currentPage = Number(searchParams.get('page')) || 1;
 
   const allPages = generatePagination(currentPage, totalPages);
 
-  const handlePageChange = (page: number | string) => {
-    const newUrl = formUrlQuery({
-      params: searchParams.toString(),
-      key: 'page',
-      value: page.toString(),
-    });
-
-    router.push(newUrl, { scroll: false });
-  };
-
   return (
-    <div id="pagination" className="mt-10">
-      <Button
-        className="pagination-btn_dark"
-        disabled={currentPage <= 1}
-        onClick={() => handlePageChange(currentPage - 1)}
-        aria-label="Previous Page"
-      >
-        <ChevronLeft
-          strokeWidth={2}
-          className="size-6 font-semibold text-light-100"
+    <div id="pagination" className="mt-10 flex items-center gap-2">
+      <Form action={route} scroll={false}>
+        {/* Preserve all existing query parameters except page */}
+        {Array.from(searchParams.entries()).map(([key, value]) => {
+          if (key !== 'page') {
+            return <input key={key} type="hidden" name={key} value={value} />;
+          }
+          return null;
+        })}
+
+        {/* Set page to previous page */}
+        <input
+          type="hidden"
+          name="page"
+          value={(currentPage > 1 ? currentPage - 1 : 1).toString()}
         />
-      </Button>
+
+        <Button
+          type="submit"
+          className="pagination-btn_dark"
+          disabled={currentPage <= 1}
+          aria-label="Previous Page"
+        >
+          <ChevronLeft
+            strokeWidth={2}
+            className="size-6 font-semibold text-light-100"
+          />
+        </Button>
+      </Form>
 
       <div className="flex gap-3">
         {allPages.map((page, index) => {
@@ -56,29 +63,68 @@ export default function Pagination({
               {page}
             </p>
           ) : (
-            <Button
+            <Form
               key={page}
-              onClick={() => handlePageChange(page)}
-              aria-label={`Page ${page}`}
-              className="pagination-btn_dark inline-flex items-center rounded-md px-4 py-1.5 text-center text-sm font-semibold"
+              action={route}
+              scroll={false}
+              className="inline-flex"
             >
-              {page}
-            </Button>
+              {/* Preserve all existing query parameters except page */}
+              {Array.from(searchParams.entries()).map(([key, value]) => {
+                if (key !== 'page') {
+                  return (
+                    <input key={key} type="hidden" name={key} value={value} />
+                  );
+                }
+                return null;
+              })}
+
+              {/* Set page to selected page */}
+              <input type="hidden" name="page" value={page.toString()} />
+
+              <Button
+                type="submit"
+                aria-label={`Page ${page}`}
+                className="pagination-btn_dark inline-flex items-center rounded-md px-4 py-1.5 text-center text-sm font-semibold"
+              >
+                {page}
+              </Button>
+            </Form>
           );
         })}
       </div>
 
-      <Button
-        className="pagination-btn_dark"
-        disabled={currentPage >= totalPages}
-        onClick={() => handlePageChange(currentPage + 1)}
-        aria-label="Next Page"
-      >
-        <ChevronRight
-          strokeWidth={2}
-          className="size-6 font-semibold text-light-100"
+      <Form action={route} scroll={false}>
+        {/* Preserve all existing query parameters except page */}
+        {Array.from(searchParams.entries()).map(([key, value]) => {
+          if (key !== 'page') {
+            return <input key={key} type="hidden" name={key} value={value} />;
+          }
+          return null;
+        })}
+
+        {/* Set page to next page */}
+        <input
+          type="hidden"
+          name="page"
+          value={(currentPage < totalPages
+            ? currentPage + 1
+            : totalPages
+          ).toString()}
         />
-      </Button>
+
+        <Button
+          type="submit"
+          className="pagination-btn_dark"
+          disabled={currentPage >= totalPages}
+          aria-label="Next Page"
+        >
+          <ChevronRight
+            strokeWidth={2}
+            className="size-6 font-semibold text-light-100"
+          />
+        </Button>
+      </Form>
     </div>
   );
 }

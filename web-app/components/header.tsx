@@ -9,7 +9,7 @@ import SignOutButton from './sign-out-btn';
 
 export default function Header({ session }: Readonly<{ session: Session }>) {
   return (
-    <header className="my-10 flex w-full max-w-7xl justify-between gap-5">
+    <header className="my-10 flex w-full justify-between gap-5">
       <Link href="/" className="flex items-center gap-2">
         <Image
           src="/icons/logo.svg"
@@ -18,9 +18,9 @@ export default function Header({ session }: Readonly<{ session: Session }>) {
           width={40}
           height={40}
         />
-        <p className="text-2xl font-semibold text-white max-md:hidden">
+        <h2 className="text-2xl font-semibold text-white max-md:hidden">
           BookWise
-        </p>
+        </h2>
       </Link>
 
       <nav className="flex flex-row items-center gap-8">

@@ -29,7 +29,7 @@ export default async function FilterBookList({
   );
 
   return (
-    <div className="max-w-7xl">
+    <section>
       {books.length === 1 ? (
         <ul className="book-list">
           <BookCard {...books[0]} />
@@ -37,6 +37,6 @@ export default async function FilterBookList({
       ) : (
         <BookList containerClassName="mt-10" books={books} />
       )}
-    </div>
+    </section>
   );
 }

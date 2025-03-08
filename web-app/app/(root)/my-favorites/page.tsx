@@ -81,7 +81,7 @@ export default async function Page({ searchParams }: Readonly<SearchParams>) {
 
             <Separator className="mt-10 h-1 rounded-full bg-dark-200/40" />
 
-            <Pagination totalPages={totalPages} />
+            <Pagination route='/my-favorites' totalPages={totalPages} />
           </>
         )}
       </main>

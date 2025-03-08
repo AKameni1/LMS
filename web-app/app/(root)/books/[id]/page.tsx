@@ -3,7 +3,7 @@ import BookOverview from '@/components/book-overview';
 import BookVideo from '@/components/book-video';
 import SimilarBooks from '@/components/similar-books';
 import { fetchBookById } from '@/lib/data';
-import { redirect } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 
 export default async function Page({
   params,
@@ -11,7 +11,7 @@ export default async function Page({
   const id = (await params).id;
   const session = await auth();
 
-  const userId = session?.user?.id
+  const userId = session?.user?.id;
 
   // check if user is logged in
   if (!session || !userId) {
@@ -22,7 +22,7 @@ export default async function Page({
   const bookDetails = await fetchBookById(id);
 
   if (!bookDetails) {
-    redirect('/404');
+    notFound();
   }
 
   return (

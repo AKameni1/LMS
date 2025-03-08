@@ -30,20 +30,20 @@ export default function FavoriteBook({
         const result = await favoriteBook({ bookId, userId });
 
         if (result.success) {
-            toast.success('Success', {
-                description: result.message,
-              });
+          toast.success('Success', {
+            description: result.message,
+          });
 
           router.push('/my-favorites');
         } else {
-            toast.info('Info', {
-                description: result.message,
-              });
+          toast.info('Info', {
+            description: result.message,
+          });
         }
       } catch (error) {
         toast.error('Error', {
-            description: `An error occurred while adding the book to favorites. ${error}`,
-          });
+          description: `An error occurred while adding the book to favorites. ${error}`,
+        });
       }
     });
   };
@@ -55,16 +55,15 @@ export default function FavoriteBook({
       disabled={isPending}
     >
       <Image src={'/icons/heart.svg'} width={30} height={30} alt="heart-icon" />
-      {isEligible ? 
-      <p className="font-bebas-neue text-xl text-dark-100">
-      {isPending ? 'Adding...' : 'Add to favorites'}
-    </p>
-       :
-    <p className="font-bebas-neue text-xl text-dark-100">
-    {isPending ? 'Removing...' : 'Remove from favorites'}
-  </p>
-      }
-      
+      {isEligible ? (
+        <p className="font-bebas-neue text-xl text-dark-100">
+          {isPending ? 'Adding...' : 'Add to favorites'}
+        </p>
+      ) : (
+        <p className="font-bebas-neue text-xl text-dark-100">
+          {isPending ? 'Removing...' : 'Remove from favorites'}
+        </p>
+      )}
     </Button>
   );
 }

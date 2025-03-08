@@ -36,14 +36,14 @@ export default function ProfileCard({
                 src={'/icons/verified.svg'}
                 width={20}
                 height={20}
-                alt="verified account"
+                alt="verified account icon"
               />
             ) : (
               <Image
                 src={'/icons/warning.svg'}
                 width={20}
                 height={20}
-                alt="not verified account"
+                alt="not verified account icon"
               />
             )}
             <p
@@ -55,12 +55,15 @@ export default function ProfileCard({
             </p>
           </div>
           <h1
-            title={fullName}
+            title={`${fullName} profile`}
             className="truncate text-xl font-semibold text-white lg:text-2xl"
           >
             {fullName}
           </h1>
-          <p title={email} className="truncate text-base text-light-100">
+          <p
+            title={`${email} profile`}
+            className="truncate text-base text-light-100"
+          >
             {email}
           </p>
         </div>

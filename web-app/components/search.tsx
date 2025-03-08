@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Form from 'next/form';
 import { Input } from './ui/input';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -46,7 +47,7 @@ export default function Search({
   }, [searchQuery, router, route, searchParams, pathname]);
 
   return (
-    <div className="search">
+    <Form action={route} className="search">
       <Image
         src={'/icons/search-fill.svg'}
         alt="search-icon"
@@ -56,12 +57,14 @@ export default function Search({
       />
       <Input
         type="search"
+        name="query"
+        aria-label="Search for books"
         className="search-input bg-transparent"
         placeholder={placeholder}
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
         ref={inputRef}
       />
-    </div>
+    </Form>
   );
 }

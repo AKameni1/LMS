@@ -14,7 +14,6 @@ const nextConfig: NextConfig = {
   },
 
   experimental: {
-    ppr: 'incremental',
     turbo: {
       resolveAlias: {
         '@nutrient-sdk/viewer': '@nutrient-sdk/viewer',

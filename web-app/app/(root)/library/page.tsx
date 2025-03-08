@@ -19,7 +19,6 @@ import { Suspense } from 'react';
 
 export default async function Page({ searchParams }: Readonly<SearchParams>) {
   const { query, filter, page } = await searchParams;
-  console.log(query, filter, page);
   const currentPage = Number(page) || 1;
   const totalPages = await fetchBooksPages(
     query ?? '',
@@ -88,7 +87,7 @@ export default async function Page({ searchParams }: Readonly<SearchParams>) {
 
             <Separator className="mt-10 h-1 rounded-full bg-dark-200/40" />
 
-            <Pagination totalPages={totalPages} />
+            <Pagination route='/library' totalPages={totalPages} />
           </>
         )}
       </main>

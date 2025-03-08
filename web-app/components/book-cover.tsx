@@ -22,6 +22,7 @@ type BookCoverProps = {
   coverImage: string;
   variant?: BookCoverVariant;
   bookTitle: string;
+  priority?: boolean;
 };
 
 export default function BookCover({
@@ -30,6 +31,7 @@ export default function BookCover({
   coverImage,
   variant = 'regular',
   bookTitle,
+  priority = false,
 }: Readonly<BookCoverProps>) {
   return (
     <div
@@ -49,12 +51,12 @@ export default function BookCover({
           path={coverImage}
           urlEndpoint={config.env.imageKit.urlEndpoint}
           fill
-          className={cn('rounded-br-sm rounded-tr-sm aspect-auto', {
+          className={cn('rounded-br-sm rounded-tr-sm', {
             'border-b-1 border-black': variant === 'small',
           })}
           alt={bookTitle}
-          loading={'eager'}
-        // lqip={{ active: true }}
+          fetchPriority={priority ? 'high' : 'auto'}
+          priority={priority}
         />
       </div>
     </div>

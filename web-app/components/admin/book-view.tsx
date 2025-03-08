@@ -5,11 +5,12 @@ import chroma from 'chroma-js';
 import Image from 'next/image';
 import { Button } from '../ui/button';
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
 
 export default async function BookView({ id }: Readonly<{ id: string }>) {
   const book = await fetchBookById(id);
   if (!book) {
-    throw new Error('Book not found');
+    notFound();
   }
 
   const {

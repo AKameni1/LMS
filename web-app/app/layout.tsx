@@ -13,8 +13,6 @@ import { auth } from '@/auth';
 import QueryProvider from '@/components/query-provider';
 import SessionProviderWrapper from '@/components/session-provider-wrapper';
 
-export const experimental_ppr = true;
-
 const ibmPlexSans = localFont({
   src: [
     {
@@ -68,7 +66,6 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     siteName: 'BookWise Library',
-    url: 'https://lms-university.vercel.app/',
   },
 };
 
@@ -81,12 +78,6 @@ export default async function RootLayout({
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <Script
-          src="/nutrient-viewer/nutrient-viewer.js"
-          strategy="beforeInteractive"
-        />
-      </head>
       <SessionProviderWrapper session={session}>
         <body
           className={`${ibmPlexSans.className} ${bebasNeue.variable} antialiased`}
@@ -95,6 +86,10 @@ export default async function RootLayout({
           <Toaster closeButton richColors position="top-center" />
           <SpeedInsights />
           <Analytics />
+          <Script
+            src="/nutrient-viewer/nutrient-viewer.js"
+            strategy="lazyOnload"
+          />
         </body>
       </SessionProviderWrapper>
     </html>

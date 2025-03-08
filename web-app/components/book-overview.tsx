@@ -43,17 +43,15 @@ export default async function BookOverview({
     )
     .limit(1);
 
-  console.log(book);
-
   // check if dueDate is there and check if the remaining time is less than 3 days
   const isDueSoon = canRenewRequest(book?.dueDate, book?.status);
-  console.log(isDueSoon);
-  console.log(isBorrowed);
 
-    const [favoriteBook] = await db
-        .select()
-        .from(favoriteBooks)
-        .where(sql`${favoriteBooks.userId} = ${userId} AND ${favoriteBooks.bookId} = ${id}`)
+  const [favoriteBook] = await db
+    .select()
+    .from(favoriteBooks)
+    .where(
+      sql`${favoriteBooks.userId} = ${userId} AND ${favoriteBooks.bookId} = ${id}`,
+    );
 
   const borrowingEligibility = {
     isEligible: availableCopies > 0 && user.status === 'APPROVED',
@@ -64,7 +62,7 @@ export default async function BookOverview({
   };
 
   const favoriteEligibility = {
-    isEligible: !!(!book && !favoriteBook),
+    isEligible: !favoriteBook,
     message:
       !book || book.status !== 'BORROWED'
         ? ''
@@ -136,6 +134,7 @@ export default async function BookOverview({
       <div className="relative flex flex-1 justify-center">
         <div className="relative">
           <BookCover
+            priority={true}
             bookTitle={title}
             variant="wide"
             className="z-10"
@@ -144,6 +143,7 @@ export default async function BookOverview({
           />
           <div className="absolute left-40 top-5 rotate-[10.23deg] opacity-50 blur-sm max-sm:hidden">
             <BookCover
+              priority={true}
               bookTitle={title}
               variant="wide"
               coverColor={coverColor}
