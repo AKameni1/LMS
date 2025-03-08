@@ -3,40 +3,47 @@
 import Image from 'next/image';
 import { Input } from './ui/input';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useDebouncedCallback } from 'use-debounce';
-import { startTransition, useDeferredValue, useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import { useSearchContext } from '@/context/search-books-context';
+import { formUrlQuery, removeKeysFromUrlQuery } from '@/lib/url';
 
 export default function Search({
   placeholder,
+  route,
 }: Readonly<{
   placeholder: string;
+  route: string;
 }>) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const query = searchParams.get('query') ?? '';
   const { inputRef } = useSearchContext();
 
-  const currentQuery = useMemo(
-    () => searchParams.get('query') ?? '',
-    [searchParams],
-  );
-  const deferredQuery = useDeferredValue(currentQuery);
+  const [searchQuery, setSearchQuery] = useState(query);
 
-  const handleSearch = useDebouncedCallback((term: string) => {
-    startTransition(() => {
-      const params = new URLSearchParams(searchParams);
-      params.set('page', '1');
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      if (searchQuery) {
+        const newUrl = formUrlQuery({
+          params: searchParams.toString(),
+          key: 'query',
+          value: searchQuery,
+        });
 
-      if (term) {
-        params.set('query', term);
-      } else {
-        params.delete('query');
+        router.push(newUrl, { scroll: false });
+      } else if (pathname === route) {
+        const newUrl = removeKeysFromUrlQuery({
+          params: searchParams.toString(),
+          keysToRemove: ['query'],
+        });
+
+        router.push(newUrl, { scroll: false });
       }
+    }, 300);
 
-      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
-    });
-  }, 300);
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchQuery, router, route, searchParams, pathname]);
 
   return (
     <div className="search">
@@ -51,8 +58,8 @@ export default function Search({
         type="search"
         className="search-input bg-transparent"
         placeholder={placeholder}
-        defaultValue={deferredQuery}
-        onChange={(e) => handleSearch(e.target.value)}
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
         ref={inputRef}
       />
     </div>

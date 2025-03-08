@@ -15,23 +15,14 @@ import { favoriteBooks } from '@/db/schema';
 import { fetchBooksPages } from '@/lib/data';
 import { truncateText } from '@/lib/utils';
 
-export default async function Page(
-  props: Readonly<{
-    searchParams?: Promise<{
-      query?: string;
-      page?: string;
-      filter?: string;
-    }>;
-  }>,
-) {
-  const searchParams = await props.searchParams;
-  const query = searchParams?.query ?? '';
-  const filter = searchParams?.filter ?? 'all';
-  const currentPage = Number(searchParams?.page) || 1;
+export default async function Page({ searchParams }: Readonly<SearchParams>) {
+  const { query, filter, page } = await searchParams;
+  console.log(query, filter, page);
+  const currentPage = Number(page) || 1;
   const totalPages = await fetchBooksPages(
-    query.trim(),
+    query ?? '',
     favoriteBooks,
-    filter.trim() as Filter,
+    (filter ?? 'all') as Filter,
   );
 
   return (
@@ -44,7 +35,7 @@ export default async function Page(
             <span className="text-light-200">Your Favorite Books</span> In Our
             Library
           </h1>
-          <Search placeholder="Search for books" />
+          <Search placeholder="Search for books" route="/my-favorites" />
         </div>
 
         <div className="mb-4 mt-12 flex items-center justify-between">
@@ -82,7 +73,7 @@ export default async function Page(
         ) : (
           <>
             <FilterBookList
-              query={query.trim()}
+              query={query ?? ''}
               currentPage={currentPage}
               filter={filter as Filter}
               type="Favorites"

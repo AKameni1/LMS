@@ -26,7 +26,6 @@ export const fetchFilteredBooks = cache(
     userId?: string,
   ): Promise<Book[]> => {
     const offset = (currentPage - 1) * ITEMS_PER_PAGE;
-    query = query.trim();
 
     try {
       if (!userId) {

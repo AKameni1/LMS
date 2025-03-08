@@ -1,50 +1,42 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { generatePagination } from '@/lib/utils';
-import Link from 'next/link';
 import { Button } from './ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { formUrlQuery } from '@/lib/url';
 
 export default function Pagination({
   totalPages,
 }: Readonly<{ totalPages: number }>) {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const currentPage = Number(searchParams.get('page')) || 1;
 
   const allPages = generatePagination(currentPage, totalPages);
+
+  const handlePageChange = (page: number | string) => {
+    const newUrl = formUrlQuery({
+      params: searchParams.toString(),
+      key: 'page',
+      value: page.toString(),
+    });
+
+    router.push(newUrl, { scroll: false });
+  };
 
   return (
     <div id="pagination" className="mt-10">
       <Button
         className="pagination-btn_dark"
         disabled={currentPage <= 1}
-        asChild={currentPage > 1}
+        onClick={() => handlePageChange(currentPage - 1)}
         aria-label="Previous Page"
       >
-        {currentPage <= 1 ? (
-          <div>
-            <ChevronLeft
-              strokeWidth={2}
-              className="h-6 w-6 font-semibold text-light-100"
-            />
-          </div>
-        ) : (
-          <Link
-            href={{
-              query: {
-                ...Object.fromEntries(searchParams.entries()),
-                page: currentPage - 1,
-              },
-            }}
-            scroll={false}
-          >
-            <ChevronLeft
-              strokeWidth={2}
-              className="h-6 w-6 font-semibold text-light-100"
-            />
-          </Link>
-        )}
+        <ChevronLeft
+          strokeWidth={2}
+          className="size-6 font-semibold text-light-100"
+        />
       </Button>
 
       <div className="flex gap-3">
@@ -64,17 +56,14 @@ export default function Pagination({
               {page}
             </p>
           ) : (
-            <Link
+            <Button
               key={page}
-              href={{
-                query: { ...Object.fromEntries(searchParams.entries()), page },
-              }}
-              scroll={false}
+              onClick={() => handlePageChange(page)}
               aria-label={`Page ${page}`}
               className="pagination-btn_dark inline-flex items-center rounded-md px-4 py-1.5 text-center text-sm font-semibold"
             >
               {page}
-            </Link>
+            </Button>
           );
         })}
       </div>
@@ -82,32 +71,13 @@ export default function Pagination({
       <Button
         className="pagination-btn_dark"
         disabled={currentPage >= totalPages}
-        asChild={currentPage < totalPages}
+        onClick={() => handlePageChange(currentPage + 1)}
         aria-label="Next Page"
       >
-        {currentPage >= totalPages ? (
-          <div>
-            <ChevronRight
-              strokeWidth={2}
-              className="h-6 w-6 font-semibold text-light-100"
-            />
-          </div>
-        ) : (
-          <Link
-            href={{
-              query: {
-                ...Object.fromEntries(searchParams.entries()),
-                page: currentPage + 1,
-              },
-            }}
-            scroll={false}
-          >
-            <ChevronRight
-              strokeWidth={2}
-              className="h-6 w-6 font-semibold text-light-100"
-            />
-          </Link>
-        )}
+        <ChevronRight
+          strokeWidth={2}
+          className="size-6 font-semibold text-light-100"
+        />
       </Button>
     </div>
   );

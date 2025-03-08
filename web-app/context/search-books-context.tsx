@@ -1,6 +1,6 @@
 'use client';
 
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { removeKeysFromUrlQuery } from '@/lib/url';
 import React, { createContext, useContext, useRef } from 'react';
 
 interface SearchContextType {
@@ -13,18 +13,20 @@ const SearchContext = createContext<SearchContextType | undefined>(undefined);
 export const SearchProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-
   const inputRef = useRef<HTMLInputElement>(null);
 
   const clearSearch = () => {
     if (inputRef.current) {
       inputRef.current.value = '';
-      const params = new URLSearchParams(searchParams);
-      params.delete('query');
-      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+
+      // remove query param
+      const newUrl = removeKeysFromUrlQuery({
+        params: window.location.search,
+        keysToRemove: ['query', 'page', 'filter'],
+      });
+
+      // go to library page
+      window.location.replace(newUrl);
     }
   };
 

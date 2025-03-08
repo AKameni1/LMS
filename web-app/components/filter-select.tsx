@@ -8,8 +8,9 @@ import {
   SelectValue,
 } from './ui/select';
 import { filterOptions } from '@/constants';
+import { formUrlQuery, removeKeysFromUrlQuery } from '@/lib/url';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { startTransition } from 'react';
+import { useState } from 'react';
 
 export default function FilterSelect({
   initialFilter,
@@ -19,27 +20,42 @@ export default function FilterSelect({
 
   const urlFilter = searchParams.get('filter');
 
+  const [active, setActive] = useState(urlFilter ?? 'all');
+
   const filter =
     (filterOptions.some((option) => option.value === urlFilter)
       ? urlFilter
       : initialFilter) ?? 'all';
+
   const handleValueChange = (value: string) => {
-    startTransition(() => {
-      const params = new URLSearchParams(searchParams);
+    let newUrl = '';
 
-      if (value === 'all') {
-        params.delete('filter');
-      } else {
-        params.set('filter', value);
-      }
+    if (value === active) {
+      setActive('all');
 
-      router.push(`?${params.toString()}`, { scroll: false });
-    });
+      newUrl = removeKeysFromUrlQuery({
+        params: searchParams.toString(),
+        keysToRemove: ['filter'],
+      });
+    } else {
+      setActive(value);
+
+      newUrl = formUrlQuery({
+        params: searchParams.toString(),
+        key: 'filter',
+        value,
+      });
+    }
+
+    router.push(newUrl, { scroll: false });
   };
 
   return (
     <Select value={filter} onValueChange={handleValueChange}>
-      <SelectTrigger className="select-trigger space-x-1" aria-label='Filter by'>
+      <SelectTrigger
+        className="select-trigger space-x-1"
+        aria-label="Filter by"
+      >
         <SelectValue>
           Filter by:{' '}
           <span className="text-base font-semibold text-light-200">

@@ -13,7 +13,7 @@ type Book = {
   summary: string;
   createdAt: Date | null;
   isLoanedBook?: boolean;
-  isFavoriteBook? : boolean;
+  isFavoriteBook?: boolean;
   borrowCount?: number;
   dueDate?: string | Date | null;
 };
@@ -137,4 +137,8 @@ type BookRequest = {
   coverColor: string;
   coverUrl: string;
   createdAt: Date;
+};
+
+type SearchParams = {
+  searchParams: Promise<{ [key: string]: string }>;
 };
