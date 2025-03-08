@@ -1,18 +1,11 @@
-import { auth } from '@/auth';
 import BookList from '@/components/book-list';
 import BookOverview from '@/components/book-overview';
+import { verifySession } from '@/lib/dal';
 import { fetchPopularBooks } from '@/lib/data';
-import { redirect } from 'next/navigation';
 import React from 'react';
 
 export default async function Home() {
-  const session = await auth();
-  const userId = session?.user?.id;
-
-  // check if user is logged in
-  if (!session || !userId) {
-    redirect('/sign-in');
-  }
+  const { userId } = await verifySession();
 
   const latestBooks = await fetchPopularBooks();
 

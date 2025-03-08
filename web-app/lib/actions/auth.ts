@@ -11,7 +11,6 @@ import { redirect } from 'next/navigation';
 import { workflowClient } from '../workflow';
 import config from '../config';
 import redis from '@/db/redis';
-import { AuthError } from 'next-auth';
 
 export const signInWithCredentials = async (
   credentials: Pick<AuthCredentials, 'email' | 'password'>,
@@ -32,6 +31,11 @@ export const signInWithCredentials = async (
     });
 
     if (result?.error) {
+      // Check if the user is locked out
+      if (result.error === 'AccessDenied') {
+        return redirect(`/error?error=AccessDenied`);
+      }
+
       return {
         success: false,
         message: 'Error signing in',
@@ -43,8 +47,9 @@ export const signInWithCredentials = async (
       message: 'Signed in successfully',
     };
   } catch (error) {
-    if (error instanceof AuthError && error.name === 'AccessDenied') {
-      redirect(`/error?error=${error.name}`);
+    // Check if the user is locked out
+    if (error instanceof Error && error.message.includes('AccessDenied')) {
+      return redirect(`/error?error=AccessDenied`);
     }
     return {
       success: false,

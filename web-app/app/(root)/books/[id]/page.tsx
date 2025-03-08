@@ -1,22 +1,15 @@
-import { auth } from '@/auth';
 import BookOverview from '@/components/book-overview';
 import BookVideo from '@/components/book-video';
 import SimilarBooks from '@/components/similar-books';
+import { verifySession } from '@/lib/dal';
 import { fetchBookById } from '@/lib/data';
-import { notFound, redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 
 export default async function Page({
   params,
 }: Readonly<{ params: Promise<{ id: string }> }>) {
   const id = (await params).id;
-  const session = await auth();
-
-  const userId = session?.user?.id;
-
-  // check if user is logged in
-  if (!session || !userId) {
-    redirect('/sign-in');
-  }
+  const { userId } = await verifySession();
 
   // Fetch data based on the id
   const bookDetails = await fetchBookById(id);

@@ -1,8 +1,6 @@
-'use server';
-
 import { db } from '@/db/drizzle';
 import { books, borrowRecords, users, favoriteBooks } from '@/db/schema';
-import { and, asc, desc, eq, not, sql } from 'drizzle-orm';
+import { and, asc, desc, eq, not, SQL, sql } from 'drizzle-orm';
 import { PgTable, TableConfig } from 'drizzle-orm/pg-core';
 import { cache } from 'react';
 
@@ -164,52 +162,79 @@ export const fetchBooksPages = cache(
     query: string,
     type: PgTable<TableConfig>,
     filter?: Filter,
+    userId?: string,
   ): Promise<number> => {
     try {
+      if (type === favoriteBooks && !userId) {
+        throw new Error('User must be authenticated to access favorites.');
+      }
+
+      // Base query setup
       let baseQuery = db
-        .select({ count: sql<number>`cast(count(*) as integer)`.as('count') })
-        .from(type)
-        .$dynamic(); // Dynamic mode enabled
+        .select({ count: sql<number>`count(*)`.as('count') })
+        .from(type === favoriteBooks ? books : type)
+        .$dynamic();
 
-      const conditions = [];
-
-      // Apply search if necessary
-      if (query.length > 0) {
-        conditions.push(
-          sql`${books.title} ILIKE ${'%' + query + '%'} OR
-             ${books.author} ILIKE ${'%' + query + '%'} OR
-             ${books.description} ILIKE ${'%' + query + '%'} OR
-             ${books.genre} ILIKE ${'%' + query + '%'} OR
-             ${books.summary} ILIKE ${'%' + query + '%'}`,
-        );
+      // Join favorites if necessary
+      if (type === favoriteBooks) {
+        baseQuery = baseQuery
+          .innerJoin(favoriteBooks, eq(books.id, favoriteBooks.bookId))
+          .where(eq(favoriteBooks.userId, userId!));
       }
 
-      // Apply search if necessary
-      if (query.length > 0) {
-        conditions.push(
-          sql`${books.searchText} @@ plainto_tsquery('english', ${query.replace(/\s+/g, ' & ')})`,
-        );
-      }
+      // Build search conditions
+      const conditions = buildSearchConditions(query, filter);
 
-      // Apply the filter here
-      if (filter === 'available') {
-        conditions.push(sql`${books.availableCopies} > 0`);
-      }
-
+      // Apply conditions if they exist
       if (conditions.length > 0) {
         baseQuery = baseQuery.where(sql.join(conditions, sql` AND `));
       }
 
+      // Execute query and calculate total pages
       const res = await baseQuery;
-
-      const totalPages = Math.ceil(Number(res[0].count) / ITEMS_PER_PAGE);
-      return totalPages;
+      return Math.ceil(Number(res[0].count) / ITEMS_PER_PAGE);
     } catch (error) {
-      console.log('Failed to fetch total number of books.', error);
+      console.error('Failed to fetch total number of books.', error);
       throw new Error('Failed to fetch total number of books.');
     }
   },
 );
+
+/**
+ * Constructs search and filter conditions
+ *
+ * @param query - The search query to filter books by title, author, description, or summary.
+ * @param filter - An optional filter to sort the books. Possible values are 'oldest', 'newest', 'highest_rated'.
+ * @returns An array of SQL conditions to apply to the query.
+ */
+function buildSearchConditions(query: string, filter?: Filter): SQL<boolean>[] {
+  const conditions: SQL<boolean>[] = [];
+
+  if (query.length > 0) {
+    const formattedQuery = query.replace(/\s+/g, ' & ');
+
+    conditions.push(
+      sql`(
+        ${books.title} ILIKE ${'%' + query + '%'} OR
+        ${books.author} ILIKE ${'%' + query + '%'} OR
+        ${books.description} ILIKE ${'%' + query + '%'} OR
+        ${books.genre} ILIKE ${'%' + query + '%'} OR
+        ${books.summary} ILIKE ${'%' + query + '%'}
+      )`,
+    );
+
+    // Full-text search
+    conditions.push(
+      sql`${books.searchText} @@ plainto_tsquery('english', ${formattedQuery})`,
+    );
+  }
+
+  if (filter === 'available') {
+    conditions.push(sql`${books.availableCopies} > 0`);
+  }
+
+  return conditions;
+}
 
 /**
  * Fetches a single book record by its ID.
@@ -219,7 +244,7 @@ export const fetchBooksPages = cache(
  * @returns A promise that resolves to the book record with the specified ID.
  * @throws An error if the book could not be fetched.
  */
-export async function fetchBookById(bookId: string): Promise<Book> {
+export const fetchBookById = cache(async (bookId: string): Promise<Book> => {
   try {
     const [book] = await db
       .select()
@@ -236,7 +261,7 @@ export async function fetchBookById(bookId: string): Promise<Book> {
     console.log('Failed to fetch book by id.', error);
     throw new Error('Failed to fetch book by id.');
   }
-}
+});
 
 // Put the result of the fetchUserBorrowedBooks function in a cache
 
@@ -248,7 +273,7 @@ export async function fetchBookById(bookId: string): Promise<Book> {
  * @returns A promise that resolves to an object containing the user details, borrowed books, and a map of borrowed book info.
  * @throws An error if the user or borrowed books could not be fetched.
  */
-export async function fetchUserBorrowedBooks(userId: string) {
+export const fetchUserBorrowedBooks = cache(async (userId: string) => {
   if (!userId) throw new Error('User ID is required');
 
   // Fetch user details
@@ -287,7 +312,7 @@ export async function fetchUserBorrowedBooks(userId: string) {
   }));
 
   return { user, borrowItems };
-}
+});
 
 /**
  * Fetches a list of popular books based on the number of times they have been borrowed.
@@ -296,9 +321,9 @@ export async function fetchUserBorrowedBooks(userId: string) {
  * @returns A promise that resolves to an array of popular books.
  * @throws An error if the popular books could not be fetched.
  */
-export async function fetchPopularBooks(): Promise<Book[]> {
+export const fetchPopularBooks = cache(async (): Promise<Book[]> => {
   return await db.select().from(books).orderBy(desc(books.updatedAt)).limit(7);
-}
+});
 
 /**
  * Fetches a list of recently added books.
@@ -307,9 +332,9 @@ export async function fetchPopularBooks(): Promise<Book[]> {
  * @returns A promise that resolves to an array of recently added books.
  * @throws An error if the recently added books could not be fetched.
  */
-export async function fetchRecentlyAddedBooks(): Promise<Book[]> {
+export const fetchRecentlyAddedBooks = cache(async (): Promise<Book[]> => {
   return await db.select().from(books).orderBy(desc(books.createdAt)).limit(7);
-}
+});
 
 /**
  * Fetches a user by their ID.
@@ -319,7 +344,7 @@ export async function fetchRecentlyAddedBooks(): Promise<Book[]> {
  * @returns A promise that resolves to the user record with the specified ID.
  * @throws An error if the user could not be fetched.
  */
-export async function fetchUserById(userId: string): Promise<User> {
+export const fetchUserById = cache(async (userId: string): Promise<User> => {
   try {
     const [user] = await db
       .select()
@@ -336,7 +361,7 @@ export async function fetchUserById(userId: string): Promise<User> {
     console.log('Failed to fetch user by id.', error);
     throw new Error('Failed to fetch user by id.');
   }
-}
+});
 
 /**
  * Fetches a list of books similar to the current book based on the genre.
@@ -347,18 +372,17 @@ export async function fetchUserById(userId: string): Promise<User> {
  * @returns A promise that resolves to an array of similar books.
  * @throws An error if the similar books could not be fetched.
  */
-export async function fetchSimilarBooks(
-  currentBookId: string,
-  genre: string,
-): Promise<Book[]> {
-  const similarBooks = await db
-    .select()
-    .from(books)
-    .where(and(eq(books.genre, genre), not(eq(books.id, currentBookId))))
-    .limit(6);
+export const fetchSimilarBooks = cache(
+  async (currentBookId: string, genre: string): Promise<Book[]> => {
+    const similarBooks = await db
+      .select()
+      .from(books)
+      .where(and(eq(books.genre, genre), not(eq(books.id, currentBookId))))
+      .limit(6);
 
-  return similarBooks;
-}
+    return similarBooks;
+  },
+);
 
 /**
  * Checks if a user is an admin.
@@ -367,7 +391,7 @@ export async function fetchSimilarBooks(
  * @returns A promise that resolves to a boolean indicating whether the user is an admin.
  * @throws An error if the user's admin status could not be checked.
  */
-export async function checkIsAdmin(userId: string): Promise<boolean> {
+export const checkIsAdmin = cache(async (userId: string): Promise<boolean> => {
   const isAdmin = await db
     .select({ isAdmin: users.role })
     .from(users)
@@ -375,7 +399,7 @@ export async function checkIsAdmin(userId: string): Promise<boolean> {
     .then((res) => res[0]?.isAdmin === 'ADMIN');
 
   return isAdmin;
-}
+});
 
 /**
  * Check if a user has already borrowed a book.
@@ -385,42 +409,40 @@ export async function checkIsAdmin(userId: string): Promise<boolean> {
  * @returns A promise that resolves to a boolean indicating whether the user has already borrowed the book.
  * @throws An error if the user's borrow status could not be checked.
  */
-export async function checkUserBorrowStatus(
-  userId: string,
-  bookId: string,
-): Promise<boolean> {
-  const hasBorrowed = await db
-    .select()
-    .from(borrowRecords)
-    .where(
-      and(
-        eq(borrowRecords.userId, userId),
-        eq(borrowRecords.bookId, bookId),
-        eq(borrowRecords.status, 'BORROWED'),
-      ),
-    )
-    .then((res) => res.length > 0);
+export const checkUserBorrowStatus = cache(
+  async (userId: string, bookId: string): Promise<boolean> => {
+    const hasBorrowed = await db
+      .select()
+      .from(borrowRecords)
+      .where(
+        and(
+          eq(borrowRecords.userId, userId),
+          eq(borrowRecords.bookId, bookId),
+          eq(borrowRecords.status, 'BORROWED'),
+        ),
+      )
+      .then((res) => res.length > 0);
 
-  return hasBorrowed;
-}
+    return hasBorrowed;
+  },
+);
 
-export async function isBookBorrowed(
-  bookId: string,
-  userId: string,
-): Promise<boolean> {
-  const record = await db
-    .select({
-      requestId: borrowRecords.id,
-    })
-    .from(borrowRecords)
-    .where(
-      and(
-        eq(borrowRecords.bookId, bookId),
-        eq(borrowRecords.userId, userId),
-        eq(borrowRecords.status, 'BORROWED'),
-      ),
-    )
-    .then((result) => result[0]);
+export const isBookBorrowed = cache(
+  async (bookId: string, userId: string): Promise<boolean> => {
+    const record = await db
+      .select({
+        requestId: borrowRecords.id,
+      })
+      .from(borrowRecords)
+      .where(
+        and(
+          eq(borrowRecords.bookId, bookId),
+          eq(borrowRecords.userId, userId),
+          eq(borrowRecords.status, 'BORROWED'),
+        ),
+      )
+      .then((result) => result[0]);
 
-  return !!record;
-}
+    return !!record;
+  },
+);

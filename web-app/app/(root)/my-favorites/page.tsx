@@ -12,17 +12,19 @@ import {
 } from '@/components/ui/tooltip';
 import { SearchProvider } from '@/context/search-books-context';
 import { favoriteBooks } from '@/db/schema';
+import { verifySession } from '@/lib/dal';
 import { fetchBooksPages } from '@/lib/data';
 import { truncateText } from '@/lib/utils';
 
 export default async function Page({ searchParams }: Readonly<SearchParams>) {
+  const { userId } = await verifySession();
   const { query, filter, page } = await searchParams;
-  console.log(query, filter, page);
   const currentPage = Number(page) || 1;
   const totalPages = await fetchBooksPages(
     query ?? '',
     favoriteBooks,
     (filter ?? 'all') as Filter,
+    userId,
   );
 
   return (
@@ -81,7 +83,7 @@ export default async function Page({ searchParams }: Readonly<SearchParams>) {
 
             <Separator className="mt-10 h-1 rounded-full bg-dark-200/40" />
 
-            <Pagination route='/my-favorites' totalPages={totalPages} />
+            <Pagination route="/my-favorites" totalPages={totalPages} />
           </>
         )}
       </main>

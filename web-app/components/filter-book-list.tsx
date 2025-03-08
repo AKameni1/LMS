@@ -2,7 +2,7 @@ import { fetchFilteredBooks } from '@/lib/data';
 import React from 'react';
 import BookList from './book-list';
 import BookCard from './book-card';
-import { auth } from '@/auth';
+import { verifySession } from '@/lib/dal';
 
 export default async function FilterBookList({
   query,
@@ -15,11 +15,7 @@ export default async function FilterBookList({
   filter?: Filter;
   type: Type;
 }>) {
-  const session = await auth();
-  const userId = session?.user?.id;
-  if (!userId) {
-    throw new Error('User not found.');
-  }
+  const { userId } = await verifySession();
   const books = await fetchFilteredBooks(
     query,
     currentPage,

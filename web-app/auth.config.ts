@@ -1,4 +1,4 @@
-import type { NextAuthConfig, Session } from 'next-auth';
+import { AuthError, type NextAuthConfig, type Session } from 'next-auth';
 import { db } from './db/drizzle';
 import { users } from './db/schema';
 import { eq } from 'drizzle-orm';
@@ -79,8 +79,9 @@ export const authConfig = {
         .from(users)
         .where(eq(users.id, user.id))
         .then((result) => {
+          console.log(result);
           if (result[0].status === 'REJECTED') {
-            throw new Error('AccessDenied');
+            throw new AuthError('AccessDenied');
           }
         });
 

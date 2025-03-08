@@ -1,18 +1,12 @@
-import { auth } from '@/auth';
 import BorrowedBookCard from '@/components/borrowed-book-card';
 import ProfileCard from '@/components/profile-card';
+import { verifySession } from '@/lib/dal';
 import { fetchUserBorrowedBooks } from '@/lib/data';
-import { redirect } from 'next/navigation';
+
 import React from 'react';
 
 export default async function Page() {
-  const session = await auth();
-
-  const userId = session?.user?.id;
-
-  if (!userId) {
-    redirect('sign-in');
-  }
+  const { userId } = await verifySession();
 
   // Fetch user data and borrowed books
   const { user, borrowItems } = await fetchUserBorrowedBooks(userId);

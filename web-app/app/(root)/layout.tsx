@@ -48,7 +48,7 @@ export default async function UserLayout({
 
   return (
     <main className="root-container">
-      <div className="max-w-7xl">
+      <div className="min-w-[80rem] max-w-7xl">
         <Header session={session} />
         <div className="mt-20 pb-20">{children}</div>
       </div>
