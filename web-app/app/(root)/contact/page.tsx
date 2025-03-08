@@ -32,7 +32,7 @@ export default function ContactForm() {
         </h2>
         <form onSubmit={handleSubmit} className="flex w-full flex-col gap-6">
           <div>
-            <label className="block text-sm font-medium">Nom</label>
+            <label className="block text-sm font-medium text-white">Nom</label>
             <input
               type="text"
               name="name"
@@ -42,7 +42,7 @@ export default function ContactForm() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium">Email</label>
+            <label className="block text-sm font-medium text-white">Email</label>
             <input
               type="email"
               name="email"
@@ -52,7 +52,7 @@ export default function ContactForm() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium">
+            <label className="block text-sm font-medium text-white">
               Objet du message
             </label>
             <select
@@ -76,7 +76,7 @@ export default function ContactForm() {
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium">
+            <label className="block text-sm font-medium text-white">
               Message détaillé
             </label>
             <textarea
