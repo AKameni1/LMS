@@ -208,7 +208,7 @@ export const columns: ColumnDef<UserRow>[] = [
                 className="rounded-md"
                 alt={'university card'}
                 loading={'eager'}
-                // lqip={{ active: true }}
+              // lqip={{ active: true }}
               />
             </div>
           </DialogContent>

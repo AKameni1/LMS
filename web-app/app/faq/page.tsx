@@ -1,10 +1,20 @@
 "use client";
 import React from "react";
+import Image from 'next/image';
+
+const FAQItem = ({ question, answer }: { question: string, answer: string }) => {
+  return (
+    <div className="faq-item p-6 bg-dark-600 text-white rounded-lg shadow-md">
+      <h3 className="text-xl font-bold">{question}</h3>
+      <p className="mt-2 text-light-100">{answer}</p>
+    </div>
+  );
+};
 
 const FAQ = () => {
   const faqs = [
     {
-      question: "How to borrow a book? ",
+      question: "How to borrow a book?",
       answer: "Log in to your account, search for the desired book, and click on 'Borrow'. Your book will appear on your user dashboard.",
     },
     {
@@ -19,21 +29,14 @@ const FAQ = () => {
       question: "My account is blocked, what should I do?",
       answer: "Contact an administrator.",
     },
-    {
-      question: "",
-      answer: "",
-    },
   ];
 
   return (
-    <div className="container mx-auto p-6">
-      <h1 className="text-3xl font-semibold text-center mb-6">FAQ - Questions Fréquentes</h1>
-      <div className="space-y-4">
+    <div className="library bg-cover  min-h-screen py-8 px-5" style={{ backgroundImage: 'url("/images/pattern.webp")'}}>
+      <h1 className="text-3xl font-bold text-center text-light-100 mb-20">FAQ - Questions Fréquentes</h1>
+      <div className="faq-list space-y-6">
         {faqs.map((faq, index) => (
-          <div key={index} className="p-4 border rounded-lg bg-white shadow">
-            <h2 className="text-lg font-bold">{faq.question}</h2>
-            <p className="text-gray-700">{faq.answer}</p>
-          </div>
+          <FAQItem key={index} question={faq.question} answer={faq.answer} />
         ))}
       </div>
     </div>
