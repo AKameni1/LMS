@@ -1,7 +1,6 @@
 import { CountdownTimer } from '@/components/counterdown-timer';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import React from 'react';
 
 export default async function Page() {
   // This page is shown when a user is trying to sign in or sign up too fast.

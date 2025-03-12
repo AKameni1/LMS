@@ -16,22 +16,22 @@ import SessionProviderWrapper from '@/components/session-provider-wrapper';
 const ibmPlexSans = localFont({
   src: [
     {
-      path: '../public/fonts/IBMPlexSans-Regular.woff2',
+      path: '../../public/fonts/IBMPlexSans-Regular.woff2',
       weight: '400',
       style: 'normal',
     },
     {
-      path: '../public/fonts/IBMPlexSans-Medium.woff2',
+      path: '../../public/fonts/IBMPlexSans-Medium.woff2',
       weight: '500',
       style: 'normal',
     },
     {
-      path: '../public/fonts/IBMPlexSans-SemiBold.woff2',
+      path: '../../public/fonts/IBMPlexSans-SemiBold.woff2',
       weight: '600',
       style: 'normal',
     },
     {
-      path: '../public/fonts/IBMPlexSans-Bold.woff2',
+      path: '../../public/fonts/IBMPlexSans-Bold.woff2',
       weight: '700',
       style: 'normal',
     },
@@ -43,7 +43,7 @@ const ibmPlexSans = localFont({
 const bebasNeue = localFont({
   src: [
     {
-      path: '../public/fonts/BebasNeue-Regular.woff2',
+      path: '../../public/fonts/BebasNeue-Regular.woff2',
       weight: '400',
       style: 'normal',
     },
