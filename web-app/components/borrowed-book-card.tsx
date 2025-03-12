@@ -45,7 +45,7 @@ export default function BorrowedBookCard({
     dueMessage = `${diffDays.toString().padStart(2, '0')} ${daysLabel} left to return`;
   }
 
-  const canCancel = canCancelRequest(borrowDate);
+  const canCancel = canCancelRequest(borrowDate, status);
   const canReturn = canBorrowRequest(updatedAt, status);
   const canRenew = canRenewRequest(dueDate, status);
 
@@ -185,7 +185,7 @@ export default function BorrowedBookCard({
             className={cn(
               'text-xs font-medium tracking-tight text-orange-400',
               status === 'CANCELLED' &&
-                'mt-4 flex items-center justify-between text-xs font-semibold tracking-normal text-red-400',
+              'mt-4 flex items-center justify-between text-xs font-semibold tracking-normal text-red-400',
             )}
           >
             {status === 'CANCELLED' && (
@@ -204,12 +204,15 @@ export default function BorrowedBookCard({
   );
 }
 
-function canCancelRequest(borrowDate: string | Date): boolean {
+function canCancelRequest(
+  borrowDate: string | Date,
+  status: BorrowRequestStatus,
+): boolean {
   const borrowTime = new Date(borrowDate).getTime();
   const currentTime = new Date().getTime();
   const hoursSinceBorrowed = (currentTime - borrowTime) / (1000 * 60 * 60);
 
-  return hoursSinceBorrowed <= 24;
+  return hoursSinceBorrowed <= 24 && status === 'PENDING';
 }
 
 function canBorrowRequest(
