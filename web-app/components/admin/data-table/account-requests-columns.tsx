@@ -19,7 +19,7 @@ import ConfirmationDialog from '../dialog/confirmation-dialog';
 import { useState, useTransition } from 'react';
 import { toast } from 'sonner';
 import { updateUser } from '@/lib/actions/admin/users';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/i18n/navigation';
 import { Loader2Icon } from 'lucide-react';
 
 /**
@@ -159,7 +159,7 @@ export const columns: ColumnDef<UserRow>[] = [
                 className="rounded-md"
                 alt={'university card'}
                 loading={'eager'}
-                // lqip={{ active: true }}
+              // lqip={{ active: true }}
               />
             </div>
           </DialogContent>

@@ -1,5 +1,4 @@
 import { fetchFilteredBooks } from '@/lib/data';
-import React from 'react';
 import BookList from './book-list';
 import BookCard from './book-card';
 import { verifySession } from '@/lib/dal';

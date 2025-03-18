@@ -1,6 +1,6 @@
 import { CountdownTimer } from '@/components/counterdown-timer';
+import { redirect } from '@/i18n/navigation';
 import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
 
 export default async function Page() {
   // This page is shown when a user is trying to sign in or sign up too fast.
@@ -9,7 +9,10 @@ export default async function Page() {
   const now = Date.now();
 
   if (!lockedUntil || now > parseInt(lockedUntil)) {
-    return redirect('/sign-in');
+    return redirect({
+      href: '/sign-in',
+      locale: 'en',
+    });
   }
 
   return (

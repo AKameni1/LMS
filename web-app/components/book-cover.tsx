@@ -1,7 +1,6 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-import React from 'react';
 import BookCoverSvg from './book-cover-svg';
 import { IKImage } from 'imagekitio-next';
 import config from '@/lib/config';

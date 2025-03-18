@@ -1,15 +1,22 @@
 import 'server-only';
 
 import { auth } from '@/auth';
-import { redirect } from 'next/navigation';
 import { cache } from 'react';
+import { redirect } from '@/i18n/navigation';
 
 export const verifySession = cache(async () => {
   const session = await auth();
 
   if (!session?.user?.id) {
-    redirect('/sign-in');
+    redirect({
+      href: '/sign-in',
+      locale: 'en',
+    });
   }
 
-  return { isAuth: true, userId: session.user.id, isAdmin: session.user.isAdmin };
+  return {
+    isAuth: true,
+    userId: session.user.id,
+    isAdmin: session.user.isAdmin,
+  };
 });

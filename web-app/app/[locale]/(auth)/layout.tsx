@@ -1,7 +1,7 @@
 import { auth } from '@/auth';
+import { redirect } from '@/i18n/navigation';
 import type { Metadata } from 'next';
 import Image from 'next/image';
-import { redirect } from 'next/navigation';
 import type { ReactNode } from 'react';
 
 export const metadata: Metadata = {
@@ -14,7 +14,10 @@ export default async function Layout({
   const session = await auth();
 
   if (session) {
-    redirect('/');
+    redirect({
+      href: '/',
+      locale: 'en',
+    });
   }
 
   return (

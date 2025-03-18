@@ -11,7 +11,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 import { useState } from 'react';
 import SuperAdminDialog from '../dialog/super-admin-dialog';
 

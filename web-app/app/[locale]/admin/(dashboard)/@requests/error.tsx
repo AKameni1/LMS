@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { CircleAlertIcon } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/i18n/navigation';
 import { startTransition, useEffect } from 'react';
 
 export default function Errors({

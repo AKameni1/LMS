@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import React from 'react';
 import BookCover from './book-cover';
 import BorrowBook from './borrow-book';
 import { checkUserBorrowStatus, fetchUserById } from '@/lib/data';

@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
-import { JSX } from 'react';
+import type { JSX } from 'react';
 
 export default function SuperAdminDialog({
   open,

@@ -24,7 +24,7 @@ import {
 } from '@/components/ui/tooltip';
 import { updateBorrowRequest } from '@/lib/actions/admin/borrow-requests';
 import { toast } from 'sonner';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/i18n/navigation';
 import { Loader2Icon } from 'lucide-react';
 
 /**
@@ -170,10 +170,10 @@ export const columns: ColumnDef<BorrowRequestsRow>[] = [
       const { returnDate } = row.original;
       const date = returnDate
         ? new Date(returnDate).toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric',
-          })
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
+        })
         : '---';
       return <span className="text-sm font-medium text-dark-200">{date}</span>;
     },
@@ -340,8 +340,8 @@ const getAllowedStatuses = (currentStatus: BorrowRequestStatus) => {
 const statusActions: Record<
   BorrowRequestStatus,
   (requestId: string, isOverdue?: boolean) => Promise<void>
-  > = {
-  PENDING: async () => {},
+> = {
+  PENDING: async () => { },
   BORROWED: async (requestId) => {
     console.log(`Approving request ${requestId}`);
     await updateBorrowRequest({ requestId, status: 'BORROWED' });

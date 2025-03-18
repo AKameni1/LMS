@@ -5,7 +5,7 @@ import { useState, useTransition } from 'react';
 import { Button } from './ui/button';
 import Image from 'next/image';
 import { toast } from 'sonner';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/i18n/navigation';
 import BookRequestModal from './book-request-modal';
 
 export default function RenewBook({

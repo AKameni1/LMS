@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { Button } from './ui/button';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/i18n/navigation';
 
 export default function EmptyList() {
   const router = useRouter();

@@ -2,7 +2,7 @@ import BookListAdded from '@/components/admin/book-list-added';
 import LinkButton from '@/components/admin/link-button';
 import { ScrollArea } from '@/components/admin/scroll-area';
 import Image from 'next/image';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 
 export default async function Page() {
   return (

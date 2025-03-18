@@ -2,8 +2,8 @@ import { auth } from '@/auth';
 import Header from '@/components/header';
 import { db } from '@/db/drizzle';
 import { users } from '@/db/schema';
+import { redirect } from '@/i18n/navigation';
 import { eq } from 'drizzle-orm';
-import { redirect } from 'next/navigation';
 import { after } from 'next/server';
 import type { ReactNode } from 'react';
 
@@ -14,7 +14,10 @@ export default async function UserLayout({
   const userId = session?.user?.id;
 
   if (!session || !userId) {
-    redirect('/sign-in');
+    redirect({
+      href: '/sign-in',
+      locale: 'en',
+    });
   }
 
   // check if the current user is an admin
@@ -22,7 +25,10 @@ export default async function UserLayout({
   const isAdmin = session?.user.isAdmin;
 
   if (isAdmin) {
-    redirect('/admin');
+    redirect({
+      href: '/admin',
+      locale: 'en',
+    });
   }
 
   after(async () => {

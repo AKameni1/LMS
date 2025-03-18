@@ -3,7 +3,7 @@ import BookCover from './book-cover';
 import chroma from 'chroma-js';
 import { cn, getDateWithSuffix } from '@/lib/utils';
 import { TriangleAlertIcon } from 'lucide-react';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 import OptionsDropdown from './options-dropdown';
 
 type BorrowedBookCardProps = {

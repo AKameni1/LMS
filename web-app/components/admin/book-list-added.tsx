@@ -1,7 +1,7 @@
 import BookCover from '../book-cover';
 import Image from 'next/image';
 import { fetchBooksAdded } from '@/lib/actions/admin/books';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 
 export default async function BookListAdded() {
   const { success, data } = await fetchBooksAdded();

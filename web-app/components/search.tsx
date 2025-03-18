@@ -3,10 +3,11 @@
 import Image from 'next/image';
 import Form from 'next/form';
 import { Input } from './ui/input';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useSearchContext } from '@/context/search-books-context';
 import { formUrlQuery, removeKeysFromUrlQuery } from '@/lib/url';
+import { usePathname, useRouter } from '@/i18n/navigation';
 
 export default function Search({
   placeholder,

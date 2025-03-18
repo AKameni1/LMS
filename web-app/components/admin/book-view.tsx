@@ -4,7 +4,7 @@ import BookCover from '../book-cover';
 import chroma from 'chroma-js';
 import Image from 'next/image';
 import { Button } from '../ui/button';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 import { notFound } from 'next/navigation';
 
 export default async function BookView({ id }: Readonly<{ id: string }>) {

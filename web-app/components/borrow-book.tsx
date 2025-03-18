@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/i18n/navigation';
 import { Button } from './ui/button';
 import Image from 'next/image';
 import { useState, useTransition } from 'react';

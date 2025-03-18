@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { ArrowLeft, Home, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -11,6 +10,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Link } from '@/i18n/navigation';
 
 export default function NotFound() {
   return (

@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from '@/i18n/navigation';
 import {
   Select,
   SelectContent,
@@ -9,7 +10,7 @@ import {
 } from './ui/select';
 import { filterOptions } from '@/constants';
 import { formUrlQuery, removeKeysFromUrlQuery } from '@/lib/url';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 
 export default function FilterSelect({

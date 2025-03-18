@@ -1,0 +1,14 @@
+{
+  "SigninPage": {
+    "error": "Erreur lors de la connexion",
+    "title": "Se connecter",
+    "toast": {
+      "success": {
+        "title": "Bienvenue à Bookwise"
+      }
+    }
+  },
+  "SignupPage": {
+    "title": "S'inscrire"
+  }
+}

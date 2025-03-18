@@ -1,14 +1,13 @@
 'use client';
 
 import { navigationLinks } from '@/constants/index';
-import { usePathname } from 'next/navigation';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from './ui/tooltip';
-import Link from 'next/link';
+import { Link, usePathname } from '@/i18n/navigation';
 import { cn } from '@/lib/utils';
 
 export default function HeaderBrowsing() {
@@ -22,7 +21,7 @@ export default function HeaderBrowsing() {
               <Link
                 href={href}
                 className={cn(
-                  'cursor-pointer text-lg px-2 capitalize transition-all duration-200 hover:scale-110',
+                  'cursor-pointer px-2 text-lg capitalize transition-all duration-200 hover:scale-110',
                   pathname === href
                     ? 'text-light-200'
                     : 'text-light-100 hover:text-light-400',

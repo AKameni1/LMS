@@ -21,13 +21,14 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import Link from 'next/link';
+import { Link, useRouter } from '@/i18n/navigation';
 import { FIELD_NAMES, FIELD_TYPES } from '@/constants';
 import FileUpload from './file-upload';
 import { toast } from 'sonner';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useTransition } from 'react';
 import { Loader2Icon } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 type AuthFormPropsType<T extends FieldValues> = {
   schema: ZodType<T>;
@@ -42,12 +43,13 @@ export default function AuthForm<T extends FieldValues>({
   defaultValues,
   onSubmit,
 }: Readonly<AuthFormPropsType<T>>) {
+  const t = useTranslations<'SigninPage' & 'SignupPage'>();
   const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get('callbackUrl') ?? '/';
   const [isPending, startTransition] = useTransition();
   const isSignIn = type === 'SIGN_IN';
-  const message = isSignIn ? 'Sign in' : 'Sign up';
+  const message = isSignIn ? t('SigninPage.title') : t('SignupPage.title');
 
   const form: UseFormReturn<T> = useForm({
     resolver: zodResolver(schema),
@@ -59,7 +61,7 @@ export default function AuthForm<T extends FieldValues>({
       const result = await onSubmit(data);
 
       if (result.success) {
-        toast.success('Welcome to BookWise', {
+        toast.success(t('SigninPage.toast.success.title'), {
           description: `You have successfully ${isSignIn ? 'Signed in' : 'Signed up'} to BookWise.`,
         });
 

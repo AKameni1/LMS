@@ -1,7 +1,7 @@
 'use client';
 
 import { type ReactNode } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/i18n/navigation';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
 import { Button } from '../ui/button';
 import Image from 'next/image';

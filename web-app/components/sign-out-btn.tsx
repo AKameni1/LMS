@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useTransition } from 'react';
+import { useTransition } from 'react';
 import {
   Tooltip,
   TooltipContent,

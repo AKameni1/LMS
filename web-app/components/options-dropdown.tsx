@@ -11,7 +11,7 @@ import {
 } from './ui/dropdown-menu';
 import ConfirmationDialog from './admin/dialog/confirmation-dialog';
 import { toast } from 'sonner';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/i18n/navigation';
 import { MoreHorizontalIcon } from 'lucide-react';
 import { Button } from './ui/button';
 import {

@@ -7,10 +7,10 @@ import { hash } from 'bcryptjs';
 import { eq } from 'drizzle-orm';
 import { cookies, headers } from 'next/headers';
 import ratelimit from '../ratelimit';
-import { redirect } from 'next/navigation';
 import { workflowClient } from '../workflow';
 import config from '../config';
 import redis from '@/db/redis';
+import { redirect } from '@/i18n/navigation';
 
 export const signInWithCredentials = async (
   credentials: Pick<AuthCredentials, 'email' | 'password'>,
@@ -20,7 +20,10 @@ export const signInWithCredentials = async (
   const ip = (await headers()).get('x-forwarded-for') ?? '127.0.0.1';
 
   if (await checkLimitation(ip, email)) {
-    return redirect('/too-fast');
+    return redirect({
+      href: '/too-fast',
+      locale: 'en',
+    });
   }
 
   try {
@@ -33,12 +36,20 @@ export const signInWithCredentials = async (
     if (result?.error) {
       // Check if the user is locked out
       if (result.error === 'AccessDenied') {
-        return redirect(`/error?error=AccessDenied`);
+        return redirect({
+          href: {
+            pathname: '/error',
+            query: {
+              error: 'AccessDenied',
+            },
+          },
+          locale: 'en',
+        });
       }
 
       return {
         success: false,
-        message: 'Error signing in',
+        message: 'Error signing in.',
       };
     }
 
@@ -49,7 +60,15 @@ export const signInWithCredentials = async (
   } catch (error) {
     // Check if the user is locked out
     if (error instanceof Error && error.message.includes('AccessDenied')) {
-      return redirect(`/error?error=AccessDenied`);
+      return redirect({
+        href: {
+          pathname: '/error',
+          query: {
+            error: 'AccessDenied',
+          },
+        },
+        locale: 'en',
+      });
     }
     return {
       success: false,
@@ -64,7 +83,10 @@ export const signUp = async (params: AuthCredentials) => {
   const ip = (await headers()).get('x-forwarded-for') ?? '127.0.0.1';
 
   if (await checkLimitation(ip, email)) {
-    return redirect('/too-fast');
+    return redirect({
+      href: '/too-fast',
+      locale: 'en',
+    });
   }
 
   // Check if the user already exists

@@ -3,8 +3,7 @@
 import { adminSideBarLinks } from '@/constants';
 import { cn, getInitials } from '@/lib/utils';
 import Image from 'next/image';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { Link, usePathname } from '@/i18n/navigation';
 import { Avatar, AvatarFallback } from '../ui/avatar';
 import { Session } from 'next-auth';
 import SignOutButton from '../sign-out-btn';
@@ -67,7 +66,7 @@ export default function Sidebar({ session }: Readonly<{ session: Session }>) {
               {getInitials(session?.user?.name ?? 'IN')}
             </AvatarFallback>
           </Avatar>
-          <div className="absolute bottom-0 right-0 z-50 size-3 rounded-full bg-green-500 border border-white" />
+          <div className="absolute bottom-0 right-0 z-50 size-3 rounded-full border border-white bg-green-500" />
         </div>
 
         <div className="flex flex-col max-md:hidden">

@@ -1,5 +1,4 @@
 import { auth } from '@/auth';
-import { redirect } from 'next/navigation';
 import type { ReactNode } from 'react';
 import '@/styles/admin.css';
 import Sidebar from '@/components/admin/sidebar';
@@ -10,6 +9,7 @@ import { db } from '@/db/drizzle';
 import { users } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import type { Metadata } from 'next';
+import { redirect } from '@/i18n/navigation';
 
 export const metadata: Metadata = {
   title: 'Admin',
@@ -24,13 +24,19 @@ export default async function AdminLayout({
   const userId = session?.user?.id;
 
   if (!userId) {
-    redirect('sign-in');
+    redirect({
+      href: 'sign-in',
+      locale: 'en',
+    });
   }
 
   const isAdmin = session?.user.isAdmin;
 
   if (!isAdmin) {
-    redirect('/');
+    redirect({
+      href: '/',
+      locale: 'en',
+    });
   }
 
   after(async () => {

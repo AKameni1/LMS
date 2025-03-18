@@ -1,10 +1,9 @@
 {
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
-      "source.fixAll.eslint": "always"
+    "source.fixAll.eslint": "always",
   },
-  "cSpell.words": [
-    "bookwise",
-    "sonner"
-  ],
+  "cSpell.words": ["bookwise", "sonner"],
+  "i18n-ally.localesPaths": ["messages"],
+  "i18n-ally.keystyle": "nested",
 }
