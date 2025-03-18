@@ -1,0 +1,15 @@
+node_modules/
+.expo/
+build/
+coverage/
+.vscode/
+migrations/
+*.log
+*.tmp
+*.cache
+.DS_Store
+*.min.js
+*.min.css
+.env*.local
+package.json
+package-lock.json
