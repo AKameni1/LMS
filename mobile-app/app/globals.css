@@ -3,9 +3,9 @@
 @tailwind utilities;
 
 .text {
-  @apply text-7xl text-red-400;
+    @apply text-red-400 text-7xl;
 }
 
 .view {
-  @apply flex-1 justify-center items-center;
+    @apply flex-1 justify-center items-center;
 }
