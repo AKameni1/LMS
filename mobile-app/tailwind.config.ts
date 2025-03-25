@@ -5,55 +5,19 @@ export default {
   content: [
     './app/**/*.{js,jsx,ts,tsx,mdx}',
     './components/**/*.{js,jsx,ts,tsx,mdx}',
+    './pages/**/*.{js,jsx,ts,tsx}',
   ],
   presets: [require('nativewind/preset')],
   theme: {
     extend: {
       fontFamily: {
-        'ibm-plex-sans': ['IBM Plex Sans', 'sans-serif'],
-        'bebas-neue': ['var(--bebas-neue)'],
+        'bebas-neue': ['Bebas Neue', 'sans-serif'],
+        'ibm-plex-sans-bold': ['IBMPlexSans-Bold', 'sans-serif'],
+        'ibm-plex-sans-medium': ['IBMPlexSans-Medium', 'sans-serif'],
+        'ibm-plex-sans': ['IBMPlexSans-Regular', 'sans-serif'],
+        'ibm-plex-sans-semibold': ['IBMPlexSans-SemiBold', 'sans-serif'],
       },
       colors: {
-        background: 'hsl(var(--background))',
-        foreground: 'hsl(var(--foreground))',
-        card: {
-          DEFAULT: 'hsl(var(--card))',
-          foreground: 'hsl(var(--card-foreground))',
-        },
-        popover: {
-          DEFAULT: 'hsl(var(--popover))',
-          foreground: 'hsl(var(--popover-foreground))',
-        },
-        secondary: {
-          DEFAULT: 'hsl(var(--secondary))',
-          foreground: 'hsl(var(--secondary-foreground))',
-        },
-        success: {
-          DEFAULT: 'hsl(var(--success))',
-          foreground: 'hsl(var(--success-foreground))',
-        },
-        muted: {
-          DEFAULT: 'hsl(var(--muted))',
-          foreground: 'hsl(var(--muted-foreground))',
-        },
-        accent: {
-          DEFAULT: 'hsl(var(--accent))',
-          foreground: 'hsl(var(--accent-foreground))',
-        },
-        destructive: {
-          DEFAULT: 'hsl(var(--destructive))',
-          foreground: 'hsl(var(--destructive-foreground))',
-        },
-        border: 'hsl(var(--border))',
-        input: 'hsl(var(--input))',
-        ring: 'hsl(var(--ring))',
-        chart: {
-          '1': 'hsl(var(--chart-1))',
-          '2': 'hsl(var(--chart-2))',
-          '3': 'hsl(var(--chart-3))',
-          '4': 'hsl(var(--chart-4))',
-          '5': 'hsl(var(--chart-5))',
-        },
         primary: {
           DEFAULT: '#E7C9A5',
           admin: '#25388C',
@@ -101,31 +65,8 @@ export default {
       screens: {
         xs: '480px',
       },
-      borderRadius: {
-        lg: 'var(--radius)',
-        md: 'calc(var(--radius) - 2px)',
-        sm: 'calc(var(--radius) - 4px)',
-      },
       backgroundImage: {
-        pattern: "url('/images/pattern.webp')",
-      },
-      keyframes: {
-        'accordion-down': {
-          from: {
-            height: '0',
-          },
-          to: {
-            height: 'var(--radix-accordion-content-height)',
-          },
-        },
-        'accordion-up': {
-          from: {
-            height: 'var(--radix-accordion-content-height)',
-          },
-          to: {
-            height: '0',
-          },
-        },
+        pattern: "url('./assets/images/pattern.webp')",
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
