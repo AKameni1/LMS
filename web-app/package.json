@@ -55,7 +55,7 @@
     "html-loader": "^5.1.0",
     "imagekit": "^6.0.0",
     "imagekitio-next": "^1.0.1",
-    "lucide-react": "^0.474.0",
+    "lucide-react": "^0.475.0",
     "mock-aws-s3": "^4.0.2",
     "motion": "^12.4.7",
     "next": "15.1.7",
