@@ -1,4 +1,3 @@
-import { SignOutButton } from '@/components/signout-button';
 import { SignedIn, SignedOut, useUser } from '@clerk/clerk-expo';
 import { Link } from 'expo-router';
 import { Text } from 'react-native';
@@ -7,10 +6,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 export default function Home() {
   const { user } = useUser();
   return (
-    <SafeAreaView>
+    <SafeAreaView className='bg-[#232839] flex-1 items-center justify-center'>
       <SignedIn>
-        <Text>Hello {user?.emailAddresses[0].emailAddress}</Text>
-        <SignOutButton />
+        <Text className='text-light-300'>Hello {user?.emailAddresses[0].emailAddress}</Text>
       </SignedIn>
       <SignedOut>
         <Link href="/(auth)/sign-in">

@@ -9,15 +9,17 @@ function TabIcon({
   title,
 }: Readonly<{ focused: boolean; source: ImageSourcePropType; title: string }>) {
   return (
-    <View className={cn('flex items-center justify-center')}>
+    <View className={cn('h-full items-center justify-center')}>
       <Image
         source={source}
-        className={cn('size-6', focused ? 'text-primary' : 'text-gray-400')}
+        className={cn('size-6', focused ? 'text-primary' : 'text-light-100')}
+        tintColor={focused ? '#E7C9A5' : '#CDCDE0'}
+        resizeMode="cover"
       />
       <Text
         className={cn(
-          'text-sm',
-          focused ? 'font-bold text-primary' : 'text-gray-400',
+          'w-full text-sm',
+          focused ? 'font-bold text-primary' : 'text-light-100',
         )}
       >
         {title}
@@ -38,14 +40,18 @@ export default function Layout() {
           backgroundColor: '#16191E',
           paddingBottom: 0,
           overflow: 'hidden',
-          height: 70,
+          height: 80,
           position: 'absolute',
+          borderColor: '#252933',
+          borderTopWidth: 1
         },
         tabBarItemStyle: {
           width: '100%',
           height: '100%',
           display: 'flex',
+          flexDirection: 'row',
           alignItems: 'center',
+          justifyContent: 'center',
         },
       }}
     >
@@ -65,7 +71,7 @@ export default function Layout() {
           title: 'Library',
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <TabIcon focused={focused} source={icons.book} title="Library" />
+            <TabIcon focused={focused} source={icons.tabBook} title="Library" />
           ),
         }}
       />

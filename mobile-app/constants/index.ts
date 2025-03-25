@@ -25,6 +25,7 @@ const user = require('../assets/icons/user.svg');
 const verified = require('../assets/icons/verified.svg');
 const warning = require('../assets/icons/warning.svg');
 const google = require('../assets/icons/google.png');
+const tabBook = require('../assets/icons/book.png')
 
 // Admin Icons
 const arrowLeftAdmin = require('../assets/icons/admin/arrow-left.svg');
@@ -75,6 +76,7 @@ export const images = {
 export const icons = {
   book2,
   book,
+  tabBook,
   profile,
   favorites,
   email,
