@@ -9,7 +9,9 @@ const email = require('@/assets/icons/email.png');
 const lock = require('@/assets/icons/lock.png');
 const person = require('@/assets/icons/person.png');
 const heart = require('../assets/icons/heart.svg');
-const home = require('../assets/icons/home.svg');
+const home = require('../assets/icons/home.png');
+const favorites = require('../assets/icons/favorites.png');
+const profile = require('../assets/icons/profile.png');
 const id = require('../assets/icons/id.svg');
 const logo = require('../assets/icons/logo.svg');
 const logout = require('../assets/icons/logout.svg');
@@ -73,6 +75,8 @@ export const images = {
 export const icons = {
   book2,
   book,
+  profile,
+  favorites,
   email,
   lock,
   person,

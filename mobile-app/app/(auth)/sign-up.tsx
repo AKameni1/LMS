@@ -85,6 +85,7 @@ export default function Signup() {
         // If the status is not complete, check why. User may need to
         // complete further steps.
         console.error(JSON.stringify(signUpAttempt, null, 2));
+        console.error('Verification failed');
         setVerification({
           ...verification,
           state: 'failed',
@@ -95,6 +96,7 @@ export default function Signup() {
       // See https://clerk.com/docs/custom-flows/error-handling
       // for more info on error handling
       console.error(JSON.stringify(err, null, 2));
+      console.log('error', err);
       setVerification({
         ...verification,
         state: 'failed',
