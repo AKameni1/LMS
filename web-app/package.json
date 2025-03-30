@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
-    "@mswjs/interceptors": "^0.37.5",
+    "@mswjs/interceptors": "^0.38.0",
     "@neondatabase/serverless": "^0.10.4",
     "@nutrient-sdk/viewer": "^1.0.0",
     "@radix-ui/react-accordion": "^1.2.3",
