@@ -32,7 +32,7 @@
       [
         "expo-router",
         {
-          "origin": "https://lms-universal.vercel.app/"
+          "origin": "https://lms-university.vercel.app/"
         }
       ],
       [

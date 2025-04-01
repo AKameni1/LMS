@@ -46,7 +46,7 @@ export default function Signin() {
   };
 
   return (
-    <ScrollView className="flex-1 bg-[#12141d]">
+    <ScrollView className="gradient-vertical flex-1">
       <SafeAreaView>
         <View className="relative h-64 w-full">
           <Image source={images.authIllustration} className="z-0 h-64 w-full" />

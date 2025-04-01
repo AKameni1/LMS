@@ -8,9 +8,9 @@ export default function OAuth() {
   return (
     <View>
       <View className="mt-4 flex-row items-center justify-center gap-x-3">
-        <View className="h-0.5 flex-1 bg-gray-100/80" />
+        <View className="h-0.5 flex-1 bg-gray-100/80 rounded-full" />
         <Text className="text-lg text-light-200">Or</Text>
-        <View className="h-0.5 flex-1 bg-gray-100/80" />
+        <View className="h-0.5 flex-1 bg-gray-100/80 rounded-full" />
       </View>
 
       <CustomButton

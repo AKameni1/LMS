@@ -43,7 +43,7 @@ export default function Layout() {
           height: 80,
           position: 'absolute',
           borderColor: '#252933',
-          borderTopWidth: 1
+          borderTopWidth: 1,
         },
         tabBarItemStyle: {
           width: '100%',
