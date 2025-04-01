@@ -6,7 +6,6 @@ import { useSignIn } from '@clerk/clerk-expo';
 import { Link, useRouter } from 'expo-router';
 import { useState } from 'react';
 import { View, Text, ScrollView, Image } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Signin() {
   const { isLoaded, signIn, setActive } = useSignIn();
@@ -46,11 +45,11 @@ export default function Signin() {
   };
 
   return (
-    <ScrollView className="gradient-vertical flex-1">
-      <SafeAreaView>
+    <ScrollView className="flex-1 bg-[#12141d]">
+      <View>
         <View className="relative h-64 w-full">
           <Image source={images.authIllustration} className="z-0 h-64 w-full" />
-          <Text className="font-ibm-plex-sans-semibold absolute bottom-5 left-5 text-2xl text-black">
+          <Text className="absolute bottom-5 left-5 font-ibm-plex-sans-semibold text-2xl text-black">
             Welcome To BookWise 👋
           </Text>
         </View>
@@ -88,7 +87,7 @@ export default function Signin() {
             <Text className="text-blue-500">Sign Up</Text>
           </Link>
         </View>
-      </SafeAreaView>
+      </View>
     </ScrollView>
   );
 }

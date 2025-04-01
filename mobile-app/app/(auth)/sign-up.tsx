@@ -4,11 +4,11 @@ import OAuth from '@/components/oauth';
 import { icons, images } from '@/constants';
 import { fetchAPI } from '@/lib/fetch';
 import { useSignUp } from '@clerk/clerk-expo';
+import { NavigationContainer } from '@react-navigation/native';
 import { Link, router } from 'expo-router';
 import { useState } from 'react';
 import { View, Text, ScrollView, Image, Alert } from 'react-native';
 import ReactNativeModal from 'react-native-modal';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Signup() {
   const { isLoaded, signUp, setActive } = useSignUp();
@@ -106,11 +106,11 @@ export default function Signup() {
   };
 
   return (
-    <ScrollView className="gradient-vertical flex-1">
-      <SafeAreaView>
+    <ScrollView className="flex-1 bg-[#12141d]">
+      <View>
         <View className="relative h-64 w-full">
           <Image source={images.authIllustration} className="z-0 h-64 w-full" />
-          <Text className="font-ibm-plex-sans-semibold absolute bottom-5 left-5 text-2xl text-black">
+          <Text className="absolute bottom-5 left-5 font-ibm-plex-sans-semibold text-2xl text-black">
             Create Your Account
           </Text>
         </View>
@@ -204,7 +204,7 @@ export default function Signup() {
             <View className="min-h-72 rounded-2xl bg-white p-7">
               <Image source={images.check} className="mx-auto my-5 size-28" />
 
-              <Text className="font-ibm-plex-sans-bold text-center text-3xl">
+              <Text className="text-center font-ibm-plex-sans-bold text-3xl">
                 Verified
               </Text>
 
@@ -223,7 +223,7 @@ export default function Signup() {
             </View>
           </ReactNativeModal>
         </View>
-      </SafeAreaView>
+      </View>
     </ScrollView>
   );
 }

@@ -1,14 +1,15 @@
 import { SignedIn, SignedOut, useUser } from '@clerk/clerk-expo';
 import { Link } from 'expo-router';
-import { Text } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Text, View } from 'react-native';
 
 export default function Home() {
   const { user } = useUser();
   return (
-    <SafeAreaView className='bg-[#232839] flex-1 items-center justify-center'>
+    <View className="flex-1 items-center justify-center bg-[#232839]">
       <SignedIn>
-        <Text className='text-light-300'>Hello {user?.emailAddresses[0].emailAddress}</Text>
+        <Text className="text-light-300">
+          Hello {user?.emailAddresses[0].emailAddress}
+        </Text>
       </SignedIn>
       <SignedOut>
         <Link href="/(auth)/sign-in">
@@ -18,6 +19,6 @@ export default function Home() {
           <Text>Sign up</Text>
         </Link>
       </SignedOut>
-    </SafeAreaView>
+    </View>
   );
 }

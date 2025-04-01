@@ -7,8 +7,9 @@ import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import { hideAsync } from 'expo-splash-screen';
 import { useEffect } from 'react';
+import config from '@/lib/config';
 
-const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!;
+const publishableKey = config.env.publishableKey;
 
 if (!publishableKey) {
   throw new Error(

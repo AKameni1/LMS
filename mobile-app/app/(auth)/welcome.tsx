@@ -27,7 +27,7 @@ export default function Welcome() {
           onPress={() => {
             router.replace('/(auth)/sign-up');
           }}
-          className="w-full items-end justify-end p-5"
+          className="mt-8 w-full items-end justify-end p-5"
         >
           <Text className="font-ibm-plex-sans-bold text-lg text-light-300">
             Skip
@@ -57,7 +57,7 @@ export default function Welcome() {
                 </Text>
               </View>
 
-              <Text className="font-ibm-plex-sans-semibold mx-10 mt-3 text-center text-lg text-light-200/80">
+              <Text className="mx-10 mt-3 text-center font-ibm-plex-sans-semibold text-lg text-light-200/80">
                 {item.description}
               </Text>
             </View>
