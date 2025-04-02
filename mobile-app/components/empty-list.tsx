@@ -1,5 +1,4 @@
-import { Image, Text, View } from 'react-native';
-import { Button } from 'react-native';
+import { Image, Text, View, Button } from 'react-native';
 import { useRouter } from 'expo-router';
 import { images } from '@/constants';
 
