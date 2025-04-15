@@ -4,6 +4,7 @@ import { Link } from 'expo-router';
 import { View, Text } from 'react-native';
 
 export default function Favorites() {
+
   return (
     <View className="flex-1 bg-[#232839]">
       <SignedIn>
@@ -26,10 +27,6 @@ export default function Favorites() {
             </View>
             <View className="h-full items-center">
               <Text className="text-white">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde,
-                laboriosam cupiditate optio voluptas tempora voluptatibus illo
-                non voluptatem itaque quisquam minus, ut quos. Quisquam dolore
-                provident voluptas explicabo, incidunt vero.
               </Text>
             </View>
           </View>

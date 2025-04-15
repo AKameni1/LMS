@@ -62,6 +62,23 @@ const notFoundIllustration = require('../assets/images/not_found-illustration.sv
 const pattern = require('../assets/images/pattern.webp');
 const onboarding1 = require('../assets/images/onboarding-1.png');
 
+// Books
+const book1 = require('../assets/images/book-1.png');
+const book3 = require('../assets/images/book-2.png');
+const book4 = require('../assets/images/book-3.png');
+const book5 = require('../assets/images/book-4.png');
+const book6 = require('../assets/images/book-5.png');
+const book7 = require('../assets/images/book-6.png');
+
+export const bookCover = {
+    book1,
+    book3,
+    book4,
+    book5,
+    book6,
+    book7,
+};
+
 export const images = {
   accountRequests,
   authIllustration,

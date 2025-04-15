@@ -7,8 +7,11 @@ export default function Home() {
   return (
     <View className="flex-1 items-center justify-center bg-[#232839]">
       <SignedIn>
-        <Text className="text-light-300">
+        <Text className=" mt-8 max-w-md self-center text-3xl font-semibold text-light-300">
           Hello {user?.emailAddresses[0].emailAddress}
+        </Text>
+        <Text className="mt-8 max-w-md self-center text-xl font-semibold text-light-200 xs:text-5xl">
+            Welcome to your next great read.
         </Text>
       </SignedIn>
       <SignedOut>
