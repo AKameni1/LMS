@@ -1,18 +1,18 @@
 import EmptyList from '@/components/empty-list';
 import { SignedIn, SignedOut } from '@clerk/clerk-expo';
 import { Link } from 'expo-router';
-import { View, Text } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 
 export default function Favorites() {
   return (
-    <View className="flex-1 bg-[#232839]">
+    <ScrollView className="flex-1 bg-[#232839]">
       <SignedIn>
         {true ? (
-          <View className="h-full">
+          <View className="h-screen">
             <EmptyList />
           </View>
         ) : (
-          <View className="flex-1">
+          <View className="h-screen">
             <View className="box-border h-[25%] justify-center">
               <Text className="mt-2 max-w-md self-center text-3xl font-semibold text-white xs:text-5xl">
                 Discover and Find All
@@ -44,6 +44,6 @@ export default function Favorites() {
           <Text>Sign up</Text>
         </Link>
       </SignedOut>
-    </View>
+    </ScrollView>
   );
 }

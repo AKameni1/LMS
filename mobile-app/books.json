@@ -1,6 +1,5 @@
 [
   {
-    "id": "12121580-de6f-46df-a235-80424474ea19",
     "title": "Inside Evil: Inside Evil Series, Book 1",
     "author": "Mr G. Wakeling",
     "genre": "Strategic, Fantasy",
@@ -14,7 +13,6 @@
     "summary": "Inside Evil by Geoffrey Wakeling is a gripping blend of mystery and fantasy set in the quiet English town of Ridgewood. The story follows Roberta Arlington, a seemingly ordinary woman whose life takes a dark turn when a brutal murder shakes the town. As she delves deeper into the mystery, she begins experiencing strange visions and an eerie sense that the crime is connected to something far older and more sinister. When she discovers a hidden portal to another realm, she realizes that Ridgewood is not just an ordinary town—it is a gateway between worlds, and an ancient evil is threatening to break through.\n\nAs Roberta and a group of unlikely allies—including her friend Susan and the enigmatic Grayson—unravel the town’s secrets, they uncover a history of disappearances and supernatural occurrences that span centuries. The deeper they dig, the more they realize that the murder was just the beginning. A dark entity known as the Weaver has been lurking beyond the veil, waiting for the right moment to unleash chaos upon both realms. Roberta learns that she has a special connection to this entity, one that might make her the key to stopping it—or the perfect vessel for its return.\n\nWith time running out, Roberta must navigate her growing powers, unearth the truth about her past, and confront the forces that threaten to consume both her world and the one beyond. Inside Evil sets the stage for an atmospheric and suspenseful series, blending elements of horror, magic, and mystery as Roberta embarks on a journey that will challenge everything she knows about herself and her town."
   },
   {
-    "id": "1785cefe-0a64-45b0-b3ce-d803c870d8d4",
     "title": "Gerald's Game",
     "author": "Stephen King",
     "genre": "Horror Game",
@@ -28,7 +26,6 @@
     "summary": "In Gerald's Game, Jessie Burlingame reluctantly agrees to participate in her husband Gerald's kinky sexual fantasies during a getaway to their secluded summer home. Despite her discomfort with the situation, Jessie hopes for a pleasant retreat, but things take a terrifying turn when Gerald crosses a dangerous line. Jessie is handcuffed to the bedposts, and the day soon spirals into a deadly confrontation, setting the stage for a psychological nightmare.\n\nWith her husband dead, Jessie finds herself trapped in the remote lakeside house, completely isolated. Handcuffed to the bed and with no means of escape, she is left alone to face her own fears. As the days drag on, Jessie begins to confront her past trauma and the darkest corners of her mind, all while grappling with the harsh realities of her dire situation. The psychological tension mounts as Jessie struggles for survival against the terrifying isolation that seems to stretch on forever.\n\nAs night falls and Jessie’s mind plays tricks on her, she faces the terrifying question of whether her fears are real or merely figments of her imagination. The line between reality and illusion blurs, as Jessie is forced to confront not just her physical restraints but her psychological torment. The shadows in the house become a terrifying presence, and Jessie must draw upon her inner strength to survive the mental and physical horrors of her situation."
   },
   {
-    "id": "17a58b62-0258-45a5-8b8b-9a21a6d6630c",
     "title": "Seriously Good Software",
     "author": "Marco Faella",
     "genre": "Programming",
@@ -42,7 +39,6 @@
     "summary": "Seriously Good Software starts by exploring the core principles of software development, emphasizing the importance of correctness—software must function as intended under all specified conditions. Faella uses clear examples to show how to identify and fix errors that might compromise the correctness of code.\n\nThe book progresses to readability, highlighting how clean, well-documented code improves collaboration and reduces maintenance costs. Developers learn techniques to refactor code for better readability without compromising functionality.\n\nPerformance and scalability are addressed with practical tips on optimizing code to handle increasing workloads and adapt to growth. Faella explains how to use profiling tools, optimize algorithms, and make trade-offs to enhance efficiency.\n\nSecurity is another key focus, with the book covering techniques to protect software from vulnerabilities and potential attacks. Maintainability rounds out the discussion, teaching developers how to write modular, testable code that adapts to future changes.\n\nThroughout, Seriously Good Software balances theory with hands-on examples, encouraging developers to apply best practices in their projects. With its emphasis on professionalism and long-term thinking, the book equips readers to create software that not only works but thrives."
   },
   {
-    "id": "350c3bc8-a5cc-45a3-ba16-97b93ed056b0",
     "title": "HTML and CSS: Design and Build Websites",
     "author": "Jon Duckett",
     "genre": "Web Development",
@@ -56,7 +52,6 @@
     "summary": "HTML and CSS: Design and Build Websites starts with an introduction to HTML, covering the basic building blocks of a webpage, including elements like headings, paragraphs, links, and images. Duckett carefully explains the structure and syntax of HTML, teaching readers how to write and organize their code.\n\nThe book then transitions to CSS, showing readers how to apply styles to their HTML elements. Topics such as fonts, colors, borders, padding, and margins are introduced in clear, easy-to-understand terms. Duckett uses plenty of visual examples to help readers see the immediate impact of the styles they apply.\n\nAs the book progresses, readers dive deeper into layout techniques, learning about the box model, positioning, floats, and flexible layouts with CSS Flexbox. The concept of responsive design is also covered, teaching readers how to make their websites adapt to different screen sizes and devices.\n\nThroughout, the book is full of practical tips and techniques to create beautiful, functional websites. Duckett’s clear explanations and colorful layout make complex topics easier to understand, making this book a perfect guide for anyone starting their web development journey."
   },
   {
-    "id": "383a8140-08b8-4c7c-97a7-e1bc68dc1488",
     "title": "Fullstack React: The Complete Guide to ReactJS and Friends",
     "author": "Accomazzo, Greif, and Murray",
     "genre": "Web Development",
@@ -70,7 +65,6 @@
     "summary": "Fullstack React: The Complete Guide to ReactJS and Friends by Accomazzo, Greif, and Murray is a comprehensive resource for developers who want to master React and build full-stack applications. The book provides step-by-step tutorials, hands-on projects, and deep insights into React's ecosystem, making it an excellent guide for both beginners and experienced developers.\n\nThe book starts with the fundamentals of React, including components, state, and props, before diving into more advanced concepts like lifecycle methods, hooks, and performance optimization. It also covers key tools in the React ecosystem, such as Redux for state management, React Router for navigation, and Webpack for bundling.\n\nA major highlight of the book is its focus on building real-world applications. Readers work on projects like a dynamic web app and learn to integrate React with backend technologies and APIs. The authors emphasize best practices and patterns, helping developers write clean, maintainable code that scales effectively.\n\nThe book also explores topics like testing React applications, using server-side rendering with Next.js, and deploying apps to production. It equips developers with the skills needed to build modern, high-performance web applications from start to finish."
   },
   {
-    "id": "3dd079d9-f28e-4ef3-bae9-9a917aa16532",
     "title": "The Huge Book of Amazing Facts and Interesting Stuff 2023",
     "author": "Jenny Kellet",
     "genre": "Thriller / Suspense",
@@ -84,7 +78,6 @@
     "summary": "The Huge Book of Amazing Facts and Interesting Stuff 2023 offers readers a treasure trove of fascinating facts from a wide range of topics. Whether it's history, science, geography, or pop culture, this book presents intriguing tidbits and mind-blowing information that will capture the reader's curiosity. With its quick, digestible facts, it’s the perfect source for anyone looking to expand their knowledge on a variety of subjects.\n\nEach page of the book delivers surprising discoveries that challenge common knowledge and introduce readers to new perspectives. From oddities in nature to obscure events in history, this compilation offers something for everyone. The facts presented are designed to both entertain and educate, making the book an excellent resource for trivia lovers or those simply seeking to learn something new and unexpected.\n\nThis book is designed not only to inform but also to engage and entertain. With its fun, easy-to-read format, The Huge Book of Amazing Facts and Interesting Stuff 2023 is perfect for casual reading, whether you’re looking to impress friends with your newfound knowledge or simply satisfy your own curiosity. It's a fun journey through a world of remarkable facts that are sure to leave readers amazed and eager for more."
   },
   {
-    "id": "4b5e77aa-b9cb-4537-b672-863b872eac2d",
     "title": "Harry Potter and the Cursed Child, Parts One and Two",
     "author": "J. K. Rowling, Jack Thorne & John Tiffany",
     "genre": "Thriller / Suspense",
@@ -98,7 +91,6 @@
     "summary": "Harry Potter and the Cursed Child follows the next generation of wizards, centering on Albus Severus Potter, the son of the famous Harry Potter. Struggling under the weight of his father’s legacy, Albus befriends Scorpius Malfoy, the son of Draco, forming an unlikely but deep friendship. When Albus feels overshadowed and misunderstood, he seizes an opportunity to change history using a stolen Time-Turner, attempting to save Cedric Diggory from his tragic fate in the Triwizard Tournament. However, their meddling with time has disastrous consequences, creating alternate realities where Voldemort reigns and loved ones are lost.\n\nAs Harry, now a Ministry of Magic official, struggles with his strained relationship with Albus, he faces visions of a lingering darkness. The Time-Turner’s misuse causes ripples across time, and the boys realize that their actions have strengthened the forces of evil. In one alternate timeline, Harry is dead, and Voldemort rules unchecked. Meanwhile, Delphi, a mysterious witch claiming to be the daughter of Voldemort, manipulates Albus and Scorpius into helping her reshape the past in her father’s favor. The truth about her identity and her sinister plan comes to light, forcing both generations of wizards to work together to stop her.\n\nIn a climactic battle, Harry, Hermione, Ron, Ginny, and Draco join their children to prevent Delphi from altering history permanently. They successfully stop her at Godric’s Hollow before she can help Voldemort kill baby Harry, restoring the timeline. The experience teaches Albus and Harry the importance of understanding and acceptance, mending their father-son bond. The story ends with Albus coming to terms with his identity, embracing his friendship with Scorpius, and recognizing that his worth is not defined by his father’s legacy but by his own choices."
   },
   {
-    "id": "4fdf30a5-5761-41a2-b5c3-e223dcf3f0f3",
     "title": "The Fury",
     "author": "Alex Michaelides",
     "genre": "Psychological Thriller",
@@ -112,7 +104,6 @@
     "summary": "The Fury by Alex Michaelides is a psychological thriller set on a private Greek island. The story revolves around a reclusive ex-movie star, Lana Farrar, who invites her closest friends for an annual Easter retreat. The tranquil setting quickly unravels into a dark mystery when a murder occurs during the getaway.\n\nThe tale is narrated by Elliot Chase, a troubled playwright and friend of Lana's, who delves deep into the complex relationships and hidden motives within the group. As the novel unfolds in five acts, Elliot's perspective reveals a web of secrets, betrayals, and obsessions that heighten the tension and suspense. Each act adds new layers to the narrative, shifting the reader's understanding of the events leading to the murder.\n\nThe novel explores themes of obsession, deception, and the destructive power of toxic relationships. Michaelides skillfully keeps readers on edge with unexpected twists and intricate plotting. The Fury promises a captivating read, full of psychological manipulation and the complexities of human nature."
   },
   {
-    "id": "585df184-991b-4edf-9902-f8531c3a81d9",
     "title": "The Clean Coder",
     "author": "Robert C. Martin",
     "genre": "Software",
@@ -126,7 +117,6 @@
     "summary": "The Clean Coder delves into the principles and practices of professional software development. The book begins by defining what it means to be a professional programmer, emphasizing the importance of taking responsibility for your work and acting with integrity. Martin highlights how professionalism goes beyond technical ability and requires a commitment to quality, discipline, and effective communication.\n\nA key focus of the book is mastering essential soft skills, such as time management and the art of saying “no.” Martin provides practical guidance for handling unrealistic expectations, prioritizing tasks, and maintaining a healthy work-life balance. Through engaging anecdotes, he explains how developers can balance their personal and professional lives while delivering consistent value to clients and stakeholders.\n\nThe book also underscores the significance of rigorous testing, clean coding practices, and continuous learning. Martin shares tips on writing better tests, debugging code efficiently, and dealing with stressful situations like tight deadlines and unexpected errors.\n\nFinally, The Clean Coder encourages developers to cultivate a mindset of lifelong learning and self-improvement. It serves as both a guide and an inspiration for developers to achieve excellence, not only in their technical skills but also in their conduct as professionals."
   },
   {
-    "id": "660bf838-b451-4106-bd3a-aa4ff1398187",
     "title": "People in Glass Houses",
     "author": "Jayne Castle",
     "genre": "Strategic, Fantasy",
@@ -140,7 +130,6 @@
     "summary": "People in Glass Houses by Jayne Castle is a thrilling blend of romance, mystery, and futuristic adventure set in a world where psychic abilities and intrigue collide. The story follows the independent and sharp-witted Celinda Ingram, a psychic consultant who specializes in matchmaking. When she accidentally comes into possession of a mysterious alien artifact, she finds herself thrust into a dangerous conspiracy that powerful forces are willing to kill for. With enemies closing in, she turns to the one man she never expected to rely on—investigator Davis Oakes, a no-nonsense, highly skilled operative with secrets of his own.\n\nAs Celinda and Davis work together to uncover the artifact’s origins, they become entangled in a web of deception, corporate espionage, and hidden dangers lurking beneath the glittering surface of their high-tech society. Their investigation takes them deep into the world of powerful psychic guilds, corrupt organizations, and long-buried secrets that could change everything. Meanwhile, the chemistry between them grows undeniable, forcing them to confront not only the dangers surrounding them but also their feelings for each other.\n\nWith action-packed twists, psychic battles, and a sizzling romance, People in Glass Houses delivers a fast-paced, engaging read. Celinda must embrace her intuition and Davis his instincts if they are to survive the forces working against them. As they fight to expose the truth and protect what matters most, they realize that sometimes, the greatest risks lead to the most unexpected rewards—both in love and in life."
   },
   {
-    "id": "68f7c183-b995-4ba3-a644-30110ebb932e",
     "title": "Atomic Habits",
     "author": "James Clear",
     "genre": "Self Help",
@@ -154,7 +143,6 @@
     "summary": "Atomic Habits by James Clear is a book about how small changes in daily habits can lead to significant transformations over time. Clear emphasizes that habits are the compound interest of self-improvement—tiny actions repeated consistently will eventually produce remarkable results. \n\nRather than focusing on massive overhauls, the book encourages readers to aim for a 1% improvement each day, as these incremental gains accumulate to create meaningful progress.\n\nThe book introduces the \"Four Laws of Behavior Change\" as a framework for building good habits and breaking bad ones. These laws are: make it obvious, make it attractive, make it easy, and make it satisfying. Clear explains how these principles can be applied to rewire habits by adjusting cues, cravings, responses, and rewards. For instance, placing a water bottle on your desk makes drinking water more obvious and accessible, increasing the likelihood of forming a healthy hydration habit.\n\nA key insight in the book is the role of identity in shaping habits. Clear argues that lasting change comes when you focus on who you want to become rather than what you want to achieve. For example, instead of saying, \"I want to read more,\" you could say, \"I am the type of person who loves learning.\" By aligning your habits with your identity, you create a sustainable foundation for growth.\n\nThe environment also plays a critical role in habit formation. Clear emphasizes the importance of designing your surroundings to make good habits easier and bad habits harder. Simple changes, like keeping healthy snacks visible or removing distractions from your workspace, can have a profound impact on your behavior.\n\nUltimately, Atomic Habits is a reminder that success is not about huge leaps but about the small, consistent steps we take every day. By focusing on systems and making intentional adjustments, anyone can create lasting, positive changes in their life."
   },
   {
-    "id": "8f45a8ad-e0e1-437e-8987-5bcbaca24bd9",
     "title": "JavaScript: The Good Parts",
     "author": "Douglas Crockford",
     "genre": "Programming",
@@ -168,7 +156,6 @@
     "summary": "JavaScript: The Good Parts by Douglas Crockford is a concise guide to understanding and using the best features of JavaScript while avoiding its pitfalls. This book is designed for developers who want to write clean, efficient, and reliable JavaScript code by focusing only on the language's strengths.\n\nCrockford identifies \"the good parts\" of JavaScript, such as its dynamic object-oriented nature, functional programming capabilities, and simplicity when used correctly. He also highlights problematic features like global variables, type coercion, and inconsistent behavior, advising readers to steer clear of these. The book emphasizes the importance of understanding JavaScript’s quirks and using tools and practices to minimize errors.\n\nKey topics covered include syntax, objects, functions, inheritance, arrays, regular expressions, and methods for managing code quality. The book also introduces best practices for writing maintainable code and offers practical examples to demonstrate how to use JavaScript effectively in real-world applications."
   },
   {
-    "id": "9084986f-456c-449b-ae6e-59ef1f26b129",
     "title": "CSS in Depth",
     "author": "Keith J. Grant",
     "genre": "Web Development",
@@ -182,7 +169,6 @@
     "summary": "CSS in Depth starts by reviewing the basic principles of CSS, then quickly moves on to more advanced concepts. Grant emphasizes the importance of understanding the underlying mechanics of CSS properties like layout, box model, and positioning. Readers learn how to use these tools more effectively, making their code more predictable and easier to debug.\n\nThe book dedicates significant time to discussing modern layout systems, especially Flexbox and CSS Grid. These powerful tools enable developers to create complex, responsive designs with minimal code. Grant explains how to use them in different contexts, providing practical examples of when and why they are useful.\n\nOne of the book’s highlights is its in-depth coverage of animations and transitions. Readers learn how to add dynamic effects to their web pages without relying on JavaScript. This is especially useful for creating smooth, interactive designs that improve user experience.\n\nThe book also discusses CSS preprocessors and methodologies like BEM (Block Element Modifier), teaching developers how to structure their stylesheets for larger projects. Grant encourages best practices such as keeping CSS DRY (Don’t Repeat Yourself) and modularizing code.\n\nBy the end of the book, readers will have the knowledge and confidence to tackle complex CSS challenges and create stunning web interfaces with efficiency and elegance."
   },
   {
-    "id": "91445e57-01a8-4e1e-bb18-cf04b3a0b7d1",
     "title": "Fundamentals of Database Systems",
     "author": "Ramez Elmasri and Shamkant B. Navathe",
     "genre": "Computer Science",
@@ -196,7 +182,6 @@
     "summary": "Fundamentals of Database Systems begins by introducing the fundamental concepts of database systems, including their purpose, architecture, and role in modern computing. It explains key data modeling techniques, such as the Entity-Relationship (ER) model, which is used to design and visualize database schemas.\n\nThe book thoroughly explores relational database theory, including relational algebra and SQL, equipping readers with the tools to query and manipulate data efficiently. It delves into database design principles, focusing on normalization to eliminate redundancy and maintain data integrity.\n\nAdvanced topics include transaction processing, where readers learn about concurrency control and recovery mechanisms to ensure reliable and consistent database operations. The book also covers distributed databases and emerging technologies like NoSQL and big data systems, providing insights into handling massive datasets and scalable architectures.\n\nAdditionally, the authors address database security, indexing, and performance optimization, offering a holistic view of database management. Each chapter is supplemented with exercises, case studies, and real-world examples, making the concepts practical and actionable.\n\nOverall, the book provides a strong foundation in database systems, empowering readers to design, implement, and manage databases effectively in diverse environments."
   },
   {
-    "id": "9641f133-75c3-4308-8793-5f0d07a38af5",
     "title": "The Maidens: A Novel",
     "author": "Alex Michaelides",
     "genre": "Psychological Thriller",
@@ -210,7 +195,6 @@
     "summary": "Mariana Andros, a brilliant but troubled group therapist, is still grieving the loss of her husband when she becomes entangled in a chilling murder mystery at Cambridge University. Drawn back to the prestigious institution by her niece, Zoe, Mariana learns that a young student has been murdered, and all clues seem to point toward a charismatic yet enigmatic professor of Greek tragedy, Edward Fosca. Despite his seemingly perfect alibi and the unwavering loyalty of his devoted female students—known as The Maidens—Mariana becomes convinced of his guilt.\n\nAs Mariana delves deeper into the case, she uncovers a web of psychological manipulation, obsession, and secret rituals tied to ancient mythology. Each step closer to the truth puts her in increasing danger, as The Maidens appear eerily complicit in the events unfolding around them. Her professional instincts tell her something is deeply wrong, yet the more she investigates, the more she begins to doubt her own judgment. Is she driven by grief and paranoia, or is there truly a hidden darkness lurking beneath Cambridge’s elite academic facade?\n\nThe novel weaves a gripping tale of mystery, myth, and psychological suspense, keeping readers on edge as Mariana’s pursuit of justice turns into a race against time. With elegant prose and masterful twists, The Maidens explores the depths of obsession, the power of trauma, and the fine line between perception and reality. Just when the truth seems within reach, Michaelides delivers a stunning revelation that shatters all expectations."
   },
   {
-    "id": "a6138fa4-d0c5-4c73-a0dd-10296ca034b5",
     "title": "Origin",
     "author": "Dan Brown",
     "genre": "Thriller / Mystery",
@@ -224,7 +208,6 @@
     "summary": "People in Glass Houses by Jayne Castle (a pseudonym for Jayne Ann Krentz) is a science fiction romance set in a future world where people with psychic abilities live in harmony with advanced technology. The story follows the main characters, Harriet and Sam, who are drawn together under unusual circumstances.\n\nHarriet, a talented psychic, works for a company that offers psychic services in a futuristic society. When she finds herself tangled in a dangerous situation involving a mysterious conspiracy, she enlists the help of Sam, a former investigator with a dark past. As they uncover the secrets surrounding a glass house—a mysterious structure tied to their investigation—they must navigate their growing attraction while facing hidden dangers.\n\nThe novel combines elements of mystery, suspense, and romance, with a focus on psychic abilities, futuristic technology, and the complexities of relationships. The title, \"People in Glass Houses,\" symbolizes the fragile nature of the world the characters inhabit and the vulnerabilities they face in their personal and professional lives."
   },
   {
-    "id": "b4ed06bf-02b2-42c4-8886-b3847af02cca",
     "title": "Computer Science Distilled",
     "author": "Wladston Ferreira Filho",
     "genre": "Computer Science",
@@ -238,7 +221,6 @@
     "summary": "Computer Science Distilled begins by explaining the art of problem-solving in computing, emphasizing the importance of breaking down problems into manageable parts. It introduces key computational concepts such as abstraction, algorithms, and complexity analysis, providing a strong foundation for tackling any programming challenge.\n\nThe book explores data structures, including arrays, linked lists, stacks, queues, and trees, with clear explanations and visual aids to make these abstract concepts tangible. Readers learn how to select the right data structure for different scenarios, enhancing the efficiency of their solutions.\n\nLogical reasoning and algorithm design are central themes. The author delves into sorting, searching, and recursion, presenting these topics in an accessible way. He also highlights the importance of trade-offs in algorithm design, such as time versus space complexity.\n\nLater chapters focus on practical problem-solving techniques, encouraging readers to approach challenges creatively while maintaining computational efficiency. The book includes exercises to reinforce learning, making it highly interactive.\n\nBy the end, readers gain a solid grasp of computer science fundamentals, enabling them to write better programs and think like problem solvers. Its concise format ensures clarity and retention without overwhelming the reader."
   },
   {
-    "id": "b514f922-a715-45ec-846e-e51d40e15aa2",
     "title": "System Design Interview",
     "author": "Alex Xu",
     "genre": "System Design",
@@ -252,7 +234,6 @@
     "summary": "System Design Interview: An Insider's Guide begins by introducing the key concepts of system design, emphasizing the importance of understanding requirements, scalability, and reliability. Xu explains how to approach an open-ended problem by breaking it down into smaller, manageable components, ensuring a structured response.\n\nThe book covers essential topics, such as database design, caching, load balancing, and message queues, explaining their relevance in building scalable and fault-tolerant systems. Xu also delves into the intricacies of designing high-availability systems, explaining concepts like replication, partitioning, and sharding.\n\nReaders are guided through various real-world system design problems, from designing a URL shortening service to building a recommendation system. Each example provides a deep dive into the trade-offs involved, offering valuable insights into how to optimize systems for performance, cost, and maintainability.\n\nXu also emphasizes the importance of communication during system design interviews, teaching readers how to present their solutions clearly and justify their decisions. With practice problems and tips on handling tough interview questions, the book is an essential resource for anyone looking to ace a system design interview."
   },
   {
-    "id": "b6b9cc5d-95fd-488e-b1df-2a805678b430",
     "title": "React in Action",
     "author": "Mark Tielens Thomas",
     "genre": "Web Development",
@@ -266,7 +247,6 @@
     "summary": "React in Action by Mark Tielens Thomas is a practical guide to mastering React, a popular JavaScript library for building user interfaces. The book is ideal for developers looking to learn React from the ground up and for those seeking to deepen their understanding of its ecosystem. With clear explanations and hands-on examples, it equips readers to build dynamic and interactive web applications.\n\nThe book starts by introducing the fundamentals of React, including components, JSX, props, and state management. It then explores more advanced topics, such as lifecycle methods, hooks, and performance optimization. A key focus is on the declarative nature of React and how it simplifies building complex user interfaces.\n\nReaders are guided through creating real-world applications, gaining experience with essential tools like Redux for state management, React Router for navigation, and testing frameworks like Jest and Enzyme. The book also addresses integrating React with backend services, ensuring a complete understanding of building full-stack applications.\n\nOne of the standout features of React in Action is its emphasis on modern development practices. It introduces readers to best practices for component architecture, reusable design, and effective debugging. By the end of the book, developers will have the confidence to tackle React projects with a solid foundation."
   },
   {
-    "id": "c328344f-4afc-47a6-a95f-e2b43985527b",
     "title": "The Great Reclamation: A Novel by Rachel Heng",
     "author": "Rachel Heng",
     "genre": "Strategic, Fantasy",
@@ -280,7 +260,6 @@
     "summary": "The Great Reclamation by Rachel Heng is a sweeping historical novel set in mid-20th century Singapore, following the coming-of-age journey of Ah Boon, a boy from a small fishing village. As a child, Ah Boon possesses a mysterious ability to locate hidden islands, a talent that brings prosperity to his village. However, as Singapore undergoes rapid transformation under British colonial rule and impending war, his world begins to shift. When he forms a deep connection with Siok Mei, a strong-willed girl with revolutionary ideals, he finds himself caught between personal desires and the sweeping forces of history.\n\nAs World War II reaches Singapore, Ah Boon and his family struggle to survive under Japanese occupation. His once-idyllic village is torn apart by war, and his childhood innocence is replaced by the harsh realities of survival and shifting allegiances. Meanwhile, Siok Mei becomes involved in the growing anti-colonial resistance, pushing Ah Boon to question his own loyalties. As Singapore moves toward independence, political and social upheavals threaten everything they have known, forcing Ah Boon to decide where he stands in a world that is rapidly changing.\n\nSpanning decades, The Great Reclamation explores themes of identity, love, and the cost of progress. Ah Boon must reconcile his nostalgic longing for the past with the realities of a modernizing nation. His relationship with Siok Mei and his connection to the land test his sense of self, revealing the sacrifices required for both personal and national transformation. In the end, the novel paints a poignant portrait of a country in flux and the individuals who must navigate the delicate balance between tradition and change."
   },
   {
-    "id": "c3f2ff59-a3c2-47d2-a793-93457a9dccf7",
     "title": "Operating System Concepts",
     "author": "Abraham Silberschatz, Peter B. Galvin, and Greg Gagne",
     "genre": "Computer Science",
@@ -294,7 +273,6 @@
     "summary": "Operating System Concepts provides an in-depth exploration of operating systems, starting with an introduction to their fundamental role in computing. It describes how operating systems manage hardware resources, such as the CPU, memory, and storage, to ensure efficient and reliable operation.\n\nThe book dives into critical topics, such as process and thread management, illustrating how multitasking and concurrency are achieved. It explains scheduling algorithms, synchronization techniques, and methods to handle deadlocks, providing a comprehensive understanding of process control.\n\nMemory management is another focus, with detailed discussions on paging, segmentation, and virtual memory. The book explains how these mechanisms optimize resource allocation while ensuring system stability. Similarly, the authors delve into file systems and storage structures, illustrating how data is stored, retrieved, and managed.\n\nAdvanced topics include security, protection, and distributed systems. Readers learn about authentication, access control, and methods to safeguard operating systems against potential threats. The book also introduces modern developments, such as virtualization and cloud computing, making it relevant in today's tech landscape.\n\nWith a balance of theory and practical application, Operating System Concepts equips readers with the knowledge needed to design, analyze, and optimize operating systems effectively."
   },
   {
-    "id": "c77727c9-0ead-4c8f-afd4-3085fdbd4fec",
     "title": "The Midnight Library",
     "author": "Matt Haig",
     "genre": "Fantasy / Fiction",
@@ -308,7 +286,6 @@
     "summary": "\"The Midnight Library\" by Matt Haig is a thought-provoking novel that explores the power of choices and regrets. Nora Seed, the protagonist, finds herself in a mysterious library that exists between life and death, where every book represents a different version of her life based on the decisions she could have made. As she navigates these alternate realities, she learns valuable lessons about self-acceptance, the unpredictability of life, and the importance of embracing the present moment. The novel masterfully blends elements of fantasy and philosophy, offering readers a deeply emotional and inspiring journey.\n\nAt the heart of the story is the concept of the \"what ifs\" that often haunt people's minds. Nora’s experience in the Midnight Library allows her to explore paths she abandoned or never considered—becoming an Olympic swimmer, a rock star, a scientist, and more. However, she soon realizes that no life is perfect and that each one comes with its own set of struggles and sacrifices. Through her journey, the novel challenges the idea that happiness is tied to specific achievements or external validation, instead emphasizing the beauty of imperfection and self-compassion.\n\nMatt Haig crafts a narrative that resonates with anyone who has ever questioned their past choices. With its deeply relatable themes of mental health, second chances, and personal growth, The Midnight Library is both a comforting and thought-provoking read. The book encourages readers to reflect on their own lives and recognize the value of small, seemingly insignificant moments. Ultimately, it delivers a hopeful message: while regrets are a natural part of life, the true magic lies in accepting oneself and making the best of the present."
   },
   {
-    "id": "cc625b42-6852-44af-b3a3-e668fa967b8e",
     "title": "Cracking the Coding Interview",
     "author": "Gayle Laakmann McDowell",
     "genre": "Programming",
@@ -322,7 +299,6 @@
     "summary": "Cracking the Coding Interview by Gayle Laakmann McDowell is a comprehensive guide for software engineers preparing for technical interviews. The book is packed with insights, strategies, and over 180 programming questions that simulate real interview scenarios. It provides not just solutions but also detailed explanations to help readers understand the reasoning and improve their problem-solving skills.\n\nThe book starts by guiding readers through the technical interview process, offering tips on resume optimization, behavioral questions, and understanding what interviewers are looking for. It breaks down complex problems into manageable parts and explains algorithms, data structures, and coding techniques essential for solving them.\n\nA standout feature of the book is its focus on strategies for tackling common topics like arrays, linked lists, trees, graphs, dynamic programming, and system design. McDowell also includes advice on how to handle pressure, communicate effectively during interviews, and debug solutions in real-time, making it more than just a collection of problems—it’s a career toolkit."
   },
   {
-    "id": "cea639ce-ee90-4ef9-9fef-c9562a247e99",
     "title": "The Lean Startup",
     "author": "Eric Ries",
     "genre": "Software",
@@ -336,7 +312,6 @@
     "summary": "The Lean Startup by Eric Ries is a guide to building and managing startups in a way that maximizes innovation while minimizing wasted effort. The book introduces the concept of the “Lean Startup” methodology, which focuses on quickly turning ideas into products, testing them with real customers, and learning from their feedback to refine and improve. This approach helps entrepreneurs create successful businesses by avoiding long periods of untested development.\n\nA central idea of the book is the Build-Measure-Learn feedback loop. Startups should build a “minimum viable product” (MVP)—a simplified version of their idea that allows them to test assumptions quickly. By measuring how customers respond to the MVP, startups can learn what works and what doesn’t, enabling them to make informed decisions about whether to pivot (change direction) or persevere (continue improving the same idea). This process reduces the risk of investing time and money into a product that might fail in the market.\n\nThe Lean Startup methodology emphasizes the importance of continuous experimentation and validated learning. Entrepreneurs are encouraged to treat their ideas as hypotheses and to test them rigorously with data rather than assumptions. This scientific approach ensures that decisions are based on evidence, leading to better chances of success.\n\nAnother key aspect is the principle of “innovation accounting,” which focuses on measuring progress in terms of validated learning rather than vanity metrics like website traffic or social media likes. Startups should track meaningful metrics that reflect real customer engagement and satisfaction to ensure they are on the right path.\n\nOverall, The Lean Startup provides a roadmap for creating agile, customer-focused businesses. By focusing on rapid experimentation, data-driven decision-making, and constant iteration, entrepreneurs can navigate uncertainty, avoid unnecessary failures, and build products that truly meet the needs of their customers."
   },
   {
-    "id": "d125678e-80d7-4ba8-97a6-cc6ee4b980ef",
     "title": "Eloquent Javascript",
     "author": "Marijn Haverbeke",
     "genre": "Programming",
@@ -350,7 +325,6 @@
     "summary": "Eloquent JavaScript by Marijn Haverbeke is a deep dive into JavaScript, designed for developers who want to master the language. The book combines clear explanations, practical examples, and exercises to help readers understand both the basics and advanced features of JavaScript. It's ideal for those who are new to the language and for experienced developers looking to refine their skills.\n\nThe book begins with an introduction to programming concepts and quickly transitions into JavaScript fundamentals, including variables, functions, and control structures. It then delves into more advanced topics such as closures, asynchronous programming, and object-oriented design. Haverbeke also explores the JavaScript ecosystem, including browser-based APIs, Node.js, and modern features of the language.\n\nA unique feature of the book is its emphasis on writing elegant, clean, and efficient code. Readers are encouraged to think critically about problem-solving and are provided with exercises that challenge them to apply concepts in real-world scenarios. The book's projects, including building a game and a basic programming language, offer hands-on experience that solidifies learning."
   },
   {
-    "id": "dc73abc1-8699-4e0a-91b0-a67e80292b9c",
     "title": "The Art of Assembly Language",
     "author": "Randall Hyde",
     "genre": "Programming",
@@ -364,7 +338,6 @@
     "summary": "The Art of Assembly Language introduces readers to the fundamentals of assembly programming, beginning with an overview of computer architecture. It explains how CPUs process instructions and manage data, providing the necessary background to appreciate the power of assembly language.\n\nThe book then transitions into practical programming, starting with data representation and memory management. Readers learn how integers, floating-point numbers, and other data types are stored and manipulated at the binary level. Hyde uses HLA as a bridge, making assembly language concepts easier to grasp while maintaining a focus on the underlying principles.\n\nControl structures, including loops, conditionals, and functions, are explained in detail. Hyde shows how these elements work in assembly, offering a deeper understanding of how high-level languages translate into machine code.\n\nAdvanced topics include optimization techniques, hardware interactions, and system-level programming. The book explores how assembly can be used to fine-tune performance-critical applications and interact directly with hardware components.\n\nThroughout, the emphasis is on clarity and practical application. The book includes numerous exercises, real-world examples, and detailed explanations, making it a valuable resource for anyone looking to master assembly language or gain deeper insights into computer operations."
   },
   {
-    "id": "fe03e013-53b8-4574-9ca8-caec69a9b16c",
     "title": "Algorithms",
     "author": "Robert Sedgewick and Kevin Wayne",
     "genre": "Computer Science",

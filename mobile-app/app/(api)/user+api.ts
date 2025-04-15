@@ -1,7 +1,8 @@
+import config from '@/lib/config';
 import { neon } from '@neondatabase/serverless';
 
 export async function POST(request: Request) {
-  const sql = neon(process.env.DATABASE_URL!);
+  const sql = neon(config.env.databaseUrl);
   const { name, email, clerkId } = await request.json();
 
   if (!name || !email || !clerkId) {
